@@ -7,6 +7,8 @@ import computeCost as cC
 
 import gradientdescent as GD
 
+import math
+
 X, Y, m = ld.load('ex1data.txt')#load X's and Y's m - len of dataset
 
 theta = np.zeros((2, 1))#init fitting params
@@ -22,5 +24,8 @@ alpha = 0.01;
 theta,J_history = GD.GDescent(X, Y, theta, alpha, iterations)
 print 'theta: ',  theta
 
-predict = np.dot( np.array([1, 2]).reshape(1, 2), theta )
-print 'predict for 3.5', predict
+
+pvalue = 3.5
+#predict = 1/(1+ math.exp( np.dot( np.array([1, pvalue]).reshape(1, 2), theta)))
+predict = np.dot( np.array([1, pvalue]).reshape(1, 2), theta )
+print 'predict for ',pvalue, predict
