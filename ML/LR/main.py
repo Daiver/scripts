@@ -21,3 +21,6 @@ alpha = 0.01;
 
 theta,J_history = GD.GDescent(X, Y, theta, alpha, iterations)
 print 'theta: ',  theta
+
+predict = np.dot( np.array([1, 2]).reshape(1, 2), theta )
+print 'predict for 3.5', predict
