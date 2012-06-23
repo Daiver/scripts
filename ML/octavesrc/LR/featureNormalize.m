@@ -28,7 +28,10 @@ sigma = zeros(1, size(X, 2));
 
 
 
-
+mu = mean(X);
+sigma = std(X);
+transform = ones(length(X), 1);
+X_norm = (X .- transform * mu) ./ (transform * sigma);
 
 
 
