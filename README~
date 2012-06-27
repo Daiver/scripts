@@ -1,3 +1,6 @@
 weather - скрипт берущий погоду с yahoo (в данный момент о погоде в Воронеже)
 
 ML - Просте примеры из ml-class
+
+google - скрипт выполняющий поиск на гугле
+(forked from https://github.com/slasyz/scripts/blob/master/google.py)
