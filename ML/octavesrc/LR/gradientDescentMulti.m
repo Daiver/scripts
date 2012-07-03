@@ -21,7 +21,7 @@ for iter = 1:num_iters
 
 	
 	tmp = ( X * theta - y )' * X;
-	
+	%fprintf('%f', theta[0, 0];
 	theta = theta .- (alpha * 1/m * tmp');
 
 
