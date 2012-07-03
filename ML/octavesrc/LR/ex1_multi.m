@@ -53,8 +53,8 @@ fprintf('Normalizing Features ...\n');
 
 % Add intercept term to X
 X = [ones(m, 1) X];
-
-
+%fprintf('what....');
+%print('%f',X);
 %% ================ Part 2: Gradient Descent ================
 
 % ====================== YOUR CODE HERE ======================
