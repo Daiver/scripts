@@ -1,7 +1,7 @@
 
 import sys
 
-from CF.FlagReader import FlagReader
+from FlagReader import FlagReader
 
 freader = FlagReader(sys.argv[1:])
 
