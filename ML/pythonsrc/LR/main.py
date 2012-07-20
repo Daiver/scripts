@@ -9,6 +9,7 @@ import gradientdescent as GD
 
 import math
 
+
 X, Y, m = ld.load('ex1data.txt')#load X's and Y's m - len of dataset
 
 theta = np.zeros((2, 1))#init fitting params
