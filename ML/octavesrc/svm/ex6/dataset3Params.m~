@@ -23,6 +23,33 @@ sigma = 0.3;
 %        mean(double(predictions ~= yval))
 %
 
+Cs = [0.01, 0.03, 0.1, 0.3, 1, 3, 10, 30];
+sigmas = [0.01, 0.03, 0.1, 0.3, 1, 3, 10, 30];
+
+max_accuracy = 0;
+
+for c = Cs
+
+	for sig = sigmas
+		
+		model = svmTrain(X, y, c, @(x1, x2) gaussianKernel(x1, x2, sig));
+		predict = svmPredict(model, X);
+		accuracy = mean(double(predict == yval));
+		fprintf(['Trained an SVM with parameter test_C = %f, test_sigma = %f, accuracy = %f\n'], 
+		 		c, sig, accuracy);
+		if (accuracy > max_accuracy)
+		 	max_accuracy = accuracy;
+		 	C = c;
+		 	sigma = sig;
+	end
+
+end
+
+C = maxC;
+sigma = maxS;
+
+fprintf(['Maximum accuracy = %f found for parameter C = %f, sigma = %f\n'], 
+ 		max_accuracy, C, sigma);
 
 % =========================================================================
 

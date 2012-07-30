@@ -100,9 +100,9 @@ while ~isempty(email_contents)
 
 
 
-	ind = find(strcmp(str, vocabList));
-	if (length(ind) == 1)
-		word_indices = [word_indices; ind];
+	idx = find(strcmp(str, vocabList));
+	if (length(idx) == 1)
+		word_indices = [word_indices; idx];
 	end
 
 
