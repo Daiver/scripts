@@ -2,6 +2,9 @@
 # -*- coding: UTF-8 -*-
 
 import vk_auth
+
+from vk_config import user_params
+
 import json
 import urllib2
 from urllib import urlencode
@@ -11,8 +14,11 @@ import sys
 
 def call_api(method, params, token):
     params.append(("access_token", token))
-    url = "https://api.vk.com/method/%s?%s" % (method, urlencode(params)) 
-    return json.loads(urllib2.urlopen(url).read())["response"]
+    url = "https://api.vk.com/method/%s?%s" % (method, urlencode(params))
+    ansewer = json.loads(urllib2.urlopen(url).read())
+    if 'response' in ansewer:
+        return ansewer["response"]
+    return None
 
 def get_albums(user_id, token):
     return call_api("photos.getAlbums", [("uid", user_id)], token)
@@ -41,14 +47,17 @@ def save_photos(urls, directory):
         open(filename, "w").write(urllib2.urlopen(url).read())
 
 
-email = raw_input("Email: ")
-password = getpass.getpass()
-print password
-exit()
+email = user_params['email']#raw_input("Email: ")
+password = user_params['password']#getpass.getpass()
+
 client_id = "2951857" # Vk application ID
-token, user_id = vk_auth.auth(email, password, client_id, "photos")
+token, user_id = vk_auth.auth(email, password, client_id, "photos,status")
+print token
+call_api('status.set', [('text', 'First_Using_VK.api')], token)
+
+
 albums = get_albums(user_id, token)
-print "\n".join("%d. %s" % (num + 1, album["title"]) for num, album in enumerate(albums))
+#print "\n".join("%d. %s" % (num + 1, album["title"]) for num, album in enumerate(albums))
 choice = -1
 while choice not in xrange(len(albums)):
     choice = int(raw_input("Choose album number: ")) - 1
