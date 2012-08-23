@@ -5,6 +5,8 @@ import vk_auth
 
 from vk_config import user_params
 
+import time
+
 import json
 import urllib2
 from urllib import urlencode
@@ -51,9 +53,18 @@ email = user_params['email']#raw_input("Email: ")
 password = user_params['password']#getpass.getpass()
 
 client_id = "2951857" # Vk application ID
-token, user_id = vk_auth.auth(email, password, client_id, "photos,status")
-print token
-call_api('status.set', [('text', 'First_Using_VK.api')], token)
+token, user_id = vk_auth.auth(email, password, client_id, "offline,photos,status,friends,audio")
+#print token
+#print call_api('status.set', [('text', 'First Using VK.api')], token)
+'''
+li = call_api('friends.get', [('uid', user_id), ('fields', 'first_name')], token)
+for x in li:
+    #print x['first_name'], x['uid']
+    try:
+        print x['uid'], len(call_api('audio.get', [('uid', x['uid'])], token))
+    except:
+        print 'unable', x['uid']
+    #time.sleep(1)
 
 
 albums = get_albums(user_id, token)
@@ -65,3 +76,4 @@ if not directory:
     directory = albums[choice]["title"]
 photos_urls = get_photos_urls(user_id, albums[choice]["aid"], token)
 save_photos(photos_urls, directory)
+'''
