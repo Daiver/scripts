@@ -100,3 +100,10 @@ def auth(email, password, client_id, scope):
         raise RuntimeError("Missing some values in answer")
     return answer["access_token"], answer["user_id"] 
 
+def call_api(method, params, token):
+    params.append(("access_token", token))
+    url = "https://api.vk.com/method/%s?%s" % (method, urlencode(params))
+    ansewer = json.loads(urllib2.urlopen(url).read())
+    if 'response' in ansewer:
+        return ansewer["response"]
+    return None

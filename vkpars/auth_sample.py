@@ -2,6 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 import vk_auth
+from vk_auth import call_api
 
 from vk_config import user_params
 
@@ -14,13 +15,7 @@ import os
 import getpass
 import sys
 
-def call_api(method, params, token):
-    params.append(("access_token", token))
-    url = "https://api.vk.com/method/%s?%s" % (method, urlencode(params))
-    ansewer = json.loads(urllib2.urlopen(url).read())
-    if 'response' in ansewer:
-        return ansewer["response"]
-    return None
+
 
 def get_albums(user_id, token):
     return call_api("photos.getAlbums", [("uid", user_id)], token)
