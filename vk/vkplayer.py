@@ -34,33 +34,43 @@ def PlayMe(player, mscdict):
     if not os.path.exists(path):
         print name, '-DownLoading...'
         DownLoadFile(mscdict['url'], path)
-    print 'Now Play', name
+    print 'Now Playing', name
     player.PlayIt(path)
 
 email = user_params['email']#raw_input("Email: ")
 password = user_params['password']#getpass.getpass()
 
+print 'Connecting to vk.com...'
 client_id = "2951857" # Vk application ID
 token, user_id = auth(email, password, client_id, "users,offline,friends,audio")
 
+print 'Getting playlist...'
+li = MusicList(token, user_id)
+
+print 'Creating daemon...'
 player = PlayerThread()
 player.start()
 
-li = MusicList(token, user_id)
-print MusicListTitle(li)
+prlist = MusicListTitle(li)
+print prlist
 
 command = ''
-while command != 'q':
+while command != 'q':#cut my arms
     command = raw_input('~>')
     if (command[0] == 'p') and len(command) > 1:
         num = int(command.split()[1])
-        PlayMe(player, li[num])
+        if (num > -1) or (num < len(li)):
+            PlayMe(player, li[num])
     if command == 'p':
         player.Pause()
     if command == 's':
         player.Stop()
+    if command == 'l':
+        prlist = MusicListTitle(li)
+        print prlist
+    if command == 'r':
+        li = MusicList(token, user_id)
 
 player.Stop()
-#DownLoadFile(li[0]['url'], 'musicchache/' + li[0]['artist'] + '-' + li[0]['title'] + '.mp3')
 player.join()
 
