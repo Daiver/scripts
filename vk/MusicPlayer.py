@@ -18,8 +18,8 @@ class PlayerThread(Thread):
         self.daemon = True
         self.data = None
         self.stream = None
-        self.pya = pyaudio.PyAudio()
         self.mf = None
+        self.pya = pyaudio.PyAudio()
 
         self.state = 'Stop'
 
@@ -28,6 +28,9 @@ class PlayerThread(Thread):
 
     def Stop(self):
         self.state = 'Stop'
+        self.data = None
+        self.stream = None
+        self.mf = None
 
     def Pause(self):
         self.state = 'Pause'
@@ -47,17 +50,20 @@ class PlayerThread(Thread):
         self.data = self.NextData()
         self.state = 'Play'
 
+    def isStop(self):
+        return self.data == None
+
     def run(self):
         self.state = 'Play'
         playnext = lambda : (self.data != None) and self.state == 'Play'
         while self.state != 'Stop':
-            
+            #message = self.commands.get() if not self.commands.empty() else None
+            #self.ProcessMessage(message)
             if playnext():
                 self.stream.write(self.data)
                 self.data = self.NextData()
-                if self.data == None:
-                    self.messages.put('Song_Finished')
-
+        self.Stop()
+'''
 def PlayIt(filename, event_for_pause):
 
     mf = mad.MadFile(filename)
@@ -87,8 +93,6 @@ t1.PlayIt('musicchache/1.mp3')
 command = ''
 while command != 'q':
     command = raw_input('>>')
-    if not t1.messages.empty():
-        print t1.messages.get()
     if command == 'p':
         t1.Pause()
     else:
@@ -102,3 +106,4 @@ t1.join()
 #musicthread.start()
 
 #musicthread.join()
+'''

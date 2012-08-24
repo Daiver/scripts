@@ -1,3 +1,4 @@
 *~
 *.pyc
-vkpars/vk_config.py
+vk/vk_config.py
+vk/musicchache/*
