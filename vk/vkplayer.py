@@ -54,22 +54,40 @@ player.start()
 prlist = MusicListTitle(li)
 print prlist
 
+current_number = 0
+
 command = ''
 while command != 'q':#cut my arms
     command = raw_input('~>')
-    if (command[0] == 'p') and len(command) > 1:
-        num = int(command.split()[1])
-        if (num > -1) or (num < len(li)):
-            PlayMe(player, li[num])
-    if command == 'p':
-        player.Pause()
-    if command == 's':
-        player.Stop()
-    if command == 'l':
-        prlist = MusicListTitle(li)
-        print prlist
-    if command == 'r':
-        li = MusicList(token, user_id)
+    try:
+        if len(command) > 1 and (command[0] == 'p'):
+            num = int(command.split()[1])
+            current_number = num
+            if (num > -1) or (num < len(li)):
+                PlayMe(player, li[current_number])
+        if command == 'b':
+            current_number -= 1
+            if (current_number > -1) or (current_number < len(li)):
+                PlayMe(player, li[current_number])
+        if command == 'n':
+            current_number += 1
+            if (current_number > -1) or (current_number < len(li)):
+                PlayMe(player, li[current_number])
+                
+        if command == 'p':
+            if player.state == 'Play':
+                player.Pause()
+            else:
+                player.Play()
+        if command == 's':
+            player.Stop()
+        if command == 'l':
+            prlist = MusicListTitle(li)
+            print prlist
+        if command == 'r':
+            li = MusicList(token, user_id)
+    except:
+        print 'Cannot process command, try again'
 
 player.Stop()
 player.join()
