@@ -28,13 +28,18 @@ class PlayerThread(Thread):
 
     def Stop(self):
         self.state = 'Stop'
-        
+
+    def Exit(self):
+        self.state = 'Exit'
 
     def Pause(self):
         self.state = 'Pause'
 
     def Play(self):
         self.state = 'Play'
+
+    def Next():
+        return None
 
     def PlayIt(self, filename):
         self.mf = mad.MadFile(filename)
@@ -54,13 +59,17 @@ class PlayerThread(Thread):
     def run(self):
         self.state = 'Play'
         playnext = lambda : (self.data != None) and self.state == 'Play'
-        while self.state != 'Stop':
+        while self.state != 'Exit':
             #message = self.commands.get() if not self.commands.empty() else None
             #self.ProcessMessage(message)
             if playnext():
                 self.stream.write(self.data)
                 self.data = self.NextData()
-
+                
+                if self.data == None:
+                    self.state = 'Stop'
+                    self.Next()
+                
         self.data = None
         self.stream = None
         self.mf = None

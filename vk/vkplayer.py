@@ -10,6 +10,9 @@ from MusicPlayer import PlayerThread
 
 chachedir = 'musicchache'
 
+def DownLoadFile(url, filename):
+    open(filename, "w").write(urllib2.urlopen(url).read())
+
 def MusicFileName(mscdict):
     return mscdict['artist'] + ' - ' + mscdict['title'] + '.mp3'
 
@@ -25,17 +28,40 @@ def MusicList(token, uid):
     except:
         return None
 
-def DownLoadFile(url, filename):
-    open(filename, "w").write(urllib2.urlopen(url).read())
 
-def PlayMe(player, mscdict):
-    name = MusicFileName(mscdict)
-    path = chachedir + '/' + name
-    if not os.path.exists(path):
-        print name, '-DownLoading...'
-        DownLoadFile(mscdict['url'], path)
-    print 'Now Playing', name
-    player.PlayIt(path)
+class VKPlayer(PlayerThread):
+    def __init__(self, mlist):
+        super(VKPlayer, self).__init__()
+        self.mlist = mlist
+        self.cur_track = 0
+
+
+    def PlayMe(self, mscdict):
+        name = MusicFileName(mscdict)
+        path = chachedir + '/' + name
+        if not os.path.exists(path):
+            print name, '-DownLoading...'
+            DownLoadFile(mscdict['url'], path)
+        print 'Now Playing', name
+        self.PlayIt(path)
+
+    def CheckListRange(self):
+        return self.cur_track > -1 and self.cur_track < len(self.mlist)
+
+    def Prev(self):
+        self.cur_track -= 1
+        if self.CheckListRange():
+            self.PlayMe(self.mlist[self.cur_track])
+
+    def Next(self):
+        self.cur_track += 1
+        if self.CheckListRange():
+            self.PlayMe(self.mlist[self.cur_track])
+
+    def PlayNum(self, num):
+        self.cur_track = num
+        if self.CheckListRange():
+            self.PlayMe(self.mlist[self.cur_track])
 
 email = user_params['email']#raw_input("Email: ")
 password = user_params['password']#getpass.getpass()
@@ -48,7 +74,7 @@ print 'Getting playlist...'
 li = MusicList(token, user_id)
 
 print 'Creating daemon...'
-player = PlayerThread()
+player = VKPlayer(li)
 player.start()
 
 prlist = MusicListTitle(li)
@@ -59,36 +85,32 @@ current_number = 0
 command = ''
 while command != 'q':#cut my arms
     command = raw_input('~>')
-    try:
-        if len(command) > 1 and (command[0] == 'p'):
-            num = int(command.split()[1])
-            current_number = num
-            if (num > -1) or (num < len(li)):
-                PlayMe(player, li[current_number])
-        if command == 'b':
-            current_number -= 1
-            if (current_number > -1) or (current_number < len(li)):
-                PlayMe(player, li[current_number])
-        if command == 'n':
-            current_number += 1
-            if (current_number > -1) or (current_number < len(li)):
-                PlayMe(player, li[current_number])
-                
-        if command == 'p':
-            if player.state == 'Play':
-                player.Pause()
-            else:
-                player.Play()
-        if command == 's':
-            player.Stop()
-        if command == 'l':
-            prlist = MusicListTitle(li)
-            print prlist
-        if command == 'r':
-            li = MusicList(token, user_id)
-    except:
-        print 'Cannot process command, try again'
+    #try:
+    if len(command) > 1 and (command[0] == 'p'):
+        num = int(command.split()[1])
+        player.PlayNum(num)
+        
+    if command == 'b':
+        player.Prev()
+    if command == 'n':
+        player.Next()
+            
+    if command == 'p':
+        if player.state == 'Play':
+            player.Pause()
+        else:
+            player.Play()
+            
+    if command == 's':
+        player.Stop()
+    if command == 'l':
+        pl = MusicListTitle(player.mlist)
+        print pl
+    if command == 'r':
+        player.mlist = MusicList(token, user_id)
+    #except:
+    #    print 'Cannot process command, try again'
 
-player.Stop()
+player.Exit()
 player.join()
 
