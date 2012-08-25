@@ -110,7 +110,9 @@ def auth(email, password, client_id, scope):
 def call_api(method, params, token):
     params.append(("access_token", token))
     url = "https://api.vk.com/method/%s?%s" % (method, urlencode(params))
+    #print url
     ansewer = json.loads(urllib2.urlopen(url).read())
     if 'response' in ansewer:
         return ansewer["response"]
     return None
+
