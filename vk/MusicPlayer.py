@@ -42,6 +42,8 @@ class PlayerThread(Thread):
         return None
 
     def PlayIt(self, filename):
+        #print filename
+        #filename = unicode(filename)
         self.mf = mad.MadFile(filename)
         self.pya = pyaudio.PyAudio()
         p = self.pya

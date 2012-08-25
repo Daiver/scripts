@@ -4,6 +4,10 @@
 import os
 import urllib2
 
+import logging
+
+from threading import Thread
+
 from vk_auth import auth, call_api
 from vk_config import user_params
 from MusicPlayer import PlayerThread
@@ -39,9 +43,11 @@ class VKPlayer(PlayerThread):
         name = MusicFileName(mscdict)
         path = chachedir + '/' + name
         if not os.path.exists(path):
-            #print name, '-DownLoading...'
+            #print 
+            logging.info( name + u' - Downloading...' )
+
             DownLoadFile(mscdict['url'], path)
-        #print 'Now Playing', name
+        logging.info('Now Playing ' + name)
         self.PlayIt(path)
 
     def CheckListRange(self):
@@ -64,12 +70,47 @@ class VKPlayer(PlayerThread):
 
     def Now_Playing(self):
         if self.state in ('Stop', ):
-            return '{' + self.status + '}~>'
+            return '{' + self.state + '}~>'
         res = '{' + MusicFileName(self.mlist[self.cur_track]) + '}'
         if self.state == 'Pause':
             res += ' Paused '
         res += '~>'
         return res
+
+
+def InputCycle():
+    command = ''
+    while command != 'q':#cut my arms
+        command = raw_input(player.Now_Playing())
+        #try:
+        if len(command) > 1 and (command[0] == 'p'):
+            num = int(command.split()[1])
+            player.PlayNum(num)
+            
+        if command == 'b':
+            player.Prev()
+        if command == 'n':
+            player.Next()
+                
+        if command == 'p':
+            if player.state == 'Play':
+                player.Pause()
+            else:
+                if not player.data:
+                    player.PlayNum(player.cur_track)
+                player.Play()
+                
+        if command == 's':
+            player.Stop()
+        if command == 'l':
+            pl = MusicListTitle(player.mlist)
+            print pl
+        if command == 'r':
+            player.mlist = MusicList(token, user_id)
+        #except:
+        #    print 'Cannot process command, try again'
+
+#logging.basicConfig(level = logging.DEBUG)
 
 email = user_params['email']#raw_input("Email: ")
 password = user_params['password']#getpass.getpass()
@@ -88,39 +129,11 @@ player.start()
 prlist = MusicListTitle(li)
 print prlist
 
-current_number = 0
+inputthread = Thread(target=InputCycle)
 
-command = ''
-while command != 'q':#cut my arms
-    command = raw_input(player.Now_Playing())
-    #try:
-    if len(command) > 1 and (command[0] == 'p'):
-        num = int(command.split()[1])
-        player.PlayNum(num)
-        
-    if command == 'b':
-        player.Prev()
-    if command == 'n':
-        player.Next()
-            
-    if command == 'p':
-        if player.state == 'Play':
-            player.Pause()
-        else:
-            if not player.data:
-                player.PlayNum(player.cur_track)
-            player.Play()
-            
-    if command == 's':
-        player.Stop()
-    if command == 'l':
-        pl = MusicListTitle(player.mlist)
-        print pl
-    if command == 'r':
-        player.mlist = MusicList(token, user_id)
-    #except:
-    #    print 'Cannot process command, try again'
+inputthread.start()
 
+inputthread.join()
 player.Exit()
 player.join()
 
