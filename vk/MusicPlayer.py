@@ -57,7 +57,7 @@ class PlayerThread(Thread):
         return self.data == None
 
     def run(self):
-        self.state = 'Play'
+        self.state = 'Pause'
         playnext = lambda : (self.data != None) and self.state == 'Play'
         while self.state != 'Exit':
             #message = self.commands.get() if not self.commands.empty() else None

@@ -34,15 +34,14 @@ class VKPlayer(PlayerThread):
         super(VKPlayer, self).__init__()
         self.mlist = mlist
         self.cur_track = 0
-
-
+        
     def PlayMe(self, mscdict):
         name = MusicFileName(mscdict)
         path = chachedir + '/' + name
         if not os.path.exists(path):
-            print name, '-DownLoading...'
+            #print name, '-DownLoading...'
             DownLoadFile(mscdict['url'], path)
-        print 'Now Playing', name
+        #print 'Now Playing', name
         self.PlayIt(path)
 
     def CheckListRange(self):
@@ -62,6 +61,15 @@ class VKPlayer(PlayerThread):
         self.cur_track = num
         if self.CheckListRange():
             self.PlayMe(self.mlist[self.cur_track])
+
+    def Now_Playing(self):
+        if self.state in ('Stop', ):
+            return '{' + self.status + '}~>'
+        res = '{' + MusicFileName(self.mlist[self.cur_track]) + '}'
+        if self.state == 'Pause':
+            res += ' Paused '
+        res += '~>'
+        return res
 
 email = user_params['email']#raw_input("Email: ")
 password = user_params['password']#getpass.getpass()
@@ -84,7 +92,7 @@ current_number = 0
 
 command = ''
 while command != 'q':#cut my arms
-    command = raw_input('~>')
+    command = raw_input(player.Now_Playing())
     #try:
     if len(command) > 1 and (command[0] == 'p'):
         num = int(command.split()[1])
@@ -99,6 +107,8 @@ while command != 'q':#cut my arms
         if player.state == 'Play':
             player.Pause()
         else:
+            if not player.data:
+                player.PlayNum(player.cur_track)
             player.Play()
             
     if command == 's':
