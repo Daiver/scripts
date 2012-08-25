@@ -28,9 +28,7 @@ class PlayerThread(Thread):
 
     def Stop(self):
         self.state = 'Stop'
-        self.data = None
-        self.stream = None
-        self.mf = None
+        
 
     def Pause(self):
         self.state = 'Pause'
@@ -62,7 +60,10 @@ class PlayerThread(Thread):
             if playnext():
                 self.stream.write(self.data)
                 self.data = self.NextData()
-        self.Stop()
+
+        self.data = None
+        self.stream = None
+        self.mf = None
 '''
 def PlayIt(filename, event_for_pause):
 
