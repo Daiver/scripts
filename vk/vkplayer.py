@@ -11,10 +11,15 @@ import pytils
 from threading import Thread
 
 from vk_auth import auth, call_api
-from vk_config import user_params
+
 from MusicPlayer import PlayerThread
 from network import checkConnection
 from autocomplete import raw_complete as complete
+from ConfigWork import CreateFromConsole
+
+if not os.path.exists('vk_config.py'):
+    CreateFromConsole()
+from vk_config import user_params
 
 chachedir = 'musicchache'
 
@@ -132,6 +137,8 @@ def InputCycle():
             player.mlist = MusicList(token, user_id)
             pl = MusicListTitle(player.mlist)
             print pl
+        elif command == 'q':
+            continue
         else:
             completelist = complete(command, NormalMusicList(player.mlist))
             if len(completelist) == 1:
