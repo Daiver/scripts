@@ -13,8 +13,22 @@ from threading import Thread
 from vk_auth import auth, call_api
 from vk_config import user_params
 from MusicPlayer import PlayerThread
+from network import checkConnection
+from autocomplete import raw_complete as complete
 
 chachedir = 'musicchache'
+
+def ListFromDir(directory):
+    li = [directory + '/' + i for i in os.listdir(directory)]
+    res = []
+    for item in li:
+        x = item[item.find('/') + 1:]
+        if (len(x) > 3) and (x[-4:] == '.mp3'):
+            i =x.find(' - ')
+            artist = x[:i]
+            title = x[i + 3:-4]
+            res.append({'artist' : artist, 'title' : title})
+    return res
 
 def DownLoadFile(url, filename):
     open(filename, "w").write(urllib2.urlopen(url).read())
@@ -23,8 +37,11 @@ def MusicFileName(mscdict):
     simpleconc = lambda mscdict:mscdict['artist'] + ' - ' + mscdict['title'] + '.mp3'
     try:
         return pytils.translit.translify(simpleconc(mscdict))
-    except ValueError, e:
+    except :
         return simpleconc(mscdict)
+
+def NormalMusicList(li):
+    return [MusicFileName(x) for x in li]
 
 def MusicListTitle(li):
     res = ''
@@ -91,14 +108,13 @@ def InputCycle():
         #try:
         if len(command) > 1 and (command[0] == 'p'):
             num = int(command.split()[1])
-            player.PlayNum(num)
-            
-        if command == 'b':
+            player.PlayNum(num)            
+        elif command == 'b':
             player.Prev()
-        if command == 'n':
+        elif command == 'n':
             player.Next()
                 
-        if command == 'p':
+        elif command == 'p':
             if player.state == 'Play':
                 player.Pause()
             else:
@@ -106,27 +122,48 @@ def InputCycle():
                     player.PlayNum(player.cur_track)
                 player.Play()
                 
-        if command == 's':
+        elif command == 's':
             player.Stop()
-        if command == 'l':
+        elif command == 'l':
             pl = MusicListTitle(player.mlist)
             print pl
-        if command == 'r':
+        elif command == 'r':
+            print 'refreshing...'
             player.mlist = MusicList(token, user_id)
+            pl = MusicListTitle(player.mlist)
+            print pl
+        else:
+            completelist = complete(command, NormalMusicList(player.mlist))
+            if len(completelist) == 1:
+                num = completelist[0]
+                player.PlayNum(num)
+            elif len(completelist) > 1:
+                for x in completelist:
+                    print x, MusicFileName(player.mlist[x])
         #except:
         #    print 'Cannot process command, try again'
 
 #logging.basicConfig(level = logging.DEBUG)
 
+user_id = None
+token = None
+li = None
+
 email = user_params['email']#raw_input("Email: ")
 password = user_params['password']#getpass.getpass()
-
-print 'Connecting to vk.com...'
 client_id = "2951857" # Vk application ID
-token, user_id = auth(email, password, client_id, "users,offline,friends,audio")
 
-print 'Getting playlist...'
-li = MusicList(token, user_id)
+print 'Checking conection....'
+if checkConnection():
+    print 'Connecting to vk.com...'
+    token, user_id = auth(email, password, client_id, "users,offline,friends,audio")
+
+    print 'Getting playlist...'
+    li = MusicList(token, user_id)
+else:
+    print 'Failed to connect google.com'
+    print 'Loading chache'
+    li = ListFromDir(chachedir)
 
 print 'Creating daemon...'
 player = VKPlayer(li)
