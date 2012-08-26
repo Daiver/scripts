@@ -6,6 +6,8 @@ import urllib2
 
 import logging
 
+import pytils
+
 from threading import Thread
 
 from vk_auth import auth, call_api
@@ -18,7 +20,11 @@ def DownLoadFile(url, filename):
     open(filename, "w").write(urllib2.urlopen(url).read())
 
 def MusicFileName(mscdict):
-    return mscdict['artist'] + ' - ' + mscdict['title'] + '.mp3'
+    simpleconc = lambda mscdict:mscdict['artist'] + ' - ' + mscdict['title'] + '.mp3'
+    try:
+        return pytils.translit.translify(simpleconc(mscdict))
+    except ValueError, e:
+        return simpleconc(mscdict)
 
 def MusicListTitle(li):
     res = ''
