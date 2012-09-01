@@ -56,7 +56,9 @@ def MusicListTitle(li):
 
 def MusicList(token, uid):
     try:
-        return call_api('audio.get', [('uid', uid)], token)
+        if checkConnection():
+            return call_api('audio.get', [('uid', uid)], token)
+        return ListFromDir(chachedir)
     except:
         return None
 
@@ -97,9 +99,11 @@ class VKPlayer(PlayerThread):
             self.PlayMe(self.mlist[self.cur_track])
 
     def Now_Playing(self):
+        res = '{Stop}~>'
         if self.state in ('Stop', ):
-            return '{' + self.state + '}~>'
-        res = '{' + MusicFileName(self.mlist[self.cur_track]) + '}'
+            return res
+        if not self.CheckListRange(): return res
+        res = '{#%i %s}' % (self.cur_track, MusicFileName(self.mlist[self.cur_track]))
         if self.state == 'Pause':
             res += ' Paused '
         res += '~>'
@@ -110,80 +114,91 @@ def InputCycle():
     command = ''
     while command != 'q':#cut my arms
         command = raw_input(player.Now_Playing())
-        #try:
-        if len(command) > 1 and (command[0] == 'p'):
-            num = int(command.split()[1])
-            player.PlayNum(num)            
-        elif command == 'b':
-            player.Prev()
-        elif command == 'n':
-            player.Next()
-                
-        elif command == 'p':
-            if player.state == 'Play':
-                player.Pause()
+        try:
+            if len(command) > 2 and (command[0:2] == 'p '):
+                try:
+                    num = int(command.split()[1])
+                    player.PlayNum(num)
+                except ValueError as e:
+                    print 'Value error'
+                    
+            elif command == 'b':
+                player.Prev()
+            elif command == 'n':
+                player.Next()
+                    
+            elif command == 'p':
+                if player.state == 'Play':
+                    player.Pause()
+                else:
+                    if not player.data:
+                        player.PlayNum(player.cur_track)
+                    player.Play()
+                    
+            elif command == 's':
+                player.Stop()
+            elif command == 'l':
+                pl = MusicListTitle(player.mlist)
+                print pl
+            elif command == 'r':
+                print 'refreshing...'
+                player.mlist = MusicList(token, user_id)
+                pl = MusicListTitle(player.mlist)
+                print pl
+            elif command == 'q':
+                continue
             else:
-                if not player.data:
-                    player.PlayNum(player.cur_track)
-                player.Play()
-                
-        elif command == 's':
-            player.Stop()
-        elif command == 'l':
-            pl = MusicListTitle(player.mlist)
-            print pl
-        elif command == 'r':
-            print 'refreshing...'
-            player.mlist = MusicList(token, user_id)
-            pl = MusicListTitle(player.mlist)
-            print pl
-        elif command == 'q':
-            continue
-        else:
-            completelist = complete(command, NormalMusicList(player.mlist))
-            if len(completelist) == 1:
-                num = completelist[0]
-                player.PlayNum(num)
-            elif len(completelist) > 1:
-                for x in completelist:
-                    print x, MusicFileName(player.mlist[x])
-        #except:
-        #    print 'Cannot process command, try again'
+                completelist = complete(command, NormalMusicList(player.mlist))
+                if len(completelist) == 1:
+                    num = completelist[0]
+                    player.PlayNum(num)
+                elif len(completelist) > 1:
+                    for x in completelist:
+                        print x, MusicFileName(player.mlist[x])
+                        
+        except Exception as e:
+            print e            
 
 #logging.basicConfig(level = logging.DEBUG)
 
-user_id = None
-token = None
-li = None
+def main():
+    global user_id
+    global token
+    user_id = None
+    token = None
+    li = None
 
-email = user_params['email']#raw_input("Email: ")
-password = user_params['password']#getpass.getpass()
-client_id = "2951857" # Vk application ID
+    email = user_params['email']#raw_input("Email: ")
+    password = user_params['password']#getpass.getpass()
+    client_id = "2951857" # Vk application ID
 
-print 'Checking conection....'
-if checkConnection():
-    print 'Connecting to vk.com...'
-    token, user_id = auth(email, password, client_id, "users,offline,friends,audio")
+    print 'Checking conection....'
+    if checkConnection():
+        print 'Connecting to vk.com...'
+        token, user_id = auth(email, password, client_id, "users,offline,friends,audio")
+    else:
+        print 'Failed to connect google.com'
+        print 'Loading chache'    
 
     print 'Getting playlist...'
     li = MusicList(token, user_id)
-else:
-    print 'Failed to connect google.com'
-    print 'Loading chache'
-    li = ListFromDir(chachedir)
 
-print 'Creating daemon...'
-player = VKPlayer(li)
-player.start()
+    print 'Creating daemon...'
+    global player
+    player = VKPlayer(li)
+    player.start()
 
-prlist = MusicListTitle(li)
-print prlist
+    prlist = MusicListTitle(li)
+    print prlist
 
-inputthread = Thread(target=InputCycle)
+    inputthread = Thread(target=InputCycle)
 
-inputthread.start()
+    inputthread.start()
 
-inputthread.join()
-player.Exit()
-player.join()
+    inputthread.join()
+    player.Exit()
+    player.join()
 
+if __name__ == '__main__':
+    main()
+    
