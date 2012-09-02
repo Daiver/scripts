@@ -19,6 +19,7 @@ from ConfigWork import CreateFromConsole
 
 if not os.path.exists('vk_config.py'):
     CreateFromConsole()
+    
 from vk_config import user_params
 
 chachedir = 'musicchache'
@@ -39,11 +40,16 @@ def DownLoadFile(url, filename):
     open(filename, "w").write(urllib2.urlopen(url).read())
 
 def MusicFileName(mscdict):
+    res = ''
     simpleconc = lambda mscdict:mscdict['artist'] + ' - ' + mscdict['title'] + '.mp3'
     try:
-        return pytils.translit.translify(simpleconc(mscdict))
+        res = pytils.translit.translify(simpleconc(mscdict))
     except :
-        return simpleconc(mscdict)
+        res = simpleconc(mscdict)
+
+    res.replace('/', '|')
+    res.replace('\\', '|')
+    return res
 
 def NormalMusicList(li):
     return [MusicFileName(x) for x in li]
@@ -111,6 +117,7 @@ class VKPlayer(PlayerThread):
 
 
 def InputCycle():
+    command_history = []
     command = ''
     while command != 'q':#cut my arms
         command = raw_input(player.Now_Playing())
@@ -155,7 +162,8 @@ def InputCycle():
                 elif len(completelist) > 1:
                     for x in completelist:
                         print x, MusicFileName(player.mlist[x])
-                        
+            command_history.append(command)
+            #print command
         except Exception as e:
             print e            
 
