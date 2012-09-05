@@ -69,3 +69,4 @@ for k, v in dct.iteritems():
     if res[1] == 0:
         i += 1
 print i
+print tree

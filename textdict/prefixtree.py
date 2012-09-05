@@ -22,15 +22,44 @@ class Node:
         for k, v in self.childs.iteritems():
             res += '\n%s%s->%s' % (additional, k, v.__str__(additional + '   '))
         return res
+    
+    def Add(self, key, value):
+       
+       stack, res = self.Find(key)
+       if res == FIND_SUC:
+           stack[-1].value = value
+           return
         
+       depth = len(stack) - 1
+       if depth == len(key):
+           stack[-1].value = value
+           stack[-1].key = key
+           return
+       stack[-1].Append(key, value, len(stack) - 1)
 
+    def Find(self, key, stack=None): 
+        if not stack: stack = []
+        stack.append(self)
+        depth = len(stack) - 1
+        if self.key == key:
+            return stack, FIND_SUC
+        if (depth >= len(key)):
+            return stack, FIND_FAIL
+        
+        if key[depth] in self.childs:
+            return self.childs[key[depth]].Find(key, stack)
+
+        if depth == 0:
+            return stack, FIND_FAIL
+        
+        return stack, FIND_PART
+'''
     def Add(self, key, value, depth=0):
         if depth >= len(key): return False
-        node, depth, res = self.Find(key, depth)
+        stack, res = self.Find(key, depth)
         if res == FIND_SUC: return False
-        
-        node.Append(key, value, depth )
-        
+        node = stack[-1]
+        node.Append(key, value, len(stack) - 1)
 
     def Find(self, key, depth=0):
         if self.key == key:
@@ -42,6 +71,7 @@ class Node:
             return self.childs[key[depth]].Find(key, depth + 1)
         else:
             return self, depth, FIND_PART
+'''
 
 class Tree:
     def __init__(self):
@@ -51,16 +81,19 @@ class Tree:
         return str(self.root)
 
     def Find(self, key):
-        node, d, res = self.root.Find(key)
-        return node, res
+        #s res = 
+        return self.root.Find(key)
 
     def Add(self, key, value):
         self.root.Add(key, value)
+
 '''
 tree = Tree()
-tree.Add('123', 424244)
+
 tree.Add('124444', 2)
-tree.Add('12g', 2)
+tree.Add('126', 2)
+tree.Add('g2', 2)
+tree.Add('g', 2)
+
 print tree
 '''
-#print root.childs['1'].childs['2'].childs['3'].value
