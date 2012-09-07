@@ -1,8 +1,24 @@
 
+import os
+
 from prefixtree import Tree
 
 def xor(a, b):
     return (a and not b) or (not a and b)
+
+def treeDir(fullPath):
+    list = os.listdir(fullPath)
+    res = []
+    for path in list:
+        link = os.path.join(fullPath, path)
+        if os.path.isfile(link):
+            res.append(os.path.join(fullPath, path))#print 'FILE:', path
+        else:
+            if os.path.isdir(link):
+                for x in treeDir(link):
+                    res.append(x)
+    return res
+ 
 '''
 special_chars = [
         '!', '<', '>', '.', ',', '@', '#', '$', '%', ':', ';', '(', ')',
@@ -55,11 +71,16 @@ def completeTreet(dct):
             tree.Add(k, v)
             #print tree
     return tree
-    
+
+path = 'linux/arch'
+
+files = treeDir(path)
 
 dct = {}
-for x in open('../../TryOpenCV/hand_tracking/TrainNN.py'):
-    dct = getDict(x,dct)
+for f in files:
+    print f
+    for x in open(f):
+        dct = getDict(x,dct)
 
 tree = completeTreet(dct)
 
@@ -68,5 +89,13 @@ for k, v in dct.iteritems():
     res = tree.Find(k)
     if res[1] == 0:
         i += 1
-print i
-print tree
+#print i
+#print tree
+
+com = '1111'
+
+while com != '':
+    com = raw_input('>')
+    st, res = tree.Find(com)
+    print str(st[-1])
+    print len(st)
