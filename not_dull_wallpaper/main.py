@@ -6,9 +6,11 @@ import os
 
 import urllib2
 
+#import cv
+
 from random import random
 
-from htmllib import HTMLParser
+#from htmllib import HTMLParser
 
 from commands import *
 
@@ -35,7 +37,7 @@ def ImageListFromGoodFon():
         height = 768
         newUrl = "http://www.goodfon.ru/image/" + walIndex[0] + "-" + str(width) + "x" + str(height) + ".jpg"
 
-        filename = walIndex[0] + "-" + str(width) + "x" + str(height) + ".jpg"
+        #filename = walIndex[0] + "-" + str(width) + "x" + str(height) + ".jpg"
         res += [newUrl]
     return res
 
