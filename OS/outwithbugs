@@ -1,4 +1,3 @@
-start
 cry me a river
 drown you out
 all i want
@@ -14,8 +13,8 @@ Step : 9
 ---------------
 
 ---------------
-id=0 placing x=mono place9
-id is 0 now x=mono
+id=1 placing x=mono place9
+id is 1 now x=mono
 cry me a river
 drown you out
 all i want
@@ -28,6 +27,7 @@ last fight
 mono
 Step : 5
 ---------------
+---------------
 
 ---------------
 id=1 placing x=resident place5
@@ -38,20 +38,19 @@ id is 1 now x=resident
 id=1 placing x=given up place7
 id is 1 now x=given up
 ---------------
+
 ---------------
+id=1 placing x=last fight place8
+id is 1 now x=last fight
+---------------
+id:1|zsh|j=4|x=mono|st=9|
+---------------
+id=1 placing x=mono place4
+id is 1 now x=mono
 
 ---------------
 id=0 placing x=falling away place6
 id is 0 now x=falling away
----------------
-id:0|zsh|j=4|x=mono|st=9|
----------------
-id=1 placing x=last fight place8
-id is 1 now x=last fight
-
----------------
-id=0 placing x=mono place4
-id is 0 now x=mono
 cry me a river
 drown you out
 all i want
@@ -66,43 +65,43 @@ Step : 3
 ---------------
 id:0|cry me a river|j=0|x=colors|st=3|
 ---------------
-id=0 placing x=colors place0
-id is 0 now x=colors
----------------
-
----------------
-id=0 placing x=resident place5
-id is 0 now x=resident
----------------
-
----------------
-id=0 placing x=falling away place6
-id is 0 now x=falling away
----------------
-id:0|mono|j=4|x=given up|st=7|
----------------
-id=0 placing x=given up place4
-id is 0 now x=given up
----------------
-id:0|resident|j=5|x=last fight|st=8|
----------------
-id=0 placing x=last fight place5
-id is 0 now x=last fight
----------------
-
----------------
-id=0 placing x=zsh place9
-id is 0 now x=zsh
 ---------------
 
 ---------------
 id=1 placing x=mono place4
 id is 1 now x=mono
+---------------
+
+---------------
+id=1 placing x=resident place5
+id is 1 now x=resident
+---------------
+
+---------------
+id=1 placing x=falling away place6
+id is 1 now x=falling away
+---------------
+id:1|mono|j=4|x=given up|st=7|
+---------------
+id=1 placing x=given up place4
+id is 1 now x=given up
+---------------
+id:1|resident|j=5|x=last fight|st=8|
+---------------
+id=1 placing x=last fight place5
+id is 1 now x=last fight
+---------------
+
+---------------
+id=1 placing x=zsh place9
+id is 1 now x=zsh
+id=0 placing x=colors place0
+id is 0 now x=colors
 colors
 drown you out
 all i want
 cry me a river
-mono
+given up
 last fight
 falling away
 mono
@@ -112,50 +111,50 @@ Step : 2
 ---------------
 id:1|colors|j=0|x=all i want|st=2|
 ---------------
-id=1 placing x=all i want place0
-id is 1 now x=all i want
----------------
-
----------------
-id=1 placing x=mono place4
-id is 1 now x=mono
----------------
-
----------------
-id=1 placing x=last fight place5
-id is 1 now x=last fight
----------------
-id:1|mono|j=4|x=falling away|st=6|
----------------
-id=1 placing x=falling away place4
-id is 1 now x=falling away
----------------
-
----------------
-id=1 placing x=mono place7
-id is 1 now x=mono
----------------
-
----------------
-id=1 placing x=resident place8
-id is 1 now x=resident
----------------
-
----------------
-id=1 placing x=zsh place9
-id is 1 now x=zsh
 ---------------
 id:0|drown you out|j=1|x=cry me a river|st=3|
 ---------------
 id=0 placing x=cry me a river place1
 id is 0 now x=cry me a river
+---------------
+
+---------------
+id=0 placing x=given up place4
+id is 0 now x=given up
+---------------
+
+---------------
+id=0 placing x=last fight place5
+id is 0 now x=last fight
+---------------
+id:0|given up|j=4|x=falling away|st=6|
+---------------
+id=0 placing x=falling away place4
+id is 0 now x=falling away
+---------------
+
+---------------
+id=0 placing x=mono place7
+id is 0 now x=mono
+---------------
+
+---------------
+id=0 placing x=resident place8
+id is 0 now x=resident
+---------------
+
+---------------
+id=0 placing x=zsh place9
+id is 0 now x=zsh
+id=1 placing x=all i want place0
+id is 1 now x=all i want
 all i want
 cry me a river
 colors
 drown you out
 falling away
 last fight
-mono
+given up
 mono
 resident
 zsh
@@ -163,8 +162,11 @@ Step : 1
 ---------------
 
 ---------------
-id=0 placing x=cry me a river place1
-id is 0 now x=cry me a river
+---------------
+id:0|cry me a river|j=1|x=colors|st=2|
+---------------
+id=0 placing x=colors place1
+id is 0 now x=colors
 ---------------
 
 ---------------
@@ -181,10 +183,10 @@ id is 0 now x=falling away
 id=0 placing x=last fight place5
 id is 0 now x=last fight
 ---------------
-
+id:0|last fight|j=5|x=given up|st=6|
 ---------------
-id=0 placing x=mono place6
-id is 0 now x=mono
+id=0 placing x=given up place5
+id is 0 now x=given up
 ---------------
 
 ---------------
@@ -200,29 +202,26 @@ id is 0 now x=resident
 ---------------
 id=0 placing x=zsh place9
 id is 0 now x=zsh
----------------
-id:1|cry me a river|j=1|x=colors|st=2|
----------------
-id=1 placing x=colors place1
-id is 1 now x=colors
+id=1 placing x=cry me a river place1
+id is 1 now x=cry me a river
 all i want
-colors
+cry me a river
 cry me a river
 drown you out
 falling away
+given up
 last fight
-mono
 mono
 resident
 zsh
 ==============================finish sort=================================
 all i want
-colors
+cry me a river
 cry me a river
 drown you out
 falling away
+given up
 last fight
-mono
 mono
 resident
 zsh
