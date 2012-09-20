@@ -85,12 +85,12 @@ void *threadwork(void *data)
 
             int j;
             //vector<int> tmp;
-            /*cout<<"---------------\n";
+            cout<<"---------------\n";
             for(j = tk.start - tk.step; (j >= 0) && (x < (*tk.items)[j]); j = j - tk.step)
             {
                 cout<<"id:"<<id<<"|"<<(*tk.items)[j]<<"|j="<<j<<"|x="<<x<<"|st="<<tk.start<<"|";
             }
-            cout<<"\n---------------\n";*/
+            cout<<"\n---------------\n";
             for(j = tk.start - tk.step; (j >= 0) && (x < (*tk.items)[j]); j = j - tk.step)
             {
 
