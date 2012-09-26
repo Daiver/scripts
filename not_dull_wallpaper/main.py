@@ -4,6 +4,8 @@ import re
 
 import os
 
+import sys
+
 import urllib2
 
 #import cv
@@ -19,8 +21,12 @@ from time import time
 def DownLoadFile(url, filename):
     open(filename, "w").write(urllib2.urlopen(url).read())
 
-OS_NAME = 'UBUNTU'
+DE_NAME = 'unity'
+setwallpapers = {}
 from ubuntu import SetWallpaper
+setwallpapers['unity'] = SetWallpaper
+from awesome import SetWallpaper
+setwallpapers['awesome'] = SetWallpaper
 
 def ImageListFromGoodFon():
     page = urllib2.urlopen("http://www.goodfon.ru/mix.php")
@@ -48,8 +54,11 @@ def Refresh(imagelist, wallsetmeth):
     DownLoadFile(imagename, filename)
     wallsetmeth(filename)
 
+if len(sys.argv) > 1:
+    DE_NAME = sys.argv[1]
+
 st = time()
-Refresh(ImageListFromGoodFon(), SetWallpaper)
+Refresh(ImageListFromGoodFon(), setwallpapers[DE_NAME])
 print 'time', time() - st
 #print SetWallpaper('%s/%s' % (ROOT_PATH, 'images_chache/1.png'))
 
