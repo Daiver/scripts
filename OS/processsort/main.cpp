@@ -10,14 +10,32 @@
 #include <vector>
 #include <stdio.h>
 
+
 class ShellManager:public Manager
 {
 	public:
 	ShellManager(int num_of_process):Manager(num_of_process)
 	{
-	
+
 	}
+	void WorkCycle();
 };
+
+void ShellManager::WorkCycle()
+{
+	char buf[80];
+	read(pipes[0], buf, 3);
+	//printf("id=%i\n", this->work_semid);
+	while (buf[0] != 1)
+	{
+		buf[0] = ' ';
+		buf[3] = 0;
+		printf("str = %s\n", buf);
+		read(pipes[0], buf, 3);
+		this->incsem(this->work_semid);
+	}
+	exit(0);
+}
 
 int createsem();
 void delsem(int semid);
@@ -30,78 +48,42 @@ using namespace std;
 
 int main(int argc, char** argv)
 {
-	int num_of_proc = 100;
-	Manager man(num_of_proc);
-	//man.Start();
-	char *s = "chaneler";
-	char buf[80];
-	int pipes[2];
-	pipe(pipes);
 	int semid = createsem();
 	incsem(semid);	
 	waitsem(semid, 1);
 	//sleep(1);
-	incsem(semid);
-
-	for (int i = 0; i< num_of_proc; i++)
-	{
-		int pid = fork();
-		switch	(pid)
-		{
-			case 0:
-				childwork(pipes);
-				return 0;
-			break;
-			case -1:
-				;//printf("ork error!!!");
-			break;
-			default:
-				;
-		}
-	}
-	//write(pipes[1], s,6 );
+	//incsem(semid);
+	int num_of_proc = 50;
+	ShellManager man(num_of_proc);
+	man.Start();
+	char *s = "chaneler";
+	char buf[80];
 	for (int i = 0; i < 8; i += 2)
 	{
 		char buf[2];
-		buf[0] = s[i];
-		buf[1] = s[i + 1];		
-		write(pipes[1], buf, 2);
+		buf[0] = 0;
+		buf[1] = s[i];
+		buf[2] = s[i + 1];
+		//write(man.pipes[1], 0, 1);
+		write(man.pipes[1], buf, 3);
 	}
+	//man.WaitForTaskEnd(0);
 	s = "1";
+	buf[0] = 1;
+	buf[1] = 1;
+	buf[2] = 0;
 	for (int i = 0; i< num_of_proc; i++)
 	{
-		write(pipes[1], s, 2);
+//		write(man.pipes[1], 0, 1);
+		write(man.pipes[1], buf, 3);
 	}
-	delsem(semid);	
-	printf("the end");
+	//delsem(semid);	
 	man.Free();
+	printf("the end");
 	return 0;	
 	
 }
 
-int childwork(int pipes[2])
-{
-	//printf("Hi!\n");
-	char buf[80];
-	read(pipes[0], buf, 2);
-	while (buf[0] != '1')
-	{
-		buf[2] = 0;
-		printf("%s\n", buf);
-		read(pipes[0], buf, 2);
-	}
-}
-
-void delsem(int semid)
-{
-	if((semctl(semid, 0, IPC_RMID)) < 0) { /* Удаление семафора */
-		perror("semctl IPC_RMID");
-		exit(EXIT_FAILURE);
-	} else {
-		puts("semaphore removed");
-		//system("ipcs -s");
-	}
-}
 
 int createsem()
 {
@@ -116,6 +98,7 @@ int createsem()
 	printf("semaphore created: %d\n", semid);
 	return semid;
 }
+
 
 void incsem(int semid)
 {
@@ -143,6 +126,55 @@ int waitsem(int semid, int num)
 }
 
 
+/*	int pipes[2];
+	pipe(pipes);
+	int semid = createsem();
+	incsem(semid);	
+	waitsem(semid, 1);
+	//sleep(1);
+	incsem(semid);
+
+	for (int i = 0; i< num_of_proc; i++)
+	{
+		int pid = fork();
+		switch	(pid)
+		{
+			case 0:
+				childwork(pipes);
+				return 0;
+			break;
+			case -1:
+				;//printf("ork error!!!");
+			break;
+			default:
+				;
+		}
+	}
+	//write(pipes[1], s,6 );
+
+int childwork(int pipes[2])
+{
+	//printf("Hi!\n");
+	char buf[80];
+	read(pipes[0], buf, 2);
+	while (buf[0] != '1')
+	{
+		buf[2] = 0;
+		printf("%s\n", buf);
+		read(pipes[0], buf, 2);
+	}
+}
+
+void delsem(int semid)
+{
+	if((semctl(semid, 0, IPC_RMID)) < 0) { 
+		perror("semctl IPC_RMID");
+		exit(EXIT_FAILURE);
+	} else {
+		puts("semaphore removed");
+		//system("ipcs -s");
+	}
+}
 
 
 
@@ -154,7 +186,9 @@ int waitsem(int semid, int num)
 
 
 
-/*	int pid = fork();
+
+
+	int pid = fork();
 	if (pid)
 	{
 		write(pipes[1], s,7 + 1);

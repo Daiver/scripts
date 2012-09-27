@@ -1,20 +1,28 @@
 
 class Manager
 {
-	private:
-		int pipes[2];//pipes :)
+	protected:		
 		int work_semid;//semaphoreid
 		int createsem();
 		void delsem(int semid);
 		void incsem(int semid);
 		int waitsem(int semid, int num);
 		int num_of_process;
+		int last_sem_ind;
 	public:
+		int pipes[2];//pipes :)
 		Manager(int num_of_process);
 		void Free();		
 		void Start();
-		void WorkCycle();
+		void WaitForTaskEnd(int tasksize);
+		virtual void WorkCycle();
 };
+
+void Manager::WaitForTaskEnd(int tasksize)
+{
+	waitsem(this->work_semid, tasksize + this->last_sem_ind);
+	this->last_sem_ind += tasksize;
+}
 
 void Manager::Free()
 {
@@ -31,6 +39,7 @@ Manager::Manager(int num_of_process)
 	this->num_of_process = num_of_process;
 	pipe(pipes);
 	this->work_semid = createsem();	
+	this->last_sem_ind = 0;
 }
 
 
