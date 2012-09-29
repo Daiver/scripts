@@ -52,13 +52,17 @@ def GetElementsFromPage(pageaddr, elements):
             tagname = tag.tag
             #print tagname
             if tagname == 'a':
-                href = int(tag.get('href')[1:])
+                #print tag.get('href')
+                tmp = tag.get('href')
+                lind = tmp.find('i')
+                
+                href = int(tmp[1:lind]) if lind  else int(tmp[1:])
                 el['href'] = href
             
         elements[href] = el
 
     #p = re.compile(r"/upload/avtochmo/original/[a-z0-9_]+\.jpg")#/upload/avtochmo/original
-        p = re.compile(r"/upload/avtochmo/original/[A-zА-я0-9_]+\.jpg")
+    p = re.compile(r"/upload/avtochmo/original/[A-zА-я0-9_]+\.jpg")
     #[a-z][a-z0-9\._]
     for el in elements:
         page = urllib2.urlopen("http://autochmo.ru/%s" % el)
@@ -74,19 +78,22 @@ def GetElementsFromPage(pageaddr, elements):
             elements[el]['number'] = None
 
 
-elements = {}
-
 pageaddr = "http://autochmo.ru"
 
 destdir = '/home/kirill/fromavtochmo/'
 
 start = time()
-GetElementsFromPage(pageaddr, elements)
-print 'time:', time() - start
-print elements
 
-for k, el in elements.iteritems():
-    DownLoadEl(pageaddr, el, destdir)
+for i in xrange(1, 745):
+    addr = pageaddr if i == 0 else pageaddr + '/?page=' + str(i)
+    print 'scan page', i, addr
+    elements = {}
+    GetElementsFromPage(addr, elements)
+    print 'time:', time() - start
+    print elements
+
+    for k, el in elements.iteritems():
+        DownLoadEl(pageaddr, el, destdir)
 
 #DownLoadImage(pageaddr + 'upload/avtochmo/original/b787tm_20120929190912.jpg', destdir)
 #MkDir(destdir, '12344')
