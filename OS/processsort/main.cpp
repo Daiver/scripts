@@ -2,7 +2,7 @@
 #include <sys/ipc.h>
 #include <sys/shm.h>
 #include <sys/sem.h>
-
+#include <sys/wait.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -51,12 +51,29 @@ using namespace std;
 
 int main(int argc, char** argv)
 {
-	//int semid = createsem();
-	//incsem(semid);	
-	//waitsem(semid, 1);
-	//sleep(1);
-	//incsem(semid);
-	//delsem(semid);	
+	key_t mykey = 12345678;
+	const size_t region_size = 4096 + 10;//sysconf(_SC_PAGE_SIZE);
+	int smid = shmget(mykey, region_size, IPC_CREAT | 0666);
+
+	void *ptr;
+	ptr = shmat(smid, NULL, 0);
+	pid_t pid = fork();
+	if (pid == 0) {
+		int *d = (int *) ptr;
+		//*d = 0xdeadbeef;
+		d[0] = 10;
+		exit(0);
+	}
+	else {
+		int status;
+		waitpid(pid, &status, 0);
+		//printf("child wrote %#lx\n", *(u_long *) ptr);
+		printf("child wrote %i\n", ((int *)ptr)[0]);
+	}
+	int r = shmdt(ptr);
+	r = shmctl(smid, IPC_RMID, NULL);	
+
+	/*
 	int num_of_proc = 10;
 	ShellManager man(num_of_proc);
 	man.Start();
@@ -72,7 +89,7 @@ int main(int argc, char** argv)
 		write(man.pipes[1], buf, 3);
 	}
 	printf("Start wait\n");
-	man.WaitForTaskEnd(3);
+	man.WaitForTaskEnd(4);
 	printf("End wait\n");	
 	s = "1";
 	buf[0] = 1;
@@ -84,63 +101,9 @@ int main(int argc, char** argv)
 		write(man.pipes[1], buf, 3);
 	}
 	
-	man.Free();
+	man.Free();*/
 	printf("the end\n");
 	return 0;	
 	
 }
-
-void delsem(int semid)
-{
-	if((semctl(semid, 0, IPC_RMID)) < 0) { 
-		perror("semctl IPC_RMID");
-		exit(EXIT_FAILURE);
-	} else {
-		puts("semaphore removed");
-		//system("ipcs -s");
-	}
-}
-
-
-int createsem()
-{
-	int semid;
-	int nsems = 1;
-	int flags = 0666;
-	semid = semget(IPC_PRIVATE, nsems, flags);
-	if(semid < 0) {
-		perror("semget");
-		exit(EXIT_FAILURE);
-	}
-	printf("semaphore created: %d\n", semid);
-	return semid;
-}
-
-
-void incsem(int semid)
-{
-	struct sembuf buf;
-	buf.sem_num = 0;
-	buf.sem_op = 1;
-	buf.sem_flg = IPC_NOWAIT; 
-	if((semop(semid, &buf, 1)) < 0) {
-		perror("semop");
-		exit(EXIT_FAILURE);
-	}
-}
-
-int waitsem(int semid, int num)
-{
-	struct sembuf buf;
-	buf.sem_num = 0;
-	buf.sem_op = -num;
-	buf.sem_flg = 0;//SEM_UNDO; 
-	if((semop(semid, &buf, 1)) < 0) {
-		perror("semop");
-		exit(EXIT_FAILURE);
-	}
-	return 0;
-}
-
-
 
