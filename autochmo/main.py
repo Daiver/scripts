@@ -22,7 +22,10 @@ def MkDir(destdir, name):
     getoutput(template)
 
 def DownLoadFile(url, filename):
-    open(filename, "w").write(urllib2.urlopen(url).read())
+    try:
+        open(filename, "w").write(urllib2.urlopen(url).read())
+    except Exception as e:
+        print 'error on url', url, 'with fname', filename, '\nerror:', e
 
 def DownLoadImage(url, destdir):
     num_st_ind = url.rfind('/')
@@ -83,7 +86,7 @@ pageaddr = "http://autochmo.ru"
 destdir = '/home/kirill/fromavtochmo/'
 
 
-for i in xrange(0, 745):
+for i in xrange(528, 745):
     start = time()
     addr = pageaddr if i == 0 else pageaddr + '/?page=' + str(i)
     print 'scan page', i, addr
