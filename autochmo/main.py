@@ -62,7 +62,7 @@ def GetElementsFromPage(pageaddr, elements):
         elements[href] = el
 
     #p = re.compile(r"/upload/avtochmo/original/[a-z0-9_]+\.jpg")#/upload/avtochmo/original
-    p = re.compile(r"/upload/avtochmo/original/[A-zА-я0-9_]+\.jpg")
+    p = re.compile(r"/upload/avtochmo/original/[A-zА-я0-9_\.]+\.jpg")
     #[a-z][a-z0-9\._]
     for el in elements:
         page = urllib2.urlopen("http://autochmo.ru/%s" % el)
@@ -82,9 +82,9 @@ pageaddr = "http://autochmo.ru"
 
 destdir = '/home/kirill/fromavtochmo/'
 
-start = time()
 
-for i in xrange(1, 745):
+for i in xrange(0, 745):
+    start = time()
     addr = pageaddr if i == 0 else pageaddr + '/?page=' + str(i)
     print 'scan page', i, addr
     elements = {}
