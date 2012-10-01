@@ -18,14 +18,13 @@ void printarr(vector<string> *arr);
 void shell(vector<string> *items, int num_of_threads);
 vector<int> *GetSteps(int count);
 
-class Task
+struct Task
 {
-    public:
+    //public:
     int start;
     int step;
     vector<string> *items;
 };
-
 
 class TaskManager
 {
@@ -35,9 +34,27 @@ public:
     queue<int> product;
     pthread_mutex_t taskmutex;
     pthread_mutex_t productmutex;
+    pthread_mutex_t coutmutex;
+
+    pthread_mutex_t taskcompletmutex;
+    pthread_cond_t taskcomplete;
     TaskManager(int num_of_threads);
     bool finish;
 };
+
+
+class ThreadPacket
+{
+    public:
+    int number;
+    TaskManager* tm;
+    ThreadPacket(int number, TaskManager* tm)
+    {
+        this->number = number;
+        this->tm = tm;
+    }
+};
+
 
 Task taskfp(int start, int step, vector<string> *items)
 {
@@ -50,7 +67,9 @@ Task taskfp(int start, int step, vector<string> *items)
 
 void *threadwork(void *data)
 {
-    TaskManager *tm = (TaskManager *)data;
+    ThreadPacket *tp = (ThreadPacket *)data;
+    TaskManager *tm = tp->tm; //= (TaskManager *)data;
+    int id = tp->number;
     while (!tm->finish)
     {
         pthread_mutex_lock( &tm->taskmutex );
@@ -63,22 +82,38 @@ void *threadwork(void *data)
             if ((tk.start < 0) || (tk.start >= tk.items->size()))
             {
                 tm->product.push(1);
+                cout<<"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
                 continue;
             }
-
             string x = (*tk.items)[tk.start];
 
             int j;
+            //vector<int> tmp;
+            /*cout<<"---------------\n";
+            for(j = tk.start - tk.step; (j >= 0) && (x < (*tk.items)[j]); j = j - tk.step)
+            {
+                cout<<"id:"<<id<<"|"<<(*tk.items)[j]<<"|j="<<j<<"|x="<<x<<"|st="<<tk.start<<"|";
+            }
+            cout<<"\n---------------\n";*/
             for(j = tk.start - tk.step; (j >= 0) && (x < (*tk.items)[j]); j = j - tk.step)
             {
 
                 (*tk.items)[j + tk.step] = (*tk.items)[j];
             }
-
+            //cout<<"id is "<<id<<" placing x="<<x<<" place"<<j+tk.step<<"\n"<<flush;
             (*tk.items)[j + tk.step] = x;
+            //cout<<"id is "<<id<<" now x="<<(*tk.items)[j + tk.step]<<"\n"<<flush;
+            pthread_mutex_lock( &tm->coutmutex );
+            cout<<"id "<<id<<" task: start "<<tk.start<<" step"<<tk.step<<"\n"<<flush;
+            cout<<"j="<<j<<" x="<<x<<" place="<<j + tk.step<<"\n";
+            cout<<"==================================\n";
+            printarr(tk.items);
+            cout<<"==============end==================\n";
+            pthread_mutex_unlock( &tm->coutmutex );
 
             pthread_mutex_lock( &tm->productmutex );
             tm->product.push(1);
+            pthread_cond_signal(&tm->taskcomplete);
             pthread_mutex_unlock( &tm->productmutex );
         }
         else{pthread_mutex_unlock(&tm->taskmutex);}
@@ -94,24 +129,51 @@ TaskManager::TaskManager(int num_of_threads)
     finish = false;
     taskmutex = PTHREAD_MUTEX_INITIALIZER;
     productmutex = PTHREAD_MUTEX_INITIALIZER;
+    coutmutex = PTHREAD_MUTEX_INITIALIZER;
+
+    taskcompletmutex = PTHREAD_MUTEX_INITIALIZER;
+    pthread_cond_init(&this->taskcomplete, 0);
     this->threads = (pthread_t *)malloc(sizeof(pthread_t) * num_of_threads);
     int t, rc;
 	for (t = 0; t < num_of_threads; t++)
 	{
-		rc = pthread_create(&threads[t], NULL, threadwork, (void *)this);
+		//rc = pthread_create(&threads[t], NULL, threadwork, (void *)this);
+		rc = pthread_create(&threads[t], NULL, threadwork, (void *)new ThreadPacket(t, this));
 		if (rc)	{printf("error!");}
 	}
 }
 
 int main(int argc, char** argv)
 {
+    if (argc != 2)
+    {
+        cout<<"2 parametrs"<<endl;
+        return 0;
+    }
+    int num_of_threads = atoi(argv[1]);
     vector<string> *items = ReadFromFile("input");
     printarr(items);
     cout<<"==============================start sort==============================\n";
-    shell(items, 5);
+    shell(items, num_of_threads);
     cout<<"==============================finish sort=================================\n";
     printarr(items);
     return 0;
+}
+
+void simplesort(vector<string> *items)
+{
+    int j;
+    string x;
+    for(int i = 1; i < items->size(); ++i)
+    {
+        x = (*items)[i];
+        for(j = i - 1; (j >= 0) && (x < (*items)[j]); j--)
+        {
+
+            (*items)[j + 1] = (*items)[j];
+        }
+        (*items)[j + 1] = x;
+    }
 }
 
 void shell(vector<string> *items, int num_of_threads)
@@ -123,7 +185,7 @@ void shell(vector<string> *items, int num_of_threads)
     {
         int step = (*steps)[t];
         int j, counter = 0;
-        //cout<<"Step : "<<step<<endl;
+        cout<<"Step : "<<step<<endl;
 		for(int i = step; i < items->size(); ++i)
 		{
 		    counter++;
@@ -132,9 +194,12 @@ void shell(vector<string> *items, int num_of_threads)
 		}
 		while (tm.product.size() < counter)
 		{
-		    sleep(0);
+		    pthread_cond_wait(&tm.taskcomplete, &tm.productmutex);
+		    //pthread_cond_wait(&tm.taskcomplete, &tm.taskcompletmutex);
+		    //sleep(0);
 		}
 		tm.product = queue<int>();
+		//printarr(items);
     }
     tm.finish = true;
     int t;
@@ -174,7 +239,7 @@ vector<string> *ReadFromFile(string filename)
 void printarr(vector<string> *arr)
 {
     for (int i = 0; i < arr->size(); i++)
-        cout<<(*arr)[i]<<endl;
+        cout<<i<<" "<<(*arr)[i]<<endl;
 }
 
 
