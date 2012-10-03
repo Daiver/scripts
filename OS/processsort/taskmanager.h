@@ -3,13 +3,15 @@ class Manager
 {
 	protected:		
 		int work_semid;//semaphoreid
-		int createsem();
+		int createsem(int num);
 		void delsem(int semid);
 		void incsem(int semid);
 		int waitsem(int semid, int num);
 		int num_of_process;
 		int last_sem_ind;
+
 	public:
+		int cursem;
 		int pipes[2];//pipes :)
 		Manager(int num_of_process);
 		void Free();		
@@ -20,7 +22,7 @@ class Manager
 
 void Manager::WaitForTaskEnd(int tasksize)
 {
-	waitsem(this->work_semid, tasksize + this->last_sem_ind);
+	waitsem(this->work_semid, tasksize);
 	this->last_sem_ind += tasksize;
 }
 
@@ -37,8 +39,9 @@ void Manager::WorkCycle()
 Manager::Manager(int num_of_process)
 {
 	this->num_of_process = num_of_process;
+	this->cursem = 0;
 	pipe(pipes);
-	this->work_semid = createsem();	
+	this->work_semid = createsem(5);	
 	this->last_sem_ind = 0;
 }
 
@@ -74,10 +77,10 @@ void Manager::delsem(int semid)
 	}
 }
 
-int Manager::createsem()
+int Manager::createsem(int nsems)
 {
 	int semid;
-	int nsems = 1;
+	//int nsems = 1;
 	int flags = 0666;
 	semid = semget(IPC_PRIVATE, nsems, flags);
 	if(semid < 0) {
@@ -91,7 +94,7 @@ int Manager::createsem()
 void Manager::incsem(int semid)
 {
 	struct sembuf buf;
-	buf.sem_num = 0;
+	buf.sem_num = this->cursem;
 	buf.sem_op = 1;
 	buf.sem_flg = IPC_NOWAIT; 
 	if((semop(semid, &buf, 1)) < 0) {
@@ -103,7 +106,7 @@ void Manager::incsem(int semid)
 int Manager::waitsem(int semid, int num)
 {
 	struct sembuf buf;
-	buf.sem_num = 0;
+	buf.sem_num = this->cursem;
 	buf.sem_op = -num;
 	buf.sem_flg = 0;//SEM_UNDO; 
 	if((semop(semid, &buf, 1)) < 0) {

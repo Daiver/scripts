@@ -51,7 +51,7 @@ using namespace std;
 
 int main(int argc, char** argv)
 {
-	key_t mykey = 12345678;
+	/*key_t mykey = 12345678;
 	const size_t region_size = 4096 + 10;//sysconf(_SC_PAGE_SIZE);
 	int smid = shmget(mykey, region_size, IPC_CREAT | 0666);
 
@@ -73,22 +73,31 @@ int main(int argc, char** argv)
 	int r = shmdt(ptr);
 	r = shmctl(smid, IPC_RMID, NULL);	
 
-	/*
+	*/
 	int num_of_proc = 10;
 	ShellManager man(num_of_proc);
 	man.Start();
-	char *s = "chaneler";
+	char *s = "chanaler";
 	char buf[80];
-	for (int i = 0; i < 8; i += 2)
+	for (int i = 0; i < 10; i += 2)
 	{
 		buf[0] = 0;
 		buf[1] = 66 + (char)i % 254;
-		//printf("buf=%c", buf[1]);
 		buf[2] = s[i + 1];
-		//write(man.pipes[1], 0, 1);
 		write(man.pipes[1], buf, 3);
 	}
 	printf("Start wait\n");
+	man.WaitForTaskEnd(5);
+	printf("End wait\n");	
+	//man.cursem++;
+	for (int i = 0; i < 8; i += 2)
+	{
+		buf[0] = 0;
+		buf[1] = 75 + (char)i % 254;
+		buf[2] = s[i + 1];
+		write(man.pipes[1], buf, 3);
+	}
+	printf("Start wait again\n");
 	man.WaitForTaskEnd(4);
 	printf("End wait\n");	
 	s = "1";
@@ -97,11 +106,10 @@ int main(int argc, char** argv)
 	buf[2] = 0;
 	for (int i = 0; i< num_of_proc; i++)
 	{
-//		write(man.pipes[1], 0, 1);
 		write(man.pipes[1], buf, 3);
 	}
 	
-	man.Free();*/
+	man.Free();
 	printf("the end\n");
 	return 0;	
 	
