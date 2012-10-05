@@ -41,7 +41,7 @@ Manager::Manager(int num_of_process)
 	this->num_of_process = num_of_process;
 	this->cursem = 0;
 	pipe(pipes);
-	this->work_semid = createsem(5);	
+	this->work_semid = createsem(1);	
 	this->last_sem_ind = 0;
 }
 
