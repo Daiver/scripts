@@ -88,13 +88,6 @@ void *threadwork(void *data)
             string x = (*tk.items)[tk.start];
 
             int j;
-            //vector<int> tmp;
-            /*cout<<"---------------\n";
-            for(j = tk.start - tk.step; (j >= 0) && (x < (*tk.items)[j]); j = j - tk.step)
-            {
-                cout<<"id:"<<id<<"|"<<(*tk.items)[j]<<"|j="<<j<<"|x="<<x<<"|st="<<tk.start<<"|";
-            }
-            cout<<"\n---------------\n";*/
             for(j = tk.start - tk.step; (j >= 0) && (x < (*tk.items)[j]); j = j - tk.step)
             {
 
@@ -103,13 +96,6 @@ void *threadwork(void *data)
             //cout<<"id is "<<id<<" placing x="<<x<<" place"<<j+tk.step<<"\n"<<flush;
             (*tk.items)[j + tk.step] = x;
             //cout<<"id is "<<id<<" now x="<<(*tk.items)[j + tk.step]<<"\n"<<flush;
-            pthread_mutex_lock( &tm->coutmutex );
-            cout<<"id "<<id<<" task: start "<<tk.start<<" step"<<tk.step<<"\n"<<flush;
-            cout<<"j="<<j<<" x="<<x<<" place="<<j + tk.step<<"\n";
-            cout<<"==================================\n";
-            printarr(tk.items);
-            cout<<"==============end==================\n";
-            pthread_mutex_unlock( &tm->coutmutex );
 
             pthread_mutex_lock( &tm->productmutex );
             tm->product.push(1);
