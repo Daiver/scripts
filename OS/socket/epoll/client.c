@@ -5,13 +5,15 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <stdlib.h>
-int main()
+int main(int argc, char** argv)
 {
 	int sockfd;
 	int len;
 	struct sockaddr_in address;
 	int result;
 	char ch = 'A';
+	if (argc == 2)
+		ch = argv[1][0];
 	sockfd = socket(AF_INET, SOCK_STREAM, 0);
 	address.sin_family = AF_INET;
 	address.sin_addr.s_addr = inet_addr("127.0.0.1");

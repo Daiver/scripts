@@ -103,15 +103,12 @@ int main (int argc, char *argv[])
 {
   int sfd, s;
   int efd;
-  pipe(pipes);
-  pthread_t thread;
-  printf("before thread create\n");
-  pthread_create(&thread, NULL, ClientServ, NULL);
-  printf("after thread create\n");
-  struct epoll_event event;
-  struct epoll_event *events;
-
-  sfd = create_and_bind ("9734");
+  if (argc != 3)
+  {
+  	printf("\nUSAGE: server <port> <num_of_threads>\n");
+  	return 0;
+  }
+  sfd = create_and_bind (argv[1]);
   if (sfd == -1)
     abort ();
 
@@ -125,6 +122,19 @@ int main (int argc, char *argv[])
       perror ("listen");
       abort ();
     }
+
+  int num_of_threads = atoi(argv[2]);
+  pipe(pipes);
+  pthread_t *thread = new pthread_t[num_of_threads];
+  printf("before thread create\n");
+  for (int i = 0; i < num_of_threads; i++)
+  {
+  	pthread_create(&thread[i], NULL, ClientServ, NULL);  
+  }
+  printf("after thread create\n");
+  struct epoll_event event;
+  struct epoll_event *events;
+
 
   efd = epoll_create1 (0);
   if (efd == -1)
