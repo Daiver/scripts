@@ -11,7 +11,7 @@ int main()
 	int len;
 	struct sockaddr_in address;
 	int result;
-	char ch = 'A';
+	char ch = 'Q';
 	sockfd = socket(AF_INET, SOCK_STREAM, 0);
 	address.sin_family = AF_INET;
 	address.sin_addr.s_addr = inet_addr("127.0.0.1");

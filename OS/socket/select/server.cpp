@@ -10,6 +10,10 @@
 #include <arpa/inet.h>
 #include <pthread.h>
 
+int pipes[2];
+pthread_mutex_t msgmutex = PTHREAD_MUTEX_INITIALIZER;
+
+
 struct message
 {
 	int fd;
@@ -23,17 +27,19 @@ struct message
 	}
 };
 
-void ClientServ(int pipes[2])//serving client
+void *ClientServ(void* arg)//serving client
 {
 	message msg;
 	msg.finish = false;
 	while (!msg.finish)
 	{
 		printf("reading......\n");
+		pthread_mutex_lock(&msgmutex);
 		read(pipes[0], &msg, sizeof(message));
+		pthread_mutex_unlock(&msgmutex);		
 		char ch;
 		read(msg.fd, &ch, 1);						
-		printf("serving client on fd %d\n", msg.fd);
+		printf("serving client on fd %d, msg=%c\n", msg.fd, ch);
 		ch+=2;
 		write(msg.fd, &ch, 1);
 	}
@@ -41,11 +47,10 @@ void ClientServ(int pipes[2])//serving client
 
 int main()
 {
-	int pipes[2];
+//	int pipes[2];
 	pipe(pipes);
-	int pid = fork();
-	if (!pid)
-	{ClientServ(pipes); return 0;}
+	pthread_t thread;
+	pthread_create(&thread, NULL, ClientServ, NULL);
 	int server_sockfd, client_sockfd;
 	int server_len, client_len;
 	sockaddr_in server_address;
@@ -99,6 +104,7 @@ int main()
 					else {
 						message msg(fd, false);
 						write(pipes[1], &msg, sizeof(message));
+						//sleep(1);
 						//ClientServ(pipes);
 					}
 				}

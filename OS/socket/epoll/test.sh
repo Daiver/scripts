@@ -1,4 +1,4 @@
-
-gcc -o server server.c
+rm server
+g++ -o server server.cpp -lpthread
 gcc -o client client.c
 ./server
