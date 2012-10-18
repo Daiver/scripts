@@ -8,19 +8,44 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <arpa/inet.h>
+#include <pthread.h>
 
-
-void ClientServ(int fd)//serving client
+struct message
 {
-	char ch;
-	read(fd, &ch, 1);						
-	printf("serving client on fd %d\n", fd);
-	ch+=2;
-	write(fd, &ch, 1);
+	int fd;
+	bool finish;
+	message()
+	{}
+	message(int fd,	bool finish)
+	{
+		this->fd = fd;
+		this->finish = finish;
+	}
+};
+
+void ClientServ(int pipes[2])//serving client
+{
+	message msg;
+	msg.finish = false;
+	while (!msg.finish)
+	{
+		printf("reading......\n");
+		read(pipes[0], &msg, sizeof(message));
+		char ch;
+		read(msg.fd, &ch, 1);						
+		printf("serving client on fd %d\n", msg.fd);
+		ch+=2;
+		write(msg.fd, &ch, 1);
+	}
 }
 
 int main()
 {
+	int pipes[2];
+	pipe(pipes);
+	int pid = fork();
+	if (!pid)
+	{ClientServ(pipes); return 0;}
 	int server_sockfd, client_sockfd;
 	int server_len, client_len;
 	sockaddr_in server_address;
@@ -41,15 +66,16 @@ int main()
 	FD_ZERO(&readfds);
 	FD_SET(server_sockfd, &readfds);
 	///* Ожидаем запросы на соединение: 
+	printf("server waiting\n");
 	while(1) {
 		//char ch;
 		int fd;
 		int nread;
 		testfds = readfds;
-		printf("server waiting\n");
+		
 		result = select(FD_SETSIZE, &testfds, (fd_set *)0, (fd_set *)0, (struct timeval *) 0);
 		if(result < 1) {			
-			perror("server5");
+			perror("server");
 			exit(1);
 		}
 		printf("Find activity...\n");
@@ -61,7 +87,6 @@ int main()
 					client_sockfd = accept(server_sockfd, (sockaddr *)&client_address, (socklen_t*)&client_len);
 					FD_SET(client_sockfd, &readfds);
 					printf("adding client on fd %d\n", client_sockfd);
-
 				}
 
 				else {
@@ -72,13 +97,9 @@ int main()
 						printf("removing client on fd %d\n", fd);
 					}
 					else {
-						ClientServ(fd);
-					/*
-						read(fd, &ch, 1);						
-						printf("serving client on fd %d\n", fd);
-						ch++;
-						write(fd, &ch, 1);
-					*/
+						message msg(fd, false);
+						write(pipes[1], &msg, sizeof(message));
+						//ClientServ(pipes);
 					}
 				}
 			}
