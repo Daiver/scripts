@@ -83,8 +83,10 @@ create_and_bind (char *port)
   return sfd;
 }
 
-void* ClientServ(int fd)
+void* ClientServ(void *arg)
 {
+	int fd;
+	read(pipes[0], &fd, sizeof(int));
 	char buf;
 	read (fd, &buf, sizeof buf);
 	printf("cl = %c\n", buf);
@@ -221,7 +223,8 @@ int main (int argc, char *argv[])
                  completely, as we are running in edge-triggered mode
                  and won't get a notification again for the same
                  data. */
-                	ClientServ(events[i].data.fd);
+               write(pipes[1], &events[i].data.fd, sizeof events[i].data.fd);
+               ClientServ(NULL);
             }
         }
     }
