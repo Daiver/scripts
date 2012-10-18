@@ -8,8 +8,11 @@
 #include <fcntl.h>
 #include <sys/epoll.h>
 #include <errno.h>
+#include <pthread.h>
 
 #define MAXEVENTS 64
+
+int pipes[2];
 
 static int
 make_socket_non_blocking (int sfd)
@@ -80,11 +83,25 @@ create_and_bind (char *port)
   return sfd;
 }
 
-int
-main (int argc, char *argv[])
+void* ClientServ(int fd)
+{
+	char buf;
+	read (fd, &buf, sizeof buf);
+	printf("cl = %c\n", buf);
+	buf++;
+	write (fd, &buf, sizeof buf);
+	printf ("Closed connection on descriptor %d\n", fd);
+	close (fd);
+}
+
+int main (int argc, char *argv[])
 {
   int sfd, s;
   int efd;
+  pipe(pipes);
+  pthread_t *thread;
+  //pthread_create(thread, NULL, NULL, NULL);
+  
   struct epoll_event event;
   struct epoll_event *events;
 
@@ -204,48 +221,7 @@ main (int argc, char *argv[])
                  completely, as we are running in edge-triggered mode
                  and won't get a notification again for the same
                  data. */
-              int done = 1;
-
-              //while (1)
-                //{
-                  ssize_t count;
-                  char buf;//[512];
-
-                  read (events[i].data.fd, &buf, sizeof buf);
-                  printf("cl = %c\n", buf);
-                  buf++;
-                  write (events[i].data.fd, &buf, sizeof buf);
-                  /*if (count == -1)
-                    {
-                      if (errno != EAGAIN)
-                        {
-                          perror ("read");
-                          done = 1;
-                        }
-                      break;
-                    }
-                  else if (count == 0)
-                    {
-                      done = 1;
-                      break;
-                    }
-                  s = write (1, buf, count);
-                  if (s == -1)
-                    {
-                      perror ("write");
-                      abort ();
-                    }*/
-                //}
-
-              if (done)
-                {
-                  printf ("Closed connection on descriptor %d\n",
-                          events[i].data.fd);
-
-                  /* Closing the descriptor will make epoll remove it
-                     from the set of descriptors which are monitored. */
-                  close (events[i].data.fd);
-                }
+                	ClientServ(events[i].data.fd);
             }
         }
     }
