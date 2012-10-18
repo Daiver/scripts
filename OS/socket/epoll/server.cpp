@@ -86,14 +86,17 @@ create_and_bind (char *port)
 void* ClientServ(void *arg)
 {
 	int fd;
-	read(pipes[0], &fd, sizeof(int));
-	char buf;
-	read (fd, &buf, sizeof buf);
-	printf("cl = %c\n", buf);
-	buf++;
-	write (fd, &buf, sizeof buf);
-	printf ("Closed connection on descriptor %d\n", fd);
-	close (fd);
+	while (1)
+	{
+		read(pipes[0], &fd, sizeof(int));
+		char buf;
+		read (fd, &buf, sizeof buf);
+		printf("cl = %c\n", buf);
+		buf++;
+		write (fd, &buf, sizeof buf);
+		printf ("Closed connection on descriptor %d\n", fd);
+		close (fd);
+	}
 }
 
 int main (int argc, char *argv[])
@@ -101,9 +104,10 @@ int main (int argc, char *argv[])
   int sfd, s;
   int efd;
   pipe(pipes);
-  pthread_t *thread;
-  //pthread_create(thread, NULL, NULL, NULL);
-  
+  pthread_t thread;
+  printf("before thread create\n");
+  pthread_create(&thread, NULL, ClientServ, NULL);
+  printf("after thread create\n");
   struct epoll_event event;
   struct epoll_event *events;
 
@@ -224,7 +228,7 @@ int main (int argc, char *argv[])
                  and won't get a notification again for the same
                  data. */
                write(pipes[1], &events[i].data.fd, sizeof events[i].data.fd);
-               ClientServ(NULL);
+               //ClientServ(NULL);
             }
         }
     }
