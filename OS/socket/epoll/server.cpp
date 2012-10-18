@@ -204,15 +204,17 @@ main (int argc, char *argv[])
                  completely, as we are running in edge-triggered mode
                  and won't get a notification again for the same
                  data. */
-              int done = 0;
+              int done = 1;
 
-              while (1)
-                {
+              //while (1)
+                //{
                   ssize_t count;
                   char buf;//[512];
 
                   read (events[i].data.fd, &buf, sizeof buf);
-                  printf("%c\n", buf);
+                  printf("cl = %c\n", buf);
+                  buf++;
+                  write (events[i].data.fd, &buf, sizeof buf);
                   /*if (count == -1)
                     {
                       if (errno != EAGAIN)
@@ -233,7 +235,7 @@ main (int argc, char *argv[])
                       perror ("write");
                       abort ();
                     }*/
-                }
+                //}
 
               if (done)
                 {
