@@ -14,6 +14,19 @@
 
 int pipes[2];
 
+struct message
+{
+	int fd;
+	bool finish;
+	message()
+	{}
+	message(int fd,	bool finish)
+	{
+		this->fd = fd;
+		this->finish = finish;
+	}
+};
+
 static int
 make_socket_non_blocking (int sfd)
 {
@@ -84,18 +97,19 @@ create_and_bind (char *port)
 }
 
 void* ClientServ(void *arg)
-{
-	int fd;
+{	
+	message msg;
 	while (1)
 	{
-		read(pipes[0], &fd, sizeof(int));
+		read(pipes[0], &msg, sizeof(msg));
+		//read(pipes[0], &fd, sizeof(int));
 		char buf;
-		read (fd, &buf, sizeof buf);
+		read (msg.fd, &buf, sizeof buf);
 		printf("cl = %c\n", buf);
 		buf++;
-		write (fd, &buf, sizeof buf);
-		printf ("Closed connection on descriptor %d\n", fd);
-		close (fd);
+		write (msg.fd, &buf, sizeof buf);
+		printf ("Closed connection on descriptor %d\n", msg.fd);
+		close (msg.fd);
 	}
 }
 
@@ -237,7 +251,9 @@ int main (int argc, char *argv[])
                  completely, as we are running in edge-triggered mode
                  and won't get a notification again for the same
                  data. */
-               write(pipes[1], &events[i].data.fd, sizeof events[i].data.fd);
+               message msg(events[i].data.fd, false);
+               write(pipes[1], &msg, sizeof msg);
+               //write(pipes[1], &events[i].data.fd, sizeof events[i].data.fd);
                //ClientServ(NULL);
             }
         }
