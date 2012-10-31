@@ -71,9 +71,10 @@ def auth(email, password, client_id, scope):
               raise RuntimeError("Something wrong")
         parser.params["email"] = email
         parser.params["pass"] = password
-        if parser.method == "POST":
+        if parser.method in ["POST", "post"]:
             response = opener.open(parser.url, urllib.urlencode(parser.params))
         else:
+            print parser.method
             raise NotImplementedError("Method '%s'" % params.method)
         return response.read(), response.geturl()
 
