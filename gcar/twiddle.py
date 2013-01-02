@@ -7,7 +7,8 @@ def twiddle(estimate, p, tol = 0.2): #Make this tolerance bigger if you are timi
     # -------------
     # Add code here
     # -------------
-    dp = [1, 1, 1]
+    #dp = [1, 1, 1]
+    dp = [1 for i in xrange(len(p))]
     besterror = estimate(p)
     while besterror > 0.00000001:
         for i in xrange(len(p)):
