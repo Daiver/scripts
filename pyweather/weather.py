@@ -7,3 +7,4 @@ pattern = '<.+?>'
 temp = re.sub(pattern,'',summary)
 #temp = re.split(r'\n',temp)
 print temp
+print summary
