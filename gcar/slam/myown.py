@@ -35,8 +35,8 @@ def make_data(steps, landmarks, robot):
     for st in steps:
         Z = robot.sense()
         robot.simple_move(st[0], st[1])
-        data.append([Z, st[0], st[1]])
-        showall(landmarks, robot, 300)
+        data.append([Z, [st[0], st[1]]])
+        showall(landmarks, robot, 30)
     return data
 
 def showall(landmarks, robot, waiting=0):
@@ -49,10 +49,13 @@ def showall(landmarks, robot, waiting=0):
     cv2.waitKey(waiting)
 
 if __name__ == '__main__':
-    robot = Robot(30., 30., 20)
+    robot = Robot(30., 30., 40)
     path = [[1., 1.], [1., 1.], [1., 1.], [1., 1.],] 
     for i in xrange(20):
         path.append([0.0, 5.0])
-    print (make_data(path, landmarks, robot))
-
-    showall(landmarks, robot)
+    data = (make_data(path, landmarks, robot))
+    print data
+    mu, om = online_slam(data, len(path) + 1, len(landmarks), 1., 1., (30., 30.))
+    mu.show('mu')
+    print robot.x, robot.y
+    showall(landmarks, robot, 1000)
