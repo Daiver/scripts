@@ -306,7 +306,7 @@ distance           = 20.0     # distance by which robot (intends to) move each i
 # Uncomment the following three lines to run the online_slam routine.
 
 #data = make_data(N, num_landmarks, world_size, measurement_range, motion_noise, measurement_noise, distance)
-#result = online_slam(data, N, num_landmarks, motion_noise, measurement_noise)
+#result = online_slam(data, num_landmarks, motion_noise, measurement_noise)
 #print_result(1, num_landmarks, result[0])
 
 ##########################################################
@@ -384,7 +384,7 @@ answer_omega1      = matrix([[0.36603773584905663, 0.0, -0.169811320754717, 0.0,
                              [0.0, -0.1811320754716981, 0.0, -0.4056603773584906, 0.0, -0.360377358490566, 0.0, 1.2339622641509433]])
 
 print 'start'
-result = online_slam(testdata1, 5, 3, 2.0, 2.0, (world_size/2.0, world_size/2.0))#world_size)
+result = online_slam(testdata1, 3, 2.0, 2.0, (world_size/2.0, world_size/2.0))#world_size)
 solution_check(result, answer_mu1, answer_omega1)
 print '\n\n'
 
@@ -411,7 +411,7 @@ answer_omega2      = matrix([[0.22871751620895048, 0.0, -0.11351536555795691, 0.
                              [-0.11351536555795691, 0.0, -0.46327947920510265, 0.0, 0.7867205207948973, 0.0],
                              [0.0, -0.11351536555795691, 0.0, -0.46327947920510265, 0.0, 0.7867205207948973]])
 
-result = online_slam(testdata2, 6, 2, 3.0, 4.0, (world_size/2., world_size/2.))#world_size)
+result = online_slam(testdata2, 2, 3.0, 4.0, (world_size/2., world_size/2.))#world_size)
 solution_check(result, answer_mu2, answer_omega2)
 
 

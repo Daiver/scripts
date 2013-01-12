@@ -18,13 +18,15 @@ class Robot(object):
 
     def sense(self):
         res = []
+        alr_seen = {}
         for i, l in enumerate(landmarks):
             #dist = np.sqrt( (self.x - l[0])**2 + (self.y - l[1])**2 )
             dx = l[0] - self.x
             dy = l[1] - self.y
             if (abs(dx) + abs(dy)) <= self.sense_power:
                 res.append([i, dx, dy])
-        return res
+            alr_seen[i] = 1
+        return res, alr_seen
 
     def simple_move(self, dx, dy):
         self.x += dx
@@ -33,7 +35,7 @@ class Robot(object):
 def make_data(steps, landmarks, robot):
     data = []
     for st in steps:
-        Z = robot.sense()
+        Z, alr_seen = robot.sense()
         robot.simple_move(st[0], st[1])
         data.append([Z, [st[0], st[1]]])
         showall(landmarks, robot, 30)

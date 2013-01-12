@@ -6,13 +6,13 @@ from math import *
 # online_slam - retains all landmarks but only most recent robot pose
 #
 
-def online_slam(data, N, num_landmarks, motion_noise, measurement_noise, init_pos):
+def online_slam(data, num_landmarks, motion_noise, measurement_noise, init_pos):
     #
     #
     # Enter your code here!
     #
-    #
-    dim = 2 + 2*num_landmarks
+
+    dim = 2 + 2 * num_landmarks
     Omega = matrix()
     Omega.zero(dim, dim)
     
