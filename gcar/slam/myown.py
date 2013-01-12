@@ -11,9 +11,20 @@ landmarks = [
 world_size = 200
 
 class Agent(object):
-    def __init__(self, x, y):
+    def __init__(self, x, y, sense_power):
         self.x = x
         self.y = y
+        self.sense_power = sense_power
+
+    def sense(self):
+        res = []
+        for i, l in enumerate(landmarks):
+            #dist = np.sqrt( (self.x - l[0])**2 + (self.y - l[1])**2 )
+            dx = l[0] - self.x
+            dy = l[0] - self.y
+            if (abs(dx) + abs(dy)) <= self.sense_power:
+                res.append([i, dx, dy])
+        return res
 
 def showall(landmarks, waiting=0):
     tmp = np.zeros((world_size, world_size, 3))
