@@ -20,7 +20,6 @@ class Robot(object):
         res = []
         alr_seen = {}
         for i, l in enumerate(landmarks):
-            #dist = np.sqrt( (self.x - l[0])**2 + (self.y - l[1])**2 )
             dx = l[0] - self.x
             dy = l[1] - self.y
             if (abs(dx) + abs(dy)) <= self.sense_power:
@@ -57,7 +56,7 @@ if __name__ == '__main__':
         path.append([0.0, 5.0])
     data = (make_data(path, landmarks, robot))
     print data
-    mu, om = online_slam(data, len(path) + 1, len(landmarks), 1., 1., (30., 30.))
+    mu, om = online_slam(data, len(landmarks), 1., 1., (30., 30.))
     mu.show('mu')
     print robot.x, robot.y
     showall(landmarks, robot, 1000)
