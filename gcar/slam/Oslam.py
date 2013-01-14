@@ -1,17 +1,6 @@
 from matrix import *
 from math import *
-
-# --------------------------------
-#
-# online_slam - retains all landmarks but only most recent robot pose
-#
-
 def online_slam(data, num_landmarks, motion_noise, measurement_noise, init_pos):
-    #
-    #
-    # Enter your code here!
-    #
-
     dim = 2 + 2 * num_landmarks
     Omega = matrix()
     Omega.zero(dim, dim)
@@ -23,7 +12,6 @@ def online_slam(data, num_landmarks, motion_noise, measurement_noise, init_pos):
     Omega.value[1][1] = 1.0
     Xi.value[0][0] = init_pos[0]#world_size / 2.0
     Xi.value[1][0] = init_pos[1]#world_size / 2.0
-    #Xi.show('xi')
     
     for sample in data:
         measurement = sample[0]
