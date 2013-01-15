@@ -12,7 +12,7 @@ class SimpleEnv(Enviroment):
     def get_landmarks(self, agent):
         return [
                     [i, [mark[j] - agent.pos[j] for j in xrange(len(agent.pos))]] for i, mark in enumerate(self.landmarks) 
-                        if (abs(mark[0]-agent.pos[0]) + abs(mark[1]-agent.pos[1])) <= agent.vis_range
+                        if sum(abs(mark[k]-agent.pos[k]) for k in xrange(len(agent.pos))) <= agent.vis_range
                 ]
 
 class Robot(object):
@@ -66,7 +66,7 @@ world_size = 200
 
 if __name__ == '__main__':
     env = SimpleEnv(landmarks)
-    robot = Robot([30., 30.], 40, env, 0.001, 0.001)
+    robot = Robot([30., 30.], 40, env, 0.01, 0.01)
     path = [[1., 1.], [1., 1.], [1., 1.], [1., 1.],] 
     for i in xrange(20):
         path.append([0.0, 5.0])
