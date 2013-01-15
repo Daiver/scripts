@@ -68,7 +68,7 @@ if __name__ == '__main__':
     env = SimpleEnv(landmarks)
     robot = Robot([30., 30.], 40, env, 0.01, 0.01)
     path = [[1., 1.], [1., 1.], [1., 1.], [1., 1.],] 
-    for i in xrange(20):
+    for i in xrange(2):
         path.append([0.0, 5.0])
     data = make_data(path, env, robot)
     print data
