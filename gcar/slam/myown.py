@@ -3,9 +3,9 @@ import cv2
 import numpy as np
 
 landmarks = [
+                [10., 20.],
                 [40., 8.],
                 [35., 120.],
-                [10., 20.],
             ]
 
 world_size = 200

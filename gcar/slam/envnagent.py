@@ -10,7 +10,10 @@ class SimpleEnv(Enviroment):
         self.landmarks = landmarks
 
     def get_landmarks(self, agent):
-        return [[i, mark] for i, mark in enumerate(self.landmarks) if abs(mark[0]-agent.pos[0]) + abs(mark[1]-agent.pos[1]) <= agent.vis_range]
+        return [
+                    [i, [mark[j] - agent.pos[j] for j in xrange(len(agent.pos))]] for i, mark in enumerate(self.landmarks) 
+                        if (abs(mark[0]-agent.pos[0]) + abs(mark[1]-agent.pos[1])) <= agent.vis_range
+                ]
 
 class Robot(object):
     def __init__(self, pos, vis_range, env, mes_noise, move_noise):
@@ -39,9 +42,11 @@ class Robot(object):
             return random() * 2.0 - 1.0
 
     def move(self, dpos):
+        res = []
         for i in xrange(len(self.pos)):
-            self.pos[i] += dpos[i] + self.rand() * self.move_noise
-        return self.pos
+            res.append(dpos[i] + self.rand() * self.move_noise)
+            self.pos[i] += res[i]
+        return res 
 
 def make_data(steps, env, agent):
     data = []
