@@ -7,7 +7,7 @@ static PyObject* say_hello(PyObject* self, PyObject* args)
     if (!PyArg_ParseTuple(args, "s", &name))
         return NULL;
  
-    printf("Hello %s!\n", name);
+    printf("Hello %s!!!\n", name);
  
     Py_RETURN_NONE;
 }
