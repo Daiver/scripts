@@ -171,7 +171,10 @@ def add_globals(self):
      'open-output-file':lambda f:open(f,'w'), 'close-output-port':lambda p: p.close(),
      'eof-object?':lambda x:x is eof_object, 'read-char':readchar,
      'read':read, 'write':lambda x,port=sys.stdout:port.write(to_string(x)),
-     'display':lambda x,port=sys.stdout:port.write(x if isa(x,str) else to_string(x))})
+     'display':lambda x,port=sys.stdout:port.write(x if isa(x,str) else to_string(x)),
+     
+     'import':lambda fname:load(fname),
+     })
     return self
 
 isa = isinstance
