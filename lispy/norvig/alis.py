@@ -175,7 +175,7 @@ def add_globals(self):
      'read':read, 'write':lambda x,port=sys.stdout:port.write(to_string(x)),
      'display':lambda x,port=sys.stdout:port.write(x if isa(x,str) else to_string(x)),
      
-     'import':lambda fname:load(fname),
+     'tostr':lambda x:x if isa(x,str) else to_string(x),
      'pyeval':lambda exp:pyeval(str(exp)),
      })
     return self
