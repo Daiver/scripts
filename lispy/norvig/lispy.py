@@ -8,6 +8,8 @@ from __future__ import division
 import re, sys, StringIO
 import os
 
+pyeval = eval
+
 class Symbol(str): pass
 
 def Sym(s, symbol_table={}):
@@ -174,6 +176,7 @@ def add_globals(self):
      'display':lambda x,port=sys.stdout:port.write(x if isa(x,str) else to_string(x)),
      
      'import':lambda fname:load(fname),
+     'pyeval':lambda exp:pyeval(str(exp)),
      })
     return self
 
