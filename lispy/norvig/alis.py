@@ -110,7 +110,7 @@ def load(filename):
 
 def repl(prompt='lispy> ', inport=InPort(sys.stdin), out=sys.stdout):
     "A prompt-read-eval-print loop."
-    sys.stderr.write("Lispy by daiver version 0.01\n")
+    sys.stderr.write("Advanced Lispy by Daiver version 0.01\n")
     while True:
         try:
             if prompt: sys.stderr.write(prompt)
