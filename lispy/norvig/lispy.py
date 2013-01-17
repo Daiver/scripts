@@ -6,6 +6,7 @@
 
 from __future__ import division
 import re, sys, StringIO
+import os
 
 class Symbol(str): pass
 
@@ -314,5 +315,11 @@ eval(parse("""(begin
 )"""))
 
 if __name__ == '__main__':
+    if len(sys.argv) == 2:
+        if os.path.exists(sys.argv[1]):
+            load(sys.argv[1])
+            exit()
+        else:
+            print('Bad filename %s: path do not exists' % sys.argv[1]) 
     repl()
 
