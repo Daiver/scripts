@@ -1,0 +1,36 @@
+# depslib dependency file v1.0
+1347779729 source:/home/nghia/Projects/5point/main.cpp
+	<vector>
+	<iostream>
+	<assert.h>
+	<opencv2/core/core.hpp>
+	"5point.h"
+
+1347780873 /home/nghia/Projects/5point/Polynomial.h
+	<vector>
+	<iostream>
+	<iomanip>
+	<cmath>
+	<assert.h>
+
+1347775719 source:/home/nghia/Projects/5point/Rpoly.cpp
+	"Rpoly.h"
+	<iostream>
+	<fstream>
+	<cctype>
+	<cmath>
+	<cfloat>
+
+1331554528 /home/nghia/Projects/5point/Rpoly.h
+
+1347723537 /home/nghia/Projects/5point/Mblock.h
+
+1347779715 /home/nghia/Projects/5point/5point.h
+	<opencv2/core/core.hpp>
+
+1347778654 source:/home/nghia/Projects/5point/5point.cpp
+	"5point.h"
+	"Polynomial.h"
+	"Rpoly.h"
+	"Mblock.h"
+

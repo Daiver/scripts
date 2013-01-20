@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_layout_file>
+	<ActiveTarget name="Debug" />
+	<File name="Mblock.h" open="0" top="0" tabpos="3">
+		<Cursor position="41" topLine="0" />
+	</File>
+	<File name="Polynomial.h" open="0" top="0" tabpos="2">
+		<Cursor position="3603" topLine="150" />
+	</File>
+	<File name="Rpoly.cpp" open="0" top="0" tabpos="3">
+		<Cursor position="7437" topLine="67" />
+	</File>
+	<File name="Rpoly.h" open="0" top="0" tabpos="2">
+		<Cursor position="302" topLine="16" />
+	</File>
+	<File name="main.cpp" open="1" top="1" tabpos="0">
+		<Cursor position="6058" topLine="179" />
+	</File>
+</CodeBlocks_layout_file>
