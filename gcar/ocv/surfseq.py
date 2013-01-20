@@ -10,7 +10,7 @@ def surffromimg(img):
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     st = time()
     kp, desc = surf.detect(gray, None, False)
-    print 't', time()  - st
+    #print 't', time()  - st
     for x in kp:
         cv2.circle(img, (int(x.pt[0]), int(x.pt[1])), 2, (0, 255, 0))
     #cv2.imshow('', img)
@@ -18,10 +18,14 @@ def surffromimg(img):
     return img, kp, desc
 imagesnames = os.listdir(wdir)
 imagesnames.sort()
+descs = {}
 for i, name in enumerate(imagesnames):
     img = cv2.imread(os.path.join(wdir,name))
     img, kp, desc = surffromimg(img)
+    for d in desc:
+        descs[d[0]] = 1
     #cv2.imshow(name, img)
-    cv2.imshow('', img)
-    cv2.waitKey()
-    if i > 39:break
+    #cv2.imshow('', img)
+    #cv2.waitKey()
+    if i > 10:break
+print len(descs)
