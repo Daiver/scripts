@@ -12,6 +12,8 @@ condfunc1 x y
         | x < y = "X < Y"
         | x == y = "X == Y"
 
+somelist1 = [1, 2, 3, 8798966]
+
 main = do--putStrLn 34
-    print (condfunc1 4 4)
+    print somelist1
     --print (take 9 (squares 0))
