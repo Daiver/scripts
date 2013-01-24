@@ -7,6 +7,11 @@ deepfun x y = f1 x + f2 y
         f2 x = 2 * f21 x
             where f21 x = x-1
 
+condfunc1 x y 
+        | x > y = "X > Y"
+        | x < y = "X < Y"
+        | x == y = "X == Y"
+
 main = do--putStrLn 34
-    print (deepfun 10 4)
+    print (condfunc1 4 4)
     --print (take 9 (squares 0))
