@@ -30,6 +30,9 @@ findsample3 = 1 `elem` somelist1
 infixsample1 x y = x + y
 infixsample1test = 5 `infixsample1` 4
 
+--rangesample
+rangesample1 = ['a' .. 'd']
+
 main = do--putStrLn 34
-    print infixsample1test
+    print rangesample1
     --print (take 9 (squares 0))
