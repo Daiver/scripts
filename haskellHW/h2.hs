@@ -24,5 +24,5 @@ psomelist4 = init somelist1
 
 
 main = do--putStrLn 34
-    print psomelist4
+    print (1 elem somelist1)
     --print (take 9 (squares 0))
