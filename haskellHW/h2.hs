@@ -44,6 +44,13 @@ nouns = ["hobo","frog","pope"]
 adjectives = ["lazy","grouchy","scheming"]  
 condlist3 = [adjective ++ " " ++ noun | adjective <- adjectives, noun <- nouns]  
 
+--factorial work
+fact1 1 = 1
+fact1 n = n * fact1 (n-1)
+
+natural2 = [1..]
+fact2 n = product $ take n natural2 
+
 main = do--putStrLn 34
-    print condlist3
+    print $ fact1 20
     --print (take 9 (squares 0))
