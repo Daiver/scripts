@@ -1,6 +1,6 @@
 import Data.List
 
-data Tree a = Empty | Leaf a | Node a (Tree a) (Tree a) deriving (Show)
+data Tree a = Empty | Leaf a | Node a (Tree a) (Tree a) deriving (Eq, Ord, Show)
 
 treeFromList [] = Empty
 treeFromList (x:[]) = Leaf x
