@@ -21,8 +21,12 @@ psomelist1 = tail somelist1
 psomelist2 = head somelist1
 psomelist3 = last somelist1
 psomelist4 = init somelist1
+--is element in list
+findsample1 = elem 1 somelist1
+findsample2 = elem 5 somelist1
+findsample3 = 1 `elem` somelist1
 
 
 main = do--putStrLn 34
-    print (1 elem somelist1)
+    print findsample3
     --print (take 9 (squares 0))
