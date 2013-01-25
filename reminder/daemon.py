@@ -48,17 +48,19 @@ class Daemon:
                 # redirect standard file descriptors
                 sys.stdout.flush()
                 sys.stderr.flush()
-                si = file(self.stdin, 'r')
-                so = file(self.stdout, 'a+')
-                se = file(self.stderr, 'a+', 0)
-                os.dup2(si.fileno(), sys.stdin.fileno())
-                os.dup2(so.fileno(), sys.stdout.fileno())
-                os.dup2(se.fileno(), sys.stderr.fileno())
+                #si = file(self.stdin, 'r')
+                #so = file(self.stdout, 'a+')
+                #se = file(self.stderr, 'a+', 0)
+                #os.dup2(si.fileno(), sys.stdin.fileno())
+                #os.dup2(so.fileno(), sys.stdout.fileno())
+                #os.dup2(se.fileno(), sys.stderr.fileno())
        
+                print 'in run', self.pidfile
                 # write pidfile
                 atexit.register(self.delpid)
                 pid = str(os.getpid())
-                file(self.pidfile,'w+').write("%s\n" % pid)
+                #file(self.pidfile,'w+').write("%s\n" % pid)
+                with open(self.pidfile, 'w+') as f:f.write('%s\n' % pid)
        
         def delpid(self):
                 os.remove(self.pidfile)
