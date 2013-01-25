@@ -51,6 +51,9 @@ fact1 n = n * fact1 (n-1)
 natural2 = [1..]
 fact2 n = product $ take n natural2 
 
+-- !!!!
+fib1 = 1:1:[a+b | (a, b) <- zip fib1 $ tail fib1]
+
 main = do--putStrLn 34
-    print $ fact1 20
+    print $ take 5 fib1
     --print (take 9 (squares 0))
