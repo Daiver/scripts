@@ -33,6 +33,11 @@ infixsample1test = 5 `infixsample1` 4
 --rangesample
 rangesample1 = ['a' .. 'd']
 
+--listwork2
+condlist = [x**2 | x <- [-2..10], x > 2]
+--from other resurse
+boomBangs xs = [ if x < 10 then "BOOM!" else "BANG!" | x <- xs, odd x]   
+
 main = do--putStrLn 34
-    print rangesample1
+    print (boomBangs [1..20])
     --print (take 9 (squares 0))
