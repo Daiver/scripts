@@ -26,7 +26,10 @@ findsample1 = elem 1 somelist1
 findsample2 = elem 5 somelist1
 findsample3 = 1 `elem` somelist1
 
+--infix func
+infixsample1 x y = x + y
+infixsample1test = 5 `infixsample1` 4
 
 main = do--putStrLn 34
-    print findsample3
+    print infixsample1test
     --print (take 9 (squares 0))
