@@ -10,20 +10,22 @@ class NotifyDaemon(Daemon):
     def run(self):
         i = 9
         while True:
-            n = pynotify.Notification('Test', 'text '+str(i))
-            n.set_timeout(1000)
+            n = pynotify.Notification('Test', 'text ')
+            #n.set_timeout(1000)
             i += 1
+            print i
             n.show()
-            #time.sleep(10000)
+            time.sleep(10)
  
 if __name__ == "__main__":
     if not pynotify.init('Reminder daemon'):
         print 'Notify init failed!'
         exit(2)
+    n = pynotify.Notification('First', 'Daemon starts!')
+    n.show()
     daemon = NotifyDaemon('/tmp/reminderdaemon.pid')
     if len(sys.argv) == 2:
         if 'start' == sys.argv[1]:
-            print('before start')
             daemon.start()
         elif 'stop' == sys.argv[1]:
             daemon.stop()

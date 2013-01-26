@@ -55,10 +55,10 @@ class Daemon:
                 #os.dup2(so.fileno(), sys.stdout.fileno())
                 #os.dup2(se.fileno(), sys.stderr.fileno())
        
-                print 'in run', self.pidfile
                 # write pidfile
                 atexit.register(self.delpid)
                 pid = str(os.getpid())
+                #print 'in run', self.pidfile, pid
                 #file(self.pidfile,'w+').write("%s\n" % pid)
                 with open(self.pidfile, 'w+') as f:f.write('%s\n' % pid)
        
@@ -110,12 +110,12 @@ class Daemon:
                                 time.sleep(0.1)
                 except OSError, err:
                         err = str(err)
-                        if err.find("No such process") > 0:
-                                if os.path.exists(self.pidfile):
-                                        os.remove(self.pidfile)
-                        else:
-                                print str(err)
-                                sys.exit(1)
+                        #if err.find("No such process") > 0:
+                        if os.path.exists(self.pidfile):
+                                os.remove(self.pidfile)
+                        #else:
+                        #        print str(err)
+                        #        sys.exit(1)
  
         def restart(self):
                 """
