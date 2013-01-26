@@ -10,12 +10,13 @@ class NotifyDaemon(Daemon):
     def run(self):
         i = 9
         while True:
+            pynotify.init('icon-summary-body')
             n = pynotify.Notification('Test', 'text ')
             #n.set_timeout(1000)
             i += 1
             print i
             n.show()
-            time.sleep(10)
+            time.sleep(1)
  
 if __name__ == "__main__":
     if not pynotify.init('Reminder daemon'):
