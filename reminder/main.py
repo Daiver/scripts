@@ -1,41 +1,21 @@
 #!/usr/bin/env python
 
 import pynotify
-#.Notification
-import sys, time
-from daemon import Daemon
+import time
 
+class NotifyDaemon(object):
+    def __init__(self):
+        self.index = 0
 
-class NotifyDaemon(Daemon):
     def run(self):
-        i = 9
         while True:
-            pynotify.init('icon-summary-body')
-            n = pynotify.Notification('Test', 'text ')
-            #n.set_timeout(1000)
-            i += 1
-            print i
+            self.index += 1
+            n = pynotify.Notification('Test', 'text ' + str(self.index))
+            n.set_timeout(10000)
             n.show()
-            time.sleep(1)
- 
-if __name__ == "__main__":
-    if not pynotify.init('Reminder daemon'):
-        print 'Notify init failed!'
-        exit(2)
-    n = pynotify.Notification('First', 'Daemon starts!')
-    n.show()
-    daemon = NotifyDaemon('/tmp/reminderdaemon.pid')
-    if len(sys.argv) == 2:
-        if 'start' == sys.argv[1]:
-            daemon.start()
-        elif 'stop' == sys.argv[1]:
-            daemon.stop()
-        elif 'restart' == sys.argv[1]:
-            daemon.restart()
-        else:
-            print "Unknown command"
-            sys.exit(2)
-        sys.exit(0)
-    else:
-        print "usage: %s start|stop|restart" % sys.argv[0]
-        sys.exit(2)
+            time.sleep(3)
+
+if __name__ == '__main__':
+    pynotify.init('reminder')
+    daemon = NotifyDaemon()
+    daemon.run()
