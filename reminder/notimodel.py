@@ -19,7 +19,7 @@ class Notification(Base):
         self.has_shown = False
     
     def __repr__(self):
-        return "<Notification('%s','%s', '%s', '%s')>" % (self.title, self.text, str(self.dt), 'already swown' if self.has_shown else 'waiting to show')
+        return "'%s','%s', '%s', '%s'" % (self.title, self.text, str(self.dt), 'already swown' if self.has_shown else 'waiting to show')
 
 def get_sesnmetneng(pathtodb):
     engine = sqlalchemy.create_engine('sqlite:///' + pathtodb, echo=False)
