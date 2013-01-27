@@ -1,0 +1,3 @@
+[submodule "rack"]
+      path = reminder 
+      url = git://github.com/Daiver/scripts/reminder
