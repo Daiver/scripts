@@ -1,13 +1,23 @@
 
 import os
-from notimodel import Notification, get_sesnmet
+from notimodel import Notification, get_sesnmetneng
+import datetime
 
+pathtobd = 'reminder.db'
 
 if __name__ == '__main__':
-    engine = sqlalchemy.create_engine('sqlite:///reminders.db', echo=False)
-    Session = sessionmaker(bind=engine)
-    session = Session()
-    metadata = Base.metadata
+    ses, met, eng = get_sesnmetneng(pathtobd)
+    if not os.path.exists(pathtobd):
+        met.create_all(eng)
+    
+    testNote = Notification('Test', 'test', datetime.datetime.now())
+    ses.add(testNote)
+    testNote.has_shown = True
+    ses.commit()
+    ourNotes = ses.query(Notification).all()
+    for note in ourNotes:
+        print(note)
+
     '''
     metadata.create_all(engine)
     vasiaUser = User("vasia", "Vasiliy Pypkin", "vasia2000")
@@ -19,5 +29,5 @@ if __name__ == '__main__':
     session.commit()
     ourUser = None
     '''
-    ourUser = session.query(User).filter_by(name="vasia").first()
-    print(ourUser)
+    #ourUser = session.query(User).filter_by(name="vasia").first()
+    #print(ourUser)
