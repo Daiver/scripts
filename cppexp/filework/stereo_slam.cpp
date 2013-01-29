@@ -223,20 +223,27 @@ startModules(const StereoCamera & stereo_camera,
   return modules;
 }
 
-void dump_points(vector<vector<GlPoint3f> > *glpoint_vec, Views *views)
+void dump_points(vector<vector<GlPoint3f> > *glpoint_vec, Views *views, Vector3d pos)
 {
-    for (int l = 0; l<NUM_PYR_LEVELS; ++l)
+    static long frameID = 0;
+    if ((frameID%5) == 0)
     {
-      (*views->drop_points) <<"Lvl "<<l<<"\n";
-      for(unsigned int indx = 0; indx < glpoint_vec->at(l).size(); indx++)
-      {
-        (*views->drop_points) << "x "<<glpoint_vec->at(l).at(indx).x  << "y "<<glpoint_vec->at(l).at(indx).y  << "z "<<glpoint_vec->at(l).at(indx).z<<"|";
-      }
-      (*views->drop_points)<<"\n";
-      views->drop_points->flush();
-      //printf("v size at level %d size %ld\n", l, glpoint_vec.at(l).size());
+        char buf[1024];
+        sprintf(buf, "dumps/%ld", frameID);
+        std::ofstream drop_points(buf);
+        drop_points<<pos[0]<<" "<<pos[1]<<" "<<pos[2]<<"\n";
+        for (int l = 0; l<NUM_PYR_LEVELS; ++l)
+        {
+          for(unsigned int indx = 0; indx < glpoint_vec->at(l).size(); indx++)
+          {
+            drop_points<<glpoint_vec->at(l).at(indx).x<<" "<<glpoint_vec->at(l).at(indx).y<<" "<<glpoint_vec->at(l).at(indx).z<<"\n";
+            //(*views->drop_points) << "x "<<glpoint_vec->at(l).at(indx).x  << "y "<<glpoint_vec->at(l).at(indx).y  << "z "<<glpoint_vec->at(l).at(indx).z<<"|";
+          }
+          //printf("v size at level %d size %ld\n", l, glpoint_vec.at(l).size());
+        }
+        drop_points.close();
     }
-
+    frameID++;
 }
 
 //TODO: method way too long...
@@ -623,10 +630,12 @@ void draw(int loop_id,
     Draw3d::pose(
           T_actkey_from_world.inverse());
   }
+  //###
   glColor3f(0,0,1);
   SE3 T_world_from_cur = (modules->frontend->T_cur_from_actkey() *
                           T_actkey_from_world
                           ).inverse();
+  //printf("\npos %f %f %f \n", T_world_from_cur.translation()[0], T_world_from_cur.translation()[1], T_world_from_cur.translation()[2]);
   Draw3d::pose(T_world_from_cur,0.25);
   Draw3d::line(T_world_from_cur.translation(),
                T_actkey_from_world.inverse().translation());
@@ -665,7 +674,7 @@ void draw(int loop_id,
       //views->drop_points->flush();
       //printf("v size at level %d size %ld\n", l, glpoint_vec.at(l).size());
     }
-    dump_points(&glpoint_vec, views);
+    dump_points(&glpoint_vec, views, T_cur_from_world.translation());
   }
   modules->per_mon->stop("drawing");
   modules->per_mon->plot(&views->logger);
