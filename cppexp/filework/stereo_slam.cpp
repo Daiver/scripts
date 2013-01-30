@@ -223,7 +223,7 @@ startModules(const StereoCamera & stereo_camera,
   return modules;
 }
 
-void dump_points(vector<vector<GlPoint3f> > *glpoint_vec, Views *views, Vector3d pos)
+void dump_points(vector<vector<GlPoint3f> > *glpoint_vec, Views *views, SE3 T_pos)//Vector3d pos)
 {
     static long frameID = 0;
     if ((frameID%5) == 0)
@@ -231,6 +231,7 @@ void dump_points(vector<vector<GlPoint3f> > *glpoint_vec, Views *views, Vector3d
         char buf[1024];
         sprintf(buf, "dumps/%ld", frameID);
         std::ofstream drop_points(buf);
+        Vector3d pos = T_pos.translation();
         drop_points<<pos[0]<<" "<<pos[1]<<" "<<pos[2]<<"\n";
         for (int l = 0; l<NUM_PYR_LEVELS; ++l)
         {
@@ -674,7 +675,9 @@ void draw(int loop_id,
       //views->drop_points->flush();
       //printf("v size at level %d size %ld\n", l, glpoint_vec.at(l).size());
     }
-    dump_points(&glpoint_vec, views, T_cur_from_world.translation());
+    //dump_points(&glpoint_vec, views, T_cur_from_world.translation());
+    //dump_points(&glpoint_vec, views, T_cur_from_world);
+    dump_points(&glpoint_vec, views, T_world_from_cur);
   }
   modules->per_mon->stop("drawing");
   modules->per_mon->plot(&views->logger);

@@ -20,7 +20,8 @@ def lps(fnumber):
     with open(file_path) as f:
         s = f.readline()
         loc = [float(x) for x in s.split(' ')]
-        loc[1], loc[2] = -loc[2], loc[1]
+        #loc[1], loc[2] = -loc[2], loc[1]
+        loc[1], loc[2] = loc[2], -loc[1]
         #s = f.readline()
         #rot = [float(x) for x in s.split(' ')]
         #rot[1], rot[2] = rot[2], -rot[1]
