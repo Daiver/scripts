@@ -233,6 +233,8 @@ void dump_points(vector<vector<GlPoint3f> > *glpoint_vec, Views *views, SE3 T_po
         std::ofstream drop_points(buf);
         Vector3d pos = T_pos.translation();
         drop_points<<pos[0]<<" "<<pos[1]<<" "<<pos[2]<<"\n";
+        pos = T_pos.so3().log();
+        drop_points<<pos[0]<<" "<<pos[1]<<" "<<pos[2]<<"\n";
         for (int l = 0; l<NUM_PYR_LEVELS; ++l)
         {
           for(unsigned int indx = 0; indx < glpoint_vec->at(l).size(); indx++)

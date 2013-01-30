@@ -22,11 +22,14 @@ def lps(fnumber):
         loc = [float(x) for x in s.split(' ')]
         #loc[1], loc[2] = -loc[2], loc[1]
         loc[1], loc[2] = loc[2], -loc[1]
-        #s = f.readline()
-        #rot = [float(x) for x in s.split(' ')]
-        #rot[1], rot[2] = rot[2], -rot[1]
-        #bpy.ops.mesh.primitive_cone_add(location=loc, rotation=rot)
-        bpy.ops.mesh.primitive_ico_sphere_add(location=loc, size=1.0)
+        s = f.readline()
+        rot = [float(x) for x in s.split(' ')]
+        #rot[1], rot[2], rot[0] = rot[0], rot[1], rot[2]
+        #rot[0] = -rot[0]
+        rot[1], rot[2] = rot[2], -rot[1]
+        rot[0] -= 1.5
+        bpy.ops.mesh.primitive_cone_add(location=loc, rotation=rot)
+        #bpy.ops.mesh.primitive_ico_sphere_add(location=loc, size=1.0)
         for s in f:
             loc = [float(x) for x in s.split(' ')]
             loc[1], loc[2] = loc[2], -loc[1]
