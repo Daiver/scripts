@@ -19,9 +19,9 @@ int main(int argc, char *argv[])
       boost::interprocess::managed_shared_memory segment(boost::interprocess::create_only, "MySharedMemory", 65536);
       const ShmemAllocator alloc_inst (segment.get_segment_manager());
       DataVector *myvector = segment.construct<DataVector>("MyVector")(alloc_inst);
-      for(int i = 0; i < 100; ++i) { //Insert data in the vector
+      for(int i = 0; i < 6; ++i) { //Insert data in the vector
         printf("%d ", i);
-         myvector->push_back(i*4);
+         myvector->push_back(i*2);
       }
       printf("\n");
     sleep(1);
