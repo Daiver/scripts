@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
       DataVector *myvector = segment.construct<DataVector>("MyVector")(alloc_inst);
       for(int i = 0; i < 100; ++i) { //Insert data in the vector
         printf("%d ", i);
-         myvector->push_back(i*10);
+         myvector->push_back(i*4);
       }
       printf("\n");
     sleep(1);

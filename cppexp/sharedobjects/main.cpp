@@ -4,7 +4,6 @@
 #include <string>
 #include<stdio.h>
 #include <cstdlib> //std::system
-#include <python.h>
 int funnyfunc(int a)
 {
     return a * 4;
