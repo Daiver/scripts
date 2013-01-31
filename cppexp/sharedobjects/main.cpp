@@ -4,6 +4,11 @@
 #include <string>
 #include<stdio.h>
 #include <cstdlib> //std::system
+#include <python.h>
+int funnyfunc(int a)
+{
+    return a * 4;
+}
 
 using namespace boost::interprocess;
 typedef allocator<int, managed_shared_memory::segment_manager>  ShmemAllocator;
