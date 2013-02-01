@@ -39,7 +39,7 @@ void work(void *result)
       res->tx = myvector->at(3);
       res->ty = myvector->at(4);
       res->tz = myvector->at(5); 
-      printf("data %ld \n", result);
+      //printf("data %ld \n", result);
       /*for(int i = 0; i < 6; ++i)  //Insert data in the vector
       {
         printf("%f ", (float)myvector->at(i));

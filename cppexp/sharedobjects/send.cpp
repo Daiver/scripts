@@ -25,7 +25,8 @@ int main(int argc, char *argv[])
   {
       for(int i = 0; i < 6; ++i) { //Insert data in the vector
         printf("%d ", i);
-         myvector->at(i) = i*5;
+         myvector->at(i) = rand()*rand();
+         printf("%f ", myvector->at(i));
       }
       printf("\n");
   }

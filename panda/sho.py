@@ -11,12 +11,16 @@ class CamPos(Structure):
             ("tz", c_float),
         ]
 
-i = 0
 libtest = cdll.LoadLibrary('./libtest.so.1.0') #python should call function "_init"  here, but nothing happens
-while 1:
-    print('\ni:%d' % i)
+
+def getCamPos():
     tmpcp = CamPos()
     libtest._Z4workPv(pointer(tmpcp))
-    print(tmpcp.x, tmpcp.y, tmpcp.z, tmpcp.tx, tmpcp.ty, tmpcp.tz)
-    i += 1
-    #time.sleep(0.9)
+    return tmpcp
+
+if __name__ == "__main__":
+    while 1:
+        #tmpcp = CamPos()
+        #libtest._Z4workPv(pointer(tmpcp))
+        tmpcp = getCamPos()
+        print(tmpcp.x, tmpcp.y, tmpcp.z, tmpcp.tx, tmpcp.ty, tmpcp.tz)
