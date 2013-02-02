@@ -77,18 +77,22 @@ if __name__ == '__main__':
         dtmp = {}
         for i, j in m: dtmp[j] = i
         m = [[i, j] for j, i in dtmp.iteritems()]
-        print m
         matched_p1 = np.array([kp1[i].pt for i, j in m])
         matched_p2 = np.array([kp2[j].pt for i, j in m])
-        H, status = cv2.findHomography(matched_p1, matched_p2, cv2.RANSAC, 5.0)
-        print '%d / %d  inliers/matched' % (np.sum(status), len(status))
+        #print(len(matched_p1), len(matched_p2))
+        try:
+            H, status = cv2.findHomography(matched_p1, matched_p2, cv2.RANSAC, 5.0)
+            print '%d / %d  inliers/matched' % (np.sum(status), len(status))
+        except:
+            H = None
+            status = None
         vis = draw_match(img1, img2, matched_p1, matched_p2, status, H)
-        return vis
+        return vis, H, status
 
     #print 'bruteforce match:',
     #vis_brute = match_and_draw( match_bruteforce, 0.75 )
     print 'flann match:',
-    vis_flann = match_and_draw( match_flann, 0.55 ) # flann tends to find more distant second
+    vis_flann, H, status = match_and_draw( match_flann, 0.55 ) # flann tends to find more distant second
                                                    # neighbours, so r_threshold is decreased
     #cv2.imshow('find_obj SURF', vis_brute)
     cv2.imshow('find_obj SURF flann', vis_flann)
