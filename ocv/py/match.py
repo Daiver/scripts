@@ -1,6 +1,6 @@
 import numpy as np
 import cv2
-from common import anorm
+#from common import anorm
 from functools import partial
 
 help_message = '''SURF image match 
@@ -92,11 +92,11 @@ if __name__ == '__main__':
         vis = draw_match(img1, img2, matched_p1, matched_p2, status, H)
         return vis
 
-    print 'bruteforce match:',
-    vis_brute = match_and_draw( match_bruteforce, 0.75 )
+    #print 'bruteforce match:',
+    #vis_brute = match_and_draw( match_bruteforce, 0.75 )
     print 'flann match:',
     vis_flann = match_and_draw( match_flann, 0.6 ) # flann tends to find more distant second
                                                    # neighbours, so r_threshold is decreased
-    cv2.imshow('find_obj SURF', vis_brute)
+    #cv2.imshow('find_obj SURF', vis_brute)
     cv2.imshow('find_obj SURF flann', vis_flann)
     cv2.waitKey()
