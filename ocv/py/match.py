@@ -1,6 +1,5 @@
 import numpy as np
 import cv2
-#from common import anorm
 from functools import partial
 
 help_message = '''SURF image match 
@@ -9,7 +8,6 @@ USAGE: findobj.py [ <image1> <image2> ]
 '''
 
 FLANN_INDEX_KDTREE = 1  # bug: flann enums are missing
-
 flann_params = dict(algorithm = FLANN_INDEX_KDTREE,
                     trees = 4)
 
@@ -60,7 +58,7 @@ if __name__ == '__main__':
     except:
         fn1 = 'img.jpg'
         fn2 = 'template.jpg'
-    print help_message
+        print help_message
 
     img1 = cv2.imread(fn1, 0)
     img2 = cv2.imread(fn2, 0)
@@ -72,28 +70,21 @@ if __name__ == '__main__':
     desc2.shape = (-1, surf.descriptorSize())
     print 'img1 - %d features, img2 - %d features' % (len(kp1), len(kp2))
 
-    def match_and_draw(match, r_threshold):
-        m = match(desc1, desc2, r_threshold)
-        dtmp = {}
-        for i, j in m: dtmp[j] = i
-        m = [[i, j] for j, i in dtmp.iteritems()]
-        matched_p1 = np.array([kp1[i].pt for i, j in m])
-        matched_p2 = np.array([kp2[j].pt for i, j in m])
-        #print(len(matched_p1), len(matched_p2))
-        try:
-            H, status = cv2.findHomography(matched_p1, matched_p2, cv2.RANSAC, 5.0)
-            print '%d / %d  inliers/matched' % (np.sum(status), len(status))
-        except:
-            H = None
-            status = None
-        vis = draw_match(img1, img2, matched_p1, matched_p2, status, H)
-        return vis, H, status
-
-    #print 'bruteforce match:',
-    #vis_brute = match_and_draw( match_bruteforce, 0.75 )
+    r_threshold = 0.55
+    m = match_flann(desc1, desc2, r_threshold)
+    dtmp = {}
+    for i, j in m: dtmp[j] = i
+    m = [[i, j] for j, i in dtmp.iteritems()]
+    matched_p1 = np.array([kp1[i].pt for i, j in m])
+    matched_p2 = np.array([kp2[j].pt for i, j in m])
+    try:
+        H, status = cv2.findHomography(matched_p1, matched_p2, cv2.RANSAC, 5.0)
+    except:
+        H = None
+        status = None
+    vis_flann = draw_match(img1, img2, matched_p1, matched_p2, status, H)
     print 'flann match:',
-    vis_flann, H, status = match_and_draw( match_flann, 0.55 ) # flann tends to find more distant second
-                                                   # neighbours, so r_threshold is decreased
-    #cv2.imshow('find_obj SURF', vis_brute)
+    if status != None:
+        print '%d / %d  inliers/matched' % (np.sum(status), len(status))
     cv2.imshow('find_obj SURF flann', vis_flann)
     cv2.waitKey()
