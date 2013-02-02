@@ -51,24 +51,17 @@ def draw_match(img1, img2, p1, p2, status = None, H = None):
             cv2.line(vis, (x2+w1-r, y2+r), (x2+w1+r, y2-r), col, thickness)
     return vis
 
+def params_from_image(img, surf=None):
+    if surf == None:surf = cv2.SURF(1000)
+    kp, desc = surf.detect(img, None, False)
+    desc.shape = (-1, surf.descriptorSize())
+    return {'img':img, 'kp':kp, 'desc':desc}
 
-if __name__ == '__main__':
-    import sys
-    try: fn1, fn2 = sys.argv[1:3]
-    except:
-        fn1 = 'img.jpg'
-        fn2 = 'template.jpg'
-        print help_message
+def template_match(params_orig, params_template):
 
-    img1 = cv2.imread(fn1, 0)
-    img2 = cv2.imread(fn2, 0)
+    img1, kp1, desc1 = params_orig['img'], params_orig['kp'], params_orig['desc']
+    img2, kp2, desc2 = params_template['img'], params_template['kp'], params_template['desc']
 
-    surf = cv2.SURF(1000)
-    kp1, desc1 = surf.detect(img1, None, False)
-    kp2, desc2 = surf.detect(img2, None, False)
-    desc1.shape = (-1, surf.descriptorSize())
-    desc2.shape = (-1, surf.descriptorSize())
-    print 'img1 - %d features, img2 - %d features' % (len(kp1), len(kp2))
 
     r_threshold = 0.55
     m = match_flann(desc1, desc2, r_threshold)
@@ -83,6 +76,30 @@ if __name__ == '__main__':
         H = None
         status = None
     vis_flann = draw_match(img1, img2, matched_p1, matched_p2, status, H)
+    return vis_flann, status
+
+if __name__ == '__main__':
+    import sys
+    try: fn1, fn2 = sys.argv[1:3]
+    except:
+        fn1 = 'img.jpg'
+        fn2 = 'template.jpg'
+        print help_message
+
+    img1 = cv2.imread(fn1, 0)
+    img2 = cv2.imread(fn2, 0)
+
+    surf = cv2.SURF(1000)
+    #kp1, desc1 = surf.detect(img1, None, False)
+    #kp2, desc2 = surf.detect(img2, None, False)
+    #desc1.shape = (-1, surf.descriptorSize())
+    #desc2.shape = (-1, surf.descriptorSize())
+    pr1 = params_from_image(img1)
+    pr2 = params_from_image(img2)
+    print 'img1 - %d features, img2 - %d features' % (len(pr1['kp']), len(pr2['kp']))
+
+    vis_flann, status = template_match(pr1, pr2)
+
     print 'flann match:',
     if status != None:
         print '%d / %d  inliers/matched' % (np.sum(status), len(status))
