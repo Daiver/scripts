@@ -1,4 +1,4 @@
-//object hw3 {
+object hw3 {
     trait DiscountPerson {
  
      def isDiscountApplied() : Boolean
@@ -21,10 +21,12 @@
   
      if( seniorPerson.isDiscountApplied() ) 
         println(seniorPerson.discountAmount())
-        println(seniorPerson.discountAmount())
+    println(seniorPerson.discountAmount())
    }
 
-   //def main(args:Array[String]) {
-   //     println("hw3:\n")
-   //}
-//}
+   def main(args:Array[String]) {
+        println("hw3:")
+        val sp = new Person(100)
+        println(sp.isDiscountApplied())
+   }
+}
