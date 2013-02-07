@@ -21,6 +21,7 @@
   
      if( seniorPerson.isDiscountApplied() ) 
         println(seniorPerson.discountAmount())
+        println(seniorPerson.discountAmount())
    }
 
    //def main(args:Array[String]) {
