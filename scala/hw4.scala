@@ -13,6 +13,6 @@ object Tmr
 
     def main(args : Array[String]) = {
         println("HW!")
-        time_work(() => println("So... :)"), 1)
+        time_work(() => println("So... :)"), 100)
     }
 }
