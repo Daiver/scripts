@@ -1,5 +1,5 @@
 object Functionlistic {
     def main(args : Array[String]) = {
-        println(args(0))
+        args.filter((arg:String)=>arg.startsWith("k")).foreach((x)=>println(x))
     }
 }
