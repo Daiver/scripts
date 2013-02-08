@@ -1,4 +1,4 @@
-object HelloWorld{
+object HelloWorld2{
     def min(x:Int, y:Int) = {
         if (x < y) x
         else y
