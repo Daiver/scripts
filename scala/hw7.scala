@@ -9,6 +9,9 @@ object MyApp {
         Console.println("i'm 'f'")
     }
 
+    def While(condition : ()=>Boolean) = {
+    }
+
     def main(args:Array[String]) = {
         my_constr {
             tst()
