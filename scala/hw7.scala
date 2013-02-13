@@ -9,7 +9,8 @@ object MyApp {
         Console.println("i'm 'f'")
     }
 
-    def While(condition : ()=>Boolean) = {
+    def While(condition : () => Boolean) (f: => Unit)= {
+        if (condition()) { f; While(condition) {f}}
     }
 
     def main(args:Array[String]) = {
