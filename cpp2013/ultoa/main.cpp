@@ -31,11 +31,20 @@ bool dec_test(testfunc foo, unsigned long num_of_iter)
     return true;
 }
 
+void test_result(bool result, const char *test_name)
+{
+    if (result)
+    {
+        printf("Test '%s' passed!", test_name);
+    }
+    else
+    {
+        printf("Test '%s' failed!", test_name);
+    }
+}
+
 int main(int argc, char** argv)
 {
-    if (dec_test(ultoa_by_sprintf, 100))
-        printf("TRUE");
-    else
-        printf("FALSE");
+    test_result(dec_test(ultoa_by_sprintf, 100), "dec_test");
     return 0;
 }
