@@ -39,6 +39,7 @@ bool assert_func(testfunc foo, unsigned long value, int radix, const char *true_
     foo(value, source, radix);
     printf(">%s %s\n", source, true_value);
     int res = strcmp(true_value, source);
+    delete[] source;
     return 0 == res;
 }
 
@@ -46,10 +47,12 @@ bool dec_test(testfunc foo, unsigned long num_of_iter)
 {
     for (unsigned long i = 0; i < num_of_iter; i++)
     {
-        char *ansewer = new char[36];
+        char ansewer[36];
         ultoa_by_sprintf(i, ansewer, 10);
         if (!assert_func(foo, i, 10, ansewer))
+        {
             return false;
+        }
     }
     return true;
 }
@@ -101,6 +104,15 @@ int main(int argc, char** argv)
         test_result(dec_test(ultoa_by_me, 10000), "dec_test");
         test_result(hex_test(ultoa_by_me), "hex_test");
         test_result(bin_test(ultoa_by_me), "bin_test");
+    } else if (argc > 2)
+    {
+        unsigned long value = atoi(argv[1]);
+        unsigned long base = atoi(argv[2]);
+        char* source = new char[36];
+        ultoa_by_me(value, source, base);
+        printf(">%ld %ld %s\n", value, base, source);
+        delete[] source;
     }
+    
     return 0;
 }
