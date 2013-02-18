@@ -54,6 +54,25 @@ bool dec_test(testfunc foo, unsigned long num_of_iter)
     return true;
 }
 
+bool hex_test(testfunc foo)
+{
+    if (!assert_func(foo, 16, 16, "10")) return false;
+    if (!assert_func(foo, 15, 16, "f")) return false;
+    if (!assert_func(foo, 8, 16, "8")) return false;
+    if (!assert_func(foo, 255, 16, "ff")) return false;
+    if (!assert_func(foo, 254, 16, "fe")) return false;
+    if (!assert_func(foo, 1, 16, "1")) return false;
+    if (!assert_func(foo, 17, 16, "11")) return false;
+    return true;
+}
+
+bool bin_test(testfunc foo)
+{
+    if (!assert_func(foo, 4, 2, "100")) return false;
+    if (!assert_func(foo, 6, 2, "110")) return false;
+    return true;
+}
+
 void test_result(bool result, const char *test_name)
 {
     if (result)
@@ -68,6 +87,8 @@ void test_result(bool result, const char *test_name)
 
 int main(int argc, char** argv)
 {
-    test_result(dec_test(ultoa_by_me, 1000), "dec_test");
+    test_result(dec_test(ultoa_by_me, 10000), "dec_test");
+    test_result(hex_test(ultoa_by_me), "hex_test");
+    test_result(bin_test(ultoa_by_me), "bin_test");
     return 0;
 }
