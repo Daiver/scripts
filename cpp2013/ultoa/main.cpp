@@ -7,7 +7,7 @@ typedef  char (*testfunc)(unsigned long value, char *string, int radix);
 
 char ultoa_by_me(unsigned long value, char *string, int radix)
 {
-    if ((radix < 2) || (radix > 36)) 
+    if ((radix < 2) || (radix > 16)) 
     {
         return 1;
     }
@@ -91,8 +91,16 @@ void test_result(bool result, const char *test_name)
 
 int main(int argc, char** argv)
 {
-    test_result(dec_test(ultoa_by_me, 10000), "dec_test");
-    test_result(hex_test(ultoa_by_me), "hex_test");
-    test_result(bin_test(ultoa_by_me), "bin_test");
+    const char* usage_message = "USAGE: ./main -t #runs tests \n\t ./main value base #runs function";
+    if (argc < 2)
+    {
+        printf("%s\n", usage_message);
+    } else if ((argc > 1) && (strcmp(argv[1], "-t") == 0))
+    {
+        printf("Start testes...\n");
+        test_result(dec_test(ultoa_by_me, 10000), "dec_test");
+        test_result(hex_test(ultoa_by_me), "hex_test");
+        test_result(bin_test(ultoa_by_me), "bin_test");
+    }
     return 0;
 }
