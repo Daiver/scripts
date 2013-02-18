@@ -1,8 +1,31 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <algorithm>
 
 typedef  char (*testfunc)(unsigned long value, char *string, int radix);
+
+char ultoa_by_me(unsigned long value, char *string, int radix)
+{
+    if ((radix < 2) || (radix > 36)) 
+    {
+        return 1;
+    }
+    
+    char *now_char = string;
+    const char *symbols = "0123456789abcdef";
+    unsigned long cur_value = value;
+    do 
+    {
+       *now_char = symbols[cur_value % radix];
+       now_char++;
+       cur_value /= radix;
+    } while(cur_value);
+    
+    std::reverse(string, now_char);
+
+    return 0;
+}
 
 char ultoa_by_sprintf(unsigned long value, char *string, int radix)
 {
@@ -45,6 +68,6 @@ void test_result(bool result, const char *test_name)
 
 int main(int argc, char** argv)
 {
-    test_result(dec_test(ultoa_by_sprintf, 100), "dec_test");
+    test_result(dec_test(ultoa_by_me, 1000), "dec_test");
     return 0;
 }
