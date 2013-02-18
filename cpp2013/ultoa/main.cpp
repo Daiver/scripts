@@ -70,6 +70,10 @@ bool bin_test(testfunc foo)
 {
     if (!assert_func(foo, 4, 2, "100")) return false;
     if (!assert_func(foo, 6, 2, "110")) return false;
+    if (!assert_func(foo, 16, 2, "10000")) return false;
+    if (!assert_func(foo, 7, 2, "111")) return false;
+    if (!assert_func(foo, 0, 2, "0")) return false;
+    if (!assert_func(foo, 13, 2, "1101")) return false;
     return true;
 }
 
