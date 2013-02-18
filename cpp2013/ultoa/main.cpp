@@ -4,7 +4,7 @@
 #include <algorithm>
 
 typedef  char (*testfunc)(unsigned long value, char *string, int radix);
-char ultoa_by_me(unsigned long value, char *string, int radix)
+inline char ultoa_by_me(unsigned long value, char *string, int radix)
 {
     if ((radix < 2) || (radix > 16)) 
     {
