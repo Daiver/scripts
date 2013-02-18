@@ -4,7 +4,6 @@
 #include <algorithm>
 
 typedef  char (*testfunc)(unsigned long value, char *string, int radix);
-
 char ultoa_by_me(unsigned long value, char *string, int radix)
 {
     if ((radix < 2) || (radix > 16)) 
@@ -26,6 +25,12 @@ char ultoa_by_me(unsigned long value, char *string, int radix)
 
     return 0;
 }
+
+template <unsigned long base> char ultoa_by_me_template(unsigned long value, char *string)
+{
+    return ultoa_by_me(value, string, base);
+}
+
 
 char ultoa_by_sprintf(unsigned long value, char *string, int radix)
 {
@@ -107,9 +112,9 @@ int main(int argc, char** argv)
     } else if (argc > 2)
     {
         unsigned long value = atoi(argv[1]);
-        unsigned long base = atoi(argv[2]);
+        const unsigned long base = atoi(argv[2]);
         char* source = new char[36];
-        ultoa_by_me(value, source, base);
+        ultoa_by_me_template<base>(value, source);
         printf(">%ld %ld >>> %s\n", value, base, source);
         delete[] source;
     }
