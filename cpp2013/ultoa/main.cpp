@@ -14,7 +14,7 @@ bool assert_func(testfunc foo, unsigned long value, int radix, const char *true_
 {
     char *source = new char[36];
     foo(value, source, radix);
-    printf(">%s\n", source);
+    printf(">%s %s\n", source, true_value);
     int res = strcmp(true_value, source);
     return 0 == res;
 }
@@ -35,11 +35,11 @@ void test_result(bool result, const char *test_name)
 {
     if (result)
     {
-        printf("Test '%s' passed!", test_name);
+        printf("Test '%s' passed!\n", test_name);
     }
     else
     {
-        printf("Test '%s' failed!", test_name);
+        printf("Test '%s' failed!\n", test_name);
     }
 }
 
