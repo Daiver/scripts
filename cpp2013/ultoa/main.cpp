@@ -112,9 +112,9 @@ int main(int argc, char** argv)
     } else if (argc > 2)
     {
         unsigned long value = atoi(argv[1]);
-        const unsigned long base = atoi(argv[2]);
+        unsigned long base = atoi(argv[2]);
         char* source = new char[36];
-        ultoa_by_me_template<base>(value, source);
+        ultoa_by_me(value, source, base);
         printf(">%ld %ld >>> %s\n", value, base, source);
         delete[] source;
     }
