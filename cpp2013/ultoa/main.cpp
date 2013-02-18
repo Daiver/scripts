@@ -110,7 +110,7 @@ int main(int argc, char** argv)
         unsigned long base = atoi(argv[2]);
         char* source = new char[36];
         ultoa_by_me(value, source, base);
-        printf(">%ld %ld %s\n", value, base, source);
+        printf(">%ld %ld >>> %s\n", value, base, source);
         delete[] source;
     }
     
