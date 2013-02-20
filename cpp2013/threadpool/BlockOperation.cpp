@@ -1,6 +1,11 @@
 #include "BlockOperation.h"
 
-BlockOperation::BlockOperation(RequestCompletionBlock block)
+void BlockOperation::Execute()
 {
-    this->operation_block = block;
+    //this->operation_block();//FIX ME
+}
+
+BlockOperation::BlockOperation(RequestCompletionBlock blck)
+{
+    this->operation_block = blck;
 }

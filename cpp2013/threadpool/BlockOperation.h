@@ -1,11 +1,16 @@
+#ifndef __BLOCKOPERATION_H__
+#define __BLOCKOPERATION_H__
 #include "Operation.h"
 
-typedef void (^RequestCompletionBlock)(void *data);
+typedef void (^RequestCompletionBlock)(void);
 
 class BlockOperation : public Operation
 {
 public:
-    BlockOperation(RequestCompletionBlock opblock);
+    BlockOperation(void (^work)(void));
+    void Execute();
 private:
-    RequestCompletionBlock operation_block;
+    void* operation_block;
 };
+#else
+#endif

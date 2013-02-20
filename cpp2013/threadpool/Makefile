@@ -8,4 +8,4 @@ Operation.o: Operation.h Operation.cpp
 	clang++ -o Operation.o -c Operation.cpp
 
 BlockOperation.o: Operation.o BlockOperation.h BlockOperation.cpp
-	clang++ -o BlockOperation.o -c BlockOperation.cpp Operation.o -fblocks -lBlocksRuntime
+	clang++ -o BlockOperation.o -c BlockOperation.cpp Operation.o -fblocks 

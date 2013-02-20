@@ -17,6 +17,8 @@ int main(int argc, char** argv)
     //Operation op;
     //run_Operation_async(queue, &op);
     //dispatch_group_t group = dispatch_group_create()
+
+    BlockOperation bop(^(void) {});
     dispatch_async(queue, ^(void) {
         printf("So...\n");
     });
