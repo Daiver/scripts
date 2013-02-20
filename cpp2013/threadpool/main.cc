@@ -11,14 +11,28 @@ void run_Operation_async(dispatch_queue_t queue, Operation *op)
     });
 }
 
+void foo(void (^block)(void))
+{
+    void (^f)(void);
+    f = block;
+    f();
+}
+
+class MyOperation : public Operation
+{
+    void Execute()
+    {
+        printf("Make!\n");
+    }
+};
+
 int main(int argc, char** argv)
 {
     dispatch_queue_t queue = dispatch_queue_create("com.mydomain.myapp.longrunningfunction", DISPATCH_QUEUE_CONCURRENT);//dispatch_get_global_queue(0, 0);
-    //Operation op;
-    //run_Operation_async(queue, &op);
+    MyOperation op;
+    run_Operation_async(queue, &op);
     //dispatch_group_t group = dispatch_group_create()
-
-    BlockOperation bop(^(void) {});
+    //foo(^(void){ printf("!!!!!!\n");});
     dispatch_async(queue, ^(void) {
         printf("So...\n");
     });

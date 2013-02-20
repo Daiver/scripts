@@ -2,10 +2,10 @@
 
 void BlockOperation::Execute()
 {
-    //this->operation_block();//FIX ME
+    this->operation_block();//FIX ME
 }
 
-BlockOperation::BlockOperation(RequestCompletionBlock blck)
+void BlockOperation::set_block(void (^blck)(void))
 {
     this->operation_block = blck;
 }
