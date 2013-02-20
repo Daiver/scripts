@@ -1,3 +1,5 @@
+#ifndef __FUNCTIONOPERATION_H__
+#define __FUNCTIONOPERATION_H__
 #include "Operation.h"
 
 typedef void (*function)(void);
@@ -10,3 +12,5 @@ public:
 private:
     function foo;
 };
+#else
+#endif
