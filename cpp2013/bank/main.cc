@@ -4,7 +4,8 @@
 
 int main(int argc, char** argv)
 {
-    Account ac(9);
-    std::cout<< "so..." << ac.get_Balance();
+    Account ac1(90);
+    Account ac2(40);
+    std::cout<< "so..." << ac1.get_Balance() << " " << ac2.get_Balance() << "\n";
     return 0;
 }
