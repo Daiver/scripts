@@ -1,6 +1,8 @@
 #include <dispatch/dispatch.h>
 #include <stdio.h>
 
+#include "Operation.h"
+
 int main(int argc, char** argv)
 {
     dispatch_queue_t queue = dispatch_get_global_queue(0, 0);
