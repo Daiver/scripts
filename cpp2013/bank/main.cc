@@ -1,7 +1,10 @@
 #include <iostream>
 
+#include "Account.h"
+
 int main(int argc, char** argv)
 {
-    std::cout<< "so...";
+    Account ac;
+    std::cout<< "so..." << ac.get_Balance();
     return 0;
 }

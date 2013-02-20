@@ -1,7 +1,7 @@
 class Account
 {
 public:
-    unsigned long get_Count_Of_Money();
+    unsigned long get_Balance();
 private:
     unsigned long money;
-}
+};
