@@ -3,6 +3,7 @@
 
 #include "Operation.h"
 #include "BlockOperation.h"
+#include "FunctionOperation.h"
 
 void run_Operation_async(dispatch_queue_t queue, Operation *op)
 {
@@ -18,6 +19,11 @@ void foo(void (^block)(void))
     f();
 }
 
+void foo2()
+{
+    printf("foo2\n");
+}
+
 class MyOperation : public Operation
 {
     void Execute()
@@ -30,7 +36,9 @@ int main(int argc, char** argv)
 {
     dispatch_queue_t queue = dispatch_queue_create("com.mydomain.myapp.longrunningfunction", DISPATCH_QUEUE_CONCURRENT);//dispatch_get_global_queue(0, 0);
     MyOperation op;
+    FunctionOperation op2(foo2);
     run_Operation_async(queue, &op);
+    run_Operation_async(queue, &op2);
     //dispatch_group_t group = dispatch_group_create()
     //foo(^(void){ printf("!!!!!!\n");});
     dispatch_async(queue, ^(void) {
