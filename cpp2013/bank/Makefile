@@ -2,7 +2,7 @@ clean: Account.o main test
 	rm *.o
 
 test: test.cc Account.h Account.o
-	clang++ -o test main.cc Account.o
+	clang++ -o test test.cc Account.o
 
 main: main.cc Account.h Account.o
 	clang++ -o main main.cc Account.o
