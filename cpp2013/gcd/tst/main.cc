@@ -22,23 +22,12 @@ static void read_completion_handler(dispatch_data_t data,
                         NULL, write_completion_handler);
 }
 
-int do_work(int *data, int i)
+void do_work(void *data, size_t i)
 {
-    return data[i]*i;
+    printf("HI %lu\n", i);
 }
 
 int main(int argc, const char *argv[]) {
-    int arr_size = 10;
-    int *data = new int[arr_size];
-    int *result = new int[arr_size];
-    int i;
-    for(int i = 0; i < arr_size; i++) data[i] = i;
-    dispatch_apply_f(arr_size, dispatch_get_global_queue(0, 0), (size_t i){
-             result[i] = do_work(data, i);
-         });
-    for(int i = 0; i < arr_size; i++) printf("%d ", result[i]);
-    
-    delete[] data;
     /*dispatch_source_t timer = dispatch_source_create(
         DISPATCH_SOURCE_TYPE_TIMER, 0, 0, dispatch_get_main_queue());
 
@@ -53,5 +42,9 @@ int main(int argc, const char *argv[]) {
                        read_completion_handler);
 
     dispatch_main();*/
+
+    dispatch_queue_t queue = dispatch_get_global_queue(0, 0);
+    dispatch_apply_f(10, queue, NULL, do_work);
+    
     return 0;
 }
