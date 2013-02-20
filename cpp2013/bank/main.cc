@@ -1,7 +1,7 @@
-#include <stdio.h>
+#include <iostream>
 
 int main(int argc, char** argv)
 {
-    printf("so...");
+    std::cout<< "so...";
     return 0;
 }
