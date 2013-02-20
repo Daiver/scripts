@@ -24,7 +24,7 @@ static void read_completion_handler(dispatch_data_t data,
 
 void do_work(void *data, size_t i)
 {
-    printf("HI %lu\n", i);
+    ((int *)data)[i] *= 100;
 }
 
 int main(int argc, const char *argv[]) {
@@ -42,9 +42,15 @@ int main(int argc, const char *argv[]) {
                        read_completion_handler);
 
     dispatch_main();*/
-
+    int *data = new int[100];
+    for(int i = 0; i < 100; i++) {data[i] = i;}
     dispatch_queue_t queue = dispatch_get_global_queue(0, 0);
-    dispatch_apply_f(10, queue, NULL, do_work);
-    
+    dispatch_apply_f(100, queue, (void *)data, do_work);
+    for(int i = 0; i < 100; i++) {printf("%d ", data[i]);}
+    void (^hello)(void)  = ^(void) 
+    {
+        printf("The end\n");
+    };
+    hello();
     return 0;
 }
