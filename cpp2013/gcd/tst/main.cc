@@ -42,15 +42,22 @@ int main(int argc, const char *argv[]) {
                        read_completion_handler);
 
     dispatch_main();*/
-    int *data = new int[100];
-    for(int i = 0; i < 100; i++) {data[i] = i;}
     dispatch_queue_t queue = dispatch_get_global_queue(0, 0);
-    dispatch_apply_f(100, queue, (void *)data, do_work);
+    dispatch_async(queue, ^(void){
+        sleep(0.7);
+        printf("\nWAKE up\n");
+    });
+    int *data = new int[100000];
+    for(int i = 0; i < 100000; i++) {data[i] = i;}
+    dispatch_apply_f(100000, queue, (void *)data, do_work);
     for(int i = 0; i < 100; i++) {printf("%d ", data[i]);}
     void (^hello)(void)  = ^(void) 
     {
-        printf("The end\n");
+        printf("\nThe end\n");
     };
+
+
+
     hello();
     return 0;
 }
