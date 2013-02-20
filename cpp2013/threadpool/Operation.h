@@ -2,6 +2,6 @@
 class Operation
 {
 public:
-    void Execute();
+    virtual void Execute() = 0;
 private:
 };
