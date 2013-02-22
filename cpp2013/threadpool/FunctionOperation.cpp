@@ -2,10 +2,11 @@
 
 void FunctionOperation::Execute()
 {
-    this->foo();//FIX ME
+    this->foo(this->args);//FIX ME
 }
 
-FunctionOperation::FunctionOperation(function foo)
+FunctionOperation::FunctionOperation(function foo, void *args)
 {
     this->foo = foo;
+    this->args = args;
 }

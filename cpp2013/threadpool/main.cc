@@ -14,16 +14,17 @@ void foo(void (^block)(void))
     f();
 }
 
-void foo2()
+void foo2(void *data)
 {
-    printf("foo2\n");
+    printf("foo2 %d\n", *(int *)data);
 }
 
 int main(int argc, char** argv)
 {
     ThreadPool pool;
     dispatch_queue_t queue = dispatch_queue_create("com.mydomain.myapp.longrunningfunction", DISPATCH_QUEUE_CONCURRENT);
-    FunctionOperation op2(foo2);
+    int tst = 100;
+    FunctionOperation op2(foo2, &tst);
     pool.async(&op2);
     //run_Operation_async(queue, &op2);
     //dispatch_group_t group = dispatch_group_create()
