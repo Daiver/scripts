@@ -42,7 +42,7 @@ bool assert_func(testfunc foo, unsigned long value, int radix, const char *true_
 {
     char *source = new char[36];
     foo(value, source, radix);
-    printf(">%s %s\n", source, true_value);
+    //printf(">%s %s\n", source, true_value);
     int res = strcmp(true_value, source);
     delete[] source;
     return 0 == res;
