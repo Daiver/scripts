@@ -8,8 +8,12 @@ object App {
     def twiddle(foo : (Array[Float]) => Float, initial_params : Array[Float], tol : Float) = {
         var params = initial_params.clone()
         var diff_params = Array.fill(initial_params.length){0.0f}
-        params(0) += 10
-
+        while (foo(params) > tol) {
+            for(i <- (0 to params.length))
+            {
+                println(i)
+            }
+        }
         params.toList
     }
 
