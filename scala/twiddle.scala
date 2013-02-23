@@ -32,8 +32,8 @@ object App {
     }
 
     def main (args : Array[String]) = {
-        val pol = (p : Array[Float]) => 2*p(0) + 3*p(1) + p(2)
-        val params = twiddle((p : Array[Float] )=> (10 - pol(p)).abs, Array(0, 0, 0), 0.01f)
+        val pol = (p : Array[Float]) => 3*p(0) + 9*p(1) + 5*p(2)
+        val params = twiddle((p : Array[Float] )=> (9- pol(p)).abs, Array(0, 0, 0), 0.000001f)
         println(params.toList)
         println(pol(params))
     }
