@@ -20,5 +20,5 @@ void run_Operation_async(dispatch_queue_t queue, Operation *op)
 
 void ThreadPool::async(Operation *op)
 {
-    run_Operation_async(this->queue[2], op);
+    run_Operation_async(this->queue[op->get_priority()], op);
 }

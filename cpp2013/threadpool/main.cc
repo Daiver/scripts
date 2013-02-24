@@ -31,9 +31,10 @@ int main(int argc, char** argv)
     int tst = 100;
     FunctionOperation op2(foo2, &tst);
     FunctionOperation op(foo3, NULL);
+    op.set_priority(low);
+    pool.async(&op2);
     pool.async(&op2);
     pool.async(&op);
-    pool.async(&op2);
     pool.async(&op2);
     //run_Operation_async(queue, &op2);
     //dispatch_group_t group = dispatch_group_create()

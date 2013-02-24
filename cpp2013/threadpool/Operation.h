@@ -13,7 +13,9 @@ enum Operation_Priority
 class Operation
 {
 public:
-    virtual void Execute() = 0;
+   virtual void Execute() = 0;
+   Operation_Priority get_priority();
+   void set_priority(Operation_Priority priority);
 private:
     Operation_Priority priority;
 };

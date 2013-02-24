@@ -9,4 +9,5 @@ FunctionOperation::FunctionOperation(function foo, void *args)
 {
     this->foo = foo;
     this->args = args;
+    this->set_priority(normal);
 }
