@@ -6,13 +6,13 @@
 typedef  char (*testfunc)(unsigned long value, char *string, int radix);
 inline char ultoa_by_me(unsigned long value, char *string, int radix)
 {
-    if ((radix < 2) || (radix > 16)) 
+    if ((radix < 2) || (radix > 36)) 
     {
         return 1;
     }
     
     char *now_char = string;
-    const char *symbols = "0123456789abcdef";
+    const char *symbols = "0123456789abcdefghijklmnopqrstuvwxyz";
     unsigned long cur_value = value;
     do 
     {
