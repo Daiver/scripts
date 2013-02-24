@@ -2,6 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <algorithm>
+#include <errno.h>
+#include <errno.h>
+#include <limits.h>
 
 typedef  char (*testfunc)(unsigned long value, char *string, int radix);
 inline char ultoa_by_me(unsigned long value, char *string, int radix)
@@ -111,11 +114,26 @@ int main(int argc, char** argv)
         test_result(bin_test(ultoa_by_me), "bin_test");
     } else 
     {
-        unsigned long value = atoi(argv[1]);
+        char *endline;
+        //unsigned long value = atoi(argv[1]);
+        unsigned long value = strtol(argv[1], &endline, 10);
+        if (endline == argv[1]) 
+        {
+            printf("Wrong num");
+            return 0;
+        }
+
         char* source = new char[255];
         if (argc > 2)
         {
-            unsigned long base = atoi(argv[2]);
+            //unsigned long base = atoi(argv[2]);
+            unsigned long base = strtol(argv[2], &endline, 10);
+
+            if (endline == argv[2]) 
+            {
+                printf("Wrong num");
+                return 0;
+            }
             if(ultoa_by_me(value, source, base))
             {
                 printf("Wrong base!\n");
