@@ -117,6 +117,14 @@ int main(int argc, char** argv)
         ultoa_by_me(value, source, base);
         printf(">%ld %ld >>> %s\n", value, base, source);
         delete[] source;
+    } else if (argc > 1)
+    {
+        
+        unsigned long value = atoi(argv[1]);
+        char* source = new char[36];
+        ultoa_by_me_template<10>(value, source);
+        printf(">%ld >>> %s\n", value, source);
+        delete[] source;
     }
     
     return 0;
