@@ -116,7 +116,11 @@ int main(int argc, char** argv)
         if (argc > 2)
         {
             unsigned long base = atoi(argv[2]);
-            ultoa_by_me(value, source, base);
+            if(ultoa_by_me(value, source, base))
+            {
+                printf("Wrong base!\n");
+                return 0;
+            }
             printf(">%ld %ld >>> %s\n", value, base, source);
         }
         else
