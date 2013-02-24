@@ -84,11 +84,27 @@ def buildtree(rows,scoref=entropy):
     else:
         return decisionnode(results=uniquecounts(rows))
 
+def classify(observation, tree):
+    if tree.results != None:
+        return tree.results
+    else:
+        v = observation[tree.col]
+        branch = None
+        if isinstance(v, int) or isinstance(v, float):
+            if v >= tree.value: branch = tree.tb
+            else: branch = tree.fb
+        else:
+            if v == tree.value: branch = tree.tb
+            else: branch = tree.fb
+        return classify(observation, branch)
+
 def make_data_valid(data):
-    return [[str(x) if i != 3 else float(x) for i, x in enumerate(row) ] for row in data]
+    return [[str(x) if i != 3 else int(x) for i, x in enumerate(row) ] for row in data]
 
 if __name__ == '__main__':
     data = [[ex for ex in s.split('\t')] for s in open('data')]
     #print(divideset(make_data_valid(data), 2, 'yes')[0])
     #print(divideset(make_data_valid(data), 2, 'yes')[1])
-    printtree(buildtree(make_data_valid(data)))
+    tree = (buildtree(make_data_valid(data)))
+    printtree(tree)
+    print classify(['(direct)', 'USA', 'yes', 5], tree)
