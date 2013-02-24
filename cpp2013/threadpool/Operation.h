@@ -3,11 +3,11 @@
 
 enum Operation_Priority
 {
-    very_hight = 2,
-    hight = 1,
-    normal = 0,
-    low = -1,
-    very_low = -2
+    very_hight = 4,
+    hight = 3,
+    normal = 2,
+    low = 1,
+    very_low = 0
 };
 
 class Operation
