@@ -100,32 +100,31 @@ void test_result(bool result, const char *test_name)
 int main(int argc, char** argv)
 {
     const char* usage_message = "USAGE: ./main -t #runs tests \n\t ./main value base #runs function";
-    if (argc < 2)
+    if (argc <= 1)
     {
         printf("%s\n", usage_message);
-    } else if ((argc > 1) && (strcmp(argv[1], "-t") == 0))
+    } else if (strcmp(argv[1], "-t") == 0)
     {
         printf("Start testes...\n");
         test_result(dec_test(ultoa_by_me, 10000), "dec_test");
         test_result(hex_test(ultoa_by_me), "hex_test");
         test_result(bin_test(ultoa_by_me), "bin_test");
-    } else if (argc > 2)
+    } else 
     {
         unsigned long value = atoi(argv[1]);
-        unsigned long base = atoi(argv[2]);
-        char* source = new char[36];
-        ultoa_by_me(value, source, base);
-        printf(">%ld %ld >>> %s\n", value, base, source);
+        char* source = new char[255];
+        if (argc > 2)
+        {
+            unsigned long base = atoi(argv[2]);
+            ultoa_by_me(value, source, base);
+            printf(">%ld %ld >>> %s\n", value, base, source);
+        }
+        else
+        {
+            ultoa_by_me_template<16>(value, source);
+            printf(">%ld 16 >>> %s\n", value, source);
+        }
         delete[] source;
-    } else if (argc > 1)
-    {
-        
-        unsigned long value = atoi(argv[1]);
-        char* source = new char[36];
-        ultoa_by_me_template<10>(value, source);
-        printf(">%ld >>> %s\n", value, source);
-        delete[] source;
-    }
-    
+    }     
     return 0;
 }
