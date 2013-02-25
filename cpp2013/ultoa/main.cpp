@@ -65,6 +65,17 @@ bool dec_test(testfunc foo, unsigned long num_of_iter)
     return true;
 }
 
+bool template_test()
+{
+    char *source = new char[36];
+    unsigned long value;
+    value = 17;
+    ultoa_by_me_template<16>(value, source);
+    if (strcmp(source, "11") != 0) return false;
+    delete [] source;
+    return true;
+}
+
 bool hex_test(testfunc foo)
 {
     if (!assert_func(foo, 16, 16, "10")) return false;
@@ -112,6 +123,7 @@ int main(int argc, char** argv)
         test_result(dec_test(ultoa_by_me, 10000), "dec_test");
         test_result(hex_test(ultoa_by_me), "hex_test");
         test_result(bin_test(ultoa_by_me), "bin_test");
+        test_result(template_test(), "bin_test");
     } else 
     {
         char *endline;
