@@ -123,7 +123,7 @@ int main(int argc, char** argv)
         test_result(dec_test(ultoa_by_me, 10000), "dec_test");
         test_result(hex_test(ultoa_by_me), "hex_test");
         test_result(bin_test(ultoa_by_me), "bin_test");
-        test_result(template_test(), "bin_test");
+        test_result(template_test(), "template_test");
     } else 
     {
         char *endline;
