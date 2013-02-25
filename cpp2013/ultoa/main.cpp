@@ -15,7 +15,7 @@ inline char ultoa_by_me(unsigned long value, char *string, int radix)
     }
     
     char *now_char = string;
-    const char *symbols = "0123456789abcdefghijklmnopqrstuvwxyz";
+    char  * const symbols  = "0123456789abcdefghijklmnopqrstuvwxyz";
     unsigned long cur_value = value;
     do 
     {
@@ -128,8 +128,8 @@ int main(int argc, char** argv)
     {
         char *endline;
         //unsigned long value = atoi(argv[1]);
-        unsigned long value = strtol(argv[1], &endline, 10);
-        if (endline == argv[1]) 
+        long value = strtol(argv[1], &endline, 10);
+        if ((endline == argv[1]) || (errno == ERANGE && (value == LONG_MAX || value == LONG_MIN)) || (value < 0))
         {
             printf("Wrong num");
             return 0;
@@ -139,9 +139,9 @@ int main(int argc, char** argv)
         if (argc > 2)
         {
             //unsigned long base = atoi(argv[2]);
-            unsigned long base = strtol(argv[2], &endline, 10);
+            long base = strtoul(argv[2], &endline, 10);
 
-            if (endline == argv[2]) 
+            if ((endline == argv[1]) || (errno == ERANGE && (base == LONG_MAX || base == LONG_MIN)) || (base < 0))
             {
                 printf("Wrong num");
                 return 0;
