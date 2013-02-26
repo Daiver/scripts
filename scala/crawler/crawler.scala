@@ -52,7 +52,7 @@ object Appp  {
                 }
             }
 
-            val hrefs = getHref()
+            val hrefs = getHref().filter(!_.endsWith(".png"))
             val images = getImages()
             StoredPage(url, "", hrefs, images)
             //getHref()
