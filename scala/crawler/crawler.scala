@@ -4,45 +4,48 @@ import java.net.URL
 import java.util.regex.Pattern
 import java.util.Scanner
 
-object App {
-    def openResourceInputStream(url : String) = {
-        val connection = new URL(url).openConnection()
-        connection.setRequestProperty("User-Agent", "Mozilla/5.0 (compatible;)")
-        connection.connect()
-        connection.getInputStream
-    }
+object Appp  {
 
-    def grabUrl(url : String) = {
+    case class StoredPage (URL : String, page_html : String)
+
+    class Crawler {
+        def openResourceInputStream(url : String) = {
+            val connection = new URL(url).openConnection()
+            connection.setRequestProperty("User-Agent", "Mozilla/5.0 (compatible;)")
+            connection.connect()
+            connection.getInputStream
+        }
+
+        def grabUrl(url : String) = {
+            val pageScanner = new Scanner(openResourceInputStream(url))
+            def getPage(res : String = "") : String = {
+                if (pageScanner.hasNextLine) {
+                    getPage(res + pageScanner.nextLine())
+                }
+                else {
+                    res
+                }
+            }
+            val imagePattern = Pattern.compile("""http:\/\/[A-Za-z0-9-_]+\.[A-Za-z0-9-_:%&\?\/.=]+""")
+            val matcher = imagePattern.matcher(getPage())
+            def getHref(res : List[String] = List[String]()) : List[String] = {
+                if (matcher.find()) {
+                    getHref(res :+ matcher.group(0).toString())
+                }
+                else {
+                    res
+                }
+            }
+            getHref()
+        }
+
+    }
     
-        val pageScanner = new Scanner(openResourceInputStream(url))
-
-        def getPage(res : String = "") : String = {
-            if (pageScanner.hasNextLine) {
-                getPage(res + pageScanner.nextLine())
-            }
-            else {
-                res
-            }
-        }
-
-        val imagePattern = Pattern.compile("""http:\/\/[A-Za-z0-9-_]+\.[A-Za-z0-9-_:%&\?\/.=]+""")
-        val matcher = imagePattern.matcher(getPage())
-        def getHref(res : List[String] = List[String]()) : List[String] = {
-            if (matcher.find()) {
-                getHref(res :+ matcher.group(0).toString())
-            }
-            else {
-                res
-            }
-        }
-        getHref()
-    }
-
     def main(args : Array[String]) = {
-
-        println(grabUrl("http://ya.ru"))
-
-        //println(conn.getInputStream())
-        //println(XML.load(conn.getInputStream))
+        val crawler = new Crawler()
+        println(crawler.grabUrl("http://ya.ru"))
+        val sp = new StoredPage("Me", "So")
+        println(sp.page_html)
     }
+
 }
