@@ -16,7 +16,7 @@ object App {
     
         val pageScanner = new Scanner(openResourceInputStream(url))
 
-        def getPage(res : String) : String = {
+        def getPage(res : String = "") : String = {
             if (pageScanner.hasNextLine) {
                 getPage(res + pageScanner.nextLine())
             }
@@ -26,8 +26,8 @@ object App {
         }
 
         val imagePattern = Pattern.compile("""http:\/\/[A-Za-z0-9-_]+\.[A-Za-z0-9-_:%&\?\/.=]+""")
-        val matcher = imagePattern.matcher(getPage(""))
-        def getHref(res : List[String]) : List[String] = {
+        val matcher = imagePattern.matcher()
+        def getHref(res : List[String] = List[String]()) : List[String] = {
             if (matcher.find()) {
                 getHref(res :+ matcher.group(0).toString())
             }
@@ -35,7 +35,7 @@ object App {
                 res
             }
         }
-        getHref(List[String]())
+        getHref()
     }
 
     def main(args : Array[String]) = {
