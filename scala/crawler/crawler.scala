@@ -8,7 +8,7 @@ object Appp  {
 
     //case class PageLink(URL : String)
     //case class ImageLink(URL : String)
-    case class StoredPage (URL : String, page_html : String, links : List[String], images : List[String])
+    case class StoredPage (URL : String, page_html : String, keyWords : scala.collection.mutable.HashMap[String, Int], links : List[String], images : List[String])
 
     class Crawler {
         def openResourceInputStream(url : String) = {
@@ -17,8 +17,10 @@ object Appp  {
             connection.connect()
             connection.getInputStream
         }
+
         val hrefPattern = Pattern.compile("""http:\/\/[A-Za-z0-9-_]+\.[A-Za-z0-9-_:%&\?\/.=]+""")
         val imagePattern = Pattern.compile("(src|href)[^><\"]*\"([^\"\']*\\.(gif|jpg|png))\"")
+        val bodyPattern = Pattern.compile("<script>(\\S+)</script>")
 
         def grabUrl(url : String) = {
             val pageScanner = new Scanner(openResourceInputStream(url))
@@ -52,19 +54,16 @@ object Appp  {
                 }
             }
 
+            val cnts = new scala.collection.mutable.HashMap[String, Int]()
             val hrefs = getHref().filter(!_.endsWith(".png"))
             val images = getImages()
-            StoredPage(url, "", hrefs, images)
-            //getHref()
+            StoredPage(url, "", cnts, hrefs, images)
         }
-
     }
     
     def main(args : Array[String]) = {
         val crawler = new Crawler()
         println(crawler.grabUrl("http://ya.ru"))
-        //val sp = new StoredPage("Me", "So")
-        //println(sp.page_html)
     }
 
 }
