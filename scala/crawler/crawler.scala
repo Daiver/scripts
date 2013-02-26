@@ -6,9 +6,9 @@ import java.util.Scanner
 
 object Appp  {
 
-    case class PageLink(URL : String)
-    case class ImageLink(URL : String)
-    case class StoredPage (URL : String, page_html : String, links : Array[PageLink], images : Array[ImageLink])
+    //case class PageLink(URL : String)
+    //case class ImageLink(URL : String)
+    case class StoredPage (URL : String, page_html : String, links : List[String], images : List[String])
 
     class Crawler {
         def openResourceInputStream(url : String) = {
@@ -17,6 +17,8 @@ object Appp  {
             connection.connect()
             connection.getInputStream
         }
+        val hrefPattern = Pattern.compile("""http:\/\/[A-Za-z0-9-_]+\.[A-Za-z0-9-_:%&\?\/.=]+""")
+        val imagePattern = Pattern.compile("(src|href)[^><\"]*\"([^\"\']*\\.(gif|jpg|png))\"")
 
         def grabUrl(url : String) = {
             val pageScanner = new Scanner(openResourceInputStream(url))
@@ -28,18 +30,32 @@ object Appp  {
                     res
                 }
             }
-            val hrefPattern = Pattern.compile("""http:\/\/[A-Za-z0-9-_]+\.[A-Za-z0-9-_:%&\?\/.=]+""")
+
             val raw_page = getPage()
-            val matcher = hrefPattern.matcher(raw_page)
+            val href_matcher = hrefPattern.matcher(raw_page)
+            val image_matcher = imagePattern.matcher(raw_page)
+
             def getHref(res : List[String] = List[String]()) : List[String] = {
-                if (matcher.find()) {
-                    getHref(res :+ matcher.group(0).toString())
+                if (href_matcher.find()) {
+                    getHref(res :+ href_matcher.group(0).toString())
                 }
                 else {
                     res
                 }
             }
-            getHref()
+            def getImages(res : List[String] = List[String]()) : List[String] = {
+                if (image_matcher.find()) {
+                    getHref(res :+ image_matcher.group(2).toString())
+                }
+                else {
+                    res
+                }
+            }
+
+            val hrefs = getHref()
+            val images = getImages()
+            StoredPage(url, "", hrefs, images)
+            //getHref()
         }
 
     }
