@@ -21,7 +21,7 @@ object App {
     }
 
     def getHref(str : String) = {
-        //val imagePattern = Pattern.compile("(src|href)[^><\"]*\"([^\"\']*\\.(gif|jpg|png|html))\"")
+        var res = List[String]()
         val imagePattern = Pattern.compile("""http:\/\/[A-Za-z0-9-_]+\.[A-Za-z0-9-_:%&\?\/.=]+""")
         val matcher = imagePattern.matcher(str)
         while(matcher.find()) {
