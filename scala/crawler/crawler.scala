@@ -5,35 +5,42 @@ import java.util.regex.Pattern
 import java.util.Scanner
 
 object App {
-    def openResourceInputStream(url: String) = {
+    def openResourceInputStream(url : String) = {
         val connection = new URL(url).openConnection()
         connection.setRequestProperty("User-Agent", "Mozilla/5.0 (compatible;)")
         connection.connect()
         connection.getInputStream
     }
 
-    def grabPage(pageScanner : Scanner)= {
-        var res = ""
-        while (pageScanner.hasNextLine) {
-            res += pageScanner.nextLine()
-        }
-        res
-    }
+    def grabUrl(url : String) = {
+    
+        val pageScanner = new Scanner(openResourceInputStream(url))
 
-    def getHref(str : String) = {
-        var res = List[String]()
-        val imagePattern = Pattern.compile("""http:\/\/[A-Za-z0-9-_]+\.[A-Za-z0-9-_:%&\?\/.=]+""")
-        val matcher = imagePattern.matcher(str)
-        while(matcher.find()) {
-            println(matcher.group(0))
+        def getPage(res : String) : String = {
+            if (pageScanner.hasNextLine) {
+                getPage(res + pageScanner.nextLine())
+            }
+            else {
+                res
+            }
         }
+
+        val imagePattern = Pattern.compile("""http:\/\/[A-Za-z0-9-_]+\.[A-Za-z0-9-_:%&\?\/.=]+""")
+        val matcher = imagePattern.matcher(getPage(""))
+        def getHref(res : List[String]) : List[String] = {
+            if (matcher.find()) {
+                getHref(res :+ matcher.group(0).toString())
+            }
+            else {
+                res
+            }
+        }
+        getHref(List[String]())
     }
 
     def main(args : Array[String]) = {
 
-        val pageScanner = new Scanner(openResourceInputStream("http://habrahabr.ru"))
-        val page = grabPage(pageScanner)
-        println(getHref(page))
+        println(grabUrl("http://ya.ru"))
 
         //println(conn.getInputStream())
         //println(XML.load(conn.getInputStream))
