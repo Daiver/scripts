@@ -53,11 +53,15 @@ object Appp  {
                     res
                 }
             }
-
-            val cnts = new scala.collection.mutable.HashMap[String, Int]()
+            
+            //println(raw_page.split(" ")(1))
+            var keyWords = new scala.collection.mutable.HashMap[String, Int]()
+            for(word <- raw_page.split(" ")) {
+               keyWords.put(word, 1)
+            }
             val hrefs = getHref().filter(!_.endsWith(".png"))
             val images = getImages()
-            StoredPage(url, "", cnts, hrefs, images)
+            StoredPage(url, "", keyWords, hrefs, images)
         }
     }
     
