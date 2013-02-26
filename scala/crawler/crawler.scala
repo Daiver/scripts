@@ -6,7 +6,9 @@ import java.util.Scanner
 
 object Appp  {
 
-    case class StoredPage (URL : String, page_html : String)
+    case class PageLink(URL : String)
+    case class ImageLink(URL : String)
+    case class StoredPage (URL : String, page_html : String, links : Array[PageLink], images : Array[ImageLink])
 
     class Crawler {
         def openResourceInputStream(url : String) = {
@@ -26,8 +28,9 @@ object Appp  {
                     res
                 }
             }
-            val imagePattern = Pattern.compile("""http:\/\/[A-Za-z0-9-_]+\.[A-Za-z0-9-_:%&\?\/.=]+""")
-            val matcher = imagePattern.matcher(getPage())
+            val hrefPattern = Pattern.compile("""http:\/\/[A-Za-z0-9-_]+\.[A-Za-z0-9-_:%&\?\/.=]+""")
+            val raw_page = getPage()
+            val matcher = hrefPattern.matcher(raw_page)
             def getHref(res : List[String] = List[String]()) : List[String] = {
                 if (matcher.find()) {
                     getHref(res :+ matcher.group(0).toString())
@@ -44,8 +47,8 @@ object Appp  {
     def main(args : Array[String]) = {
         val crawler = new Crawler()
         println(crawler.grabUrl("http://ya.ru"))
-        val sp = new StoredPage("Me", "So")
-        println(sp.page_html)
+        //val sp = new StoredPage("Me", "So")
+        //println(sp.page_html)
     }
 
 }
