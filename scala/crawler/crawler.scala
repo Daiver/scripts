@@ -26,7 +26,7 @@ object App {
         }
 
         val imagePattern = Pattern.compile("""http:\/\/[A-Za-z0-9-_]+\.[A-Za-z0-9-_:%&\?\/.=]+""")
-        val matcher = imagePattern.matcher()
+        val matcher = imagePattern.matcher(getPage())
         def getHref(res : List[String] = List[String]()) : List[String] = {
             if (matcher.find()) {
                 getHref(res :+ matcher.group(0).toString())
