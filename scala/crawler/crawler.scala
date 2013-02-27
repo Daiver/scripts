@@ -81,14 +81,18 @@ object Appp  {
     }
     
     def main(args : Array[String]) = {
+        println("Searching with " + args(0))
         val crawler = new Crawler()
         var pages = List[StoredPage]()
 
+        val major_url = "http://habrahabr.ru"
+        println("Start grabing " + major_url)
         def walker(url : String, depth : Int) : StoredPage = {
             val page = crawler.grabUrl(url)
+            println("walking page url " + page.URL + "  num of hrefs " + page.links.length)
             pages ::= page
             if (depth < 1)
-                page.links.foreach((x:String) => {
+                page.links.filter(_.startsWith(major_url)).foreach((x:String) => {
                     try {    
                         walker(x, depth+1)
                     } catch {
@@ -97,8 +101,9 @@ object Appp  {
                 })
             page
         }
-        walker("http://habrahabr.ru", 0)
-        search("Canon", pages).foreach((x:StoredPage) => println(x.URL))
+        walker(major_url, 0)
+        println("Start search")
+        search(args(0), pages).foreach((x:StoredPage) => println(x.URL))
     }
 
 }
