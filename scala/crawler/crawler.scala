@@ -1,13 +1,16 @@
 import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream
-import java.io.{File, FileOutputStream}
 import java.net.URL
 import java.util.regex.Pattern
 import java.util.Scanner
 import java.security.MessageDigest
+import scala.util.Marshal
+import scala.io.Source
+import scala.collection.immutable
+import java.io._
 
 object Appp  {
 
-    case class StoredPage (URL : String, page_html : String, keyWords : scala.collection.mutable.HashMap[String, Int], links : List[String], images : List[String], hash : Array[Byte])
+    case class StoredPage (URL : String, page_html : String, keyWords : scala.collection.mutable.HashMap[String, Int], links : List[String], images : List[String], hash : Array[Byte]) 
     def md5(s: String) = {
         MessageDigest.getInstance("MD5").digest(s.getBytes)
     }
@@ -80,12 +83,30 @@ object Appp  {
         pages.filter((x : (String, StoredPage)) => filterFunc(x._2, keyWords)).values
     }
     
+    def SerialisePages(fname : String, foo : scala.collection.mutable.HashMap[String, StoredPage]) = {
+        val out = new FileOutputStream(fname)
+        out.write(Marshal.dump(foo.values.toList))
+        out.close
+    }
+
+    def DeSerialisePages(fname : String) = {
+        val in = new FileInputStream(fname)
+        val bytes = Stream.continually(in.read).takeWhile(-1 !=).map(_.toByte).toArray
+        val lst = Marshal.load[List[StoredPage]](bytes)
+        var pages = scala.collection.mutable.HashMap[String, StoredPage]()
+        for(p <- lst) {
+            pages.put(p.URL, p)
+        }
+        pages
+    }
+
     def main(args : Array[String]) = {
         println("Searching with " + args(0))
         def grabHost(major_url : String, max_depth : Int = 1) = {
             val crawler = new Crawler()
             //var pages = List[StoredPage]()
-            var pages = scala.collection.mutable.HashMap[String, StoredPage]()
+            //var pages = scala.collection.mutable.HashMap[String, StoredPage]()
+            var pages = DeSerialisePages("index")
             println("Start grabing " + major_url)
             def walker(url : String, depth : Int) : Unit = {
                 if (!pages.contains(url)) {
@@ -100,13 +121,17 @@ object Appp  {
                                 case e: Exception => println(e)
                             }
                         })
+                } else {
+                    println("passing " + url)
                 }
             }
             walker(major_url, 0)
             pages
         }
         val major_url = "http://habrahabr.ru/"
-        val pages = grabHost(major_url, 2)
+        val pages = grabHost(major_url, 1)
+        SerialisePages("index", pages)
+        println("Index size: " + pages.size)
         println("Start search")
         search(args(0), pages).foreach((x:StoredPage) => println(x.URL))
     }
