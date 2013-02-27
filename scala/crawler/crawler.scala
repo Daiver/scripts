@@ -82,26 +82,29 @@ object Appp  {
     
     def main(args : Array[String]) = {
         println("Searching with " + args(0))
-        val crawler = new Crawler()
-        var pages = List[StoredPage]()
-
-        val major_url = "http://habrahabr.ru"
-        println("Start grabing " + major_url)
-        def walker(url : String, depth : Int) : StoredPage = {
-            val page = crawler.grabUrl(url)
-            println("walking page url " + page.URL + "  num of hrefs " + page.links.length)
-            pages ::= page
-            if (depth < 1)
-                page.links.filter(_.startsWith(major_url)).foreach((x:String) => {
-                    try {    
-                        walker(x, depth+1)
-                    } catch {
-                        case e: Exception => println(e)
-                    }
-                })
-            page
+        def grabHost(major_url : String, max_depth : Int = 1) = {
+            val crawler = new Crawler()
+            var pages = List[StoredPage]()
+            println("Start grabing " + major_url)
+            def walker(url : String, depth : Int) : StoredPage = {
+                val page = crawler.grabUrl(url)
+                println("walking page url " + page.URL + "  num of hrefs " + page.links.length)
+                pages ::= page
+                if (depth < max_depth)
+                    page.links.filter(_.startsWith(major_url)).foreach((x:String) => {
+                        try {    
+                            walker(x, depth+1)
+                        } catch {
+                            case e: Exception => println(e)
+                        }
+                    })
+                page
+            }
+            walker(major_url, 0)
+            pages
         }
-        walker(major_url, 0)
+        val major_url = "http://habrahabr.ru"
+        val pages = grabHost(major_url, 1)
         println("Start search")
         search(args(0), pages).foreach((x:StoredPage) => println(x.URL))
     }
