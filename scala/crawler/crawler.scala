@@ -60,9 +60,8 @@ object Appp  {
                 keyWords.put(word, 1)
             }
             val hrefs = getHref().filter((x : String) => !(x.endsWith(".jpg") || x.endsWith(".ico") || x.endsWith(".png") || x.endsWith(".gif")))
-
-
-            val images = getImages()
+            //val images = getImages()
+            val images = List[String]()
             StoredPage(url, "", keyWords, hrefs, images, md5(raw_page))
         }
     }
@@ -89,7 +88,7 @@ object Appp  {
             println("Start grabing " + major_url)
             def walker(url : String, depth : Int) : StoredPage = {
                 val page = crawler.grabUrl(url)
-                println("pages already " + pages.length  + " walking page url " + page.URL + "  num of hrefs " + page.links.length)
+                println(pages.length  + " walking page url " + page.URL + "  num of hrefs " + page.links.length + " hash " + page.hash.toList)
                 pages ::= page
                 if (depth < max_depth)
                     page.links.filter(_.startsWith(major_url)).foreach((x:String) => {
