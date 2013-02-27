@@ -87,8 +87,14 @@ object Appp  {
         def walker(url : String, depth : Int) : StoredPage = {
             val page = crawler.grabUrl(url)
             pages ::= page
-            /*if (depth < 1)
-                page.links.foreach{(x:String) => println("!!!!!!!!!!!!!!!!!!!!!!!!!!\n" + walker(x, depth+1) + "\n")}*/
+            if (depth < 1)
+                page.links.foreach((x:String) => {
+                    try {    
+                        walker(x, depth+1)
+                    } catch {
+                        case e: Exception => println(e)
+                    }
+                })
             page
         }
         walker("http://habrahabr.ru", 0)
