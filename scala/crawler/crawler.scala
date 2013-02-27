@@ -66,7 +66,7 @@ object Appp  {
         }
     }
 
-    def search(query : String, pages : List[StoredPage]) = {
+    def search(query : String, pages : scala.collection.mutable.HashMap[String, StoredPage]) = {
         val keyWords = query.split(" ")
         def filterFunc(page : StoredPage, words : Array[String]) : Boolean = {
             if (words.length == 0) {
@@ -77,34 +77,36 @@ object Appp  {
                 else (filterFunc(page, words.tail))
             }
         }
-        pages.filter((x:StoredPage) => filterFunc(x, keyWords))
+        pages.filter((x : (String, StoredPage)) => filterFunc(x._2, keyWords)).values
     }
     
     def main(args : Array[String]) = {
         println("Searching with " + args(0))
         def grabHost(major_url : String, max_depth : Int = 1) = {
             val crawler = new Crawler()
-            var pages = List[StoredPage]()
+            //var pages = List[StoredPage]()
+            var pages = scala.collection.mutable.HashMap[String, StoredPage]()
             println("Start grabing " + major_url)
-            def walker(url : String, depth : Int) : StoredPage = {
-                val page = crawler.grabUrl(url)
-                println(pages.length  + " walking page url " + page.URL + "  num of hrefs " + page.links.length + " hash " + page.hash.toList)
-                pages ::= page
-                if (depth < max_depth)
-                    page.links.filter(_.startsWith(major_url)).foreach((x:String) => {
-                        try {    
-                            walker(x, depth+1)
-                        } catch {
-                            case e: Exception => println(e)
-                        }
-                    })
-                page
+            def walker(url : String, depth : Int) : Unit = {
+                if (!pages.contains(url)) {
+                    val page = crawler.grabUrl(url)
+                    println(pages.size  + " walking page url " + page.URL + "  num of hrefs " + page.links.length + " hash " + page.hash.toList)
+                    pages.put(url, page)
+                    if (depth < max_depth)
+                        page.links.filter(_.startsWith(major_url)).foreach((x:String) => {
+                            try {    
+                                walker(x, depth+1)
+                            } catch {
+                                case e: Exception => println(e)
+                            }
+                        })
+                }
             }
             walker(major_url, 0)
             pages
         }
-        val major_url = "http://habrahabr.ru"
-        val pages = grabHost(major_url, 2)
+        val major_url = "http://habrahabr.ru/"
+        val pages = grabHost(major_url, 1)
         println("Start search")
         search(args(0), pages).foreach((x:StoredPage) => println(x.URL))
     }
