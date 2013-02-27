@@ -6,8 +6,6 @@ import java.util.Scanner
 
 object Appp  {
 
-    //case class PageLink(URL : String)
-    //case class ImageLink(URL : String)
     case class StoredPage (URL : String, page_html : String, keyWords : scala.collection.mutable.HashMap[String, Int], links : List[String], images : List[String])
 
     class Crawler {
@@ -58,7 +56,7 @@ object Appp  {
             for(word <- raw_page.split(" ")) {
                 keyWords.put(word, 1)
             }
-            val hrefs = getHref().filter(!_.endsWith(".png")).filter(!_.endsWith(".ico")).filter(!_.endsWith(".jpg"))
+            val hrefs = getHref().filter((x : String) => !(x.endsWith(".jpg") || x.endsWith(".ico") || x.endsWith(".png") || x.endsWith(".gif")))
 
 
             val images = getImages()
@@ -88,7 +86,7 @@ object Appp  {
             println("Start grabing " + major_url)
             def walker(url : String, depth : Int) : StoredPage = {
                 val page = crawler.grabUrl(url)
-                println("walking page url " + page.URL + "  num of hrefs " + page.links.length)
+                println("pages already " + pages.length  + " walking page url " + page.URL + "  num of hrefs " + page.links.length)
                 pages ::= page
                 if (depth < max_depth)
                     page.links.filter(_.startsWith(major_url)).foreach((x:String) => {
@@ -104,9 +102,8 @@ object Appp  {
             pages
         }
         val major_url = "http://habrahabr.ru"
-        val pages = grabHost(major_url, 1)
+        val pages = grabHost(major_url, 2)
         println("Start search")
         search(args(0), pages).foreach((x:StoredPage) => println(x.URL))
     }
-
 }
