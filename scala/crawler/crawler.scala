@@ -3,11 +3,14 @@ import java.io.{File, FileOutputStream}
 import java.net.URL
 import java.util.regex.Pattern
 import java.util.Scanner
+import java.security.MessageDigest
 
 object Appp  {
 
-    case class StoredPage (URL : String, page_html : String, keyWords : scala.collection.mutable.HashMap[String, Int], links : List[String], images : List[String])
-
+    case class StoredPage (URL : String, page_html : String, keyWords : scala.collection.mutable.HashMap[String, Int], links : List[String], images : List[String], hash : Array[Byte])
+    def md5(s: String) = {
+        MessageDigest.getInstance("MD5").digest(s.getBytes)
+    }
     class Crawler {
         def openResourceInputStream(url : String) = {
             val connection = new URL(url).openConnection()
@@ -60,7 +63,7 @@ object Appp  {
 
 
             val images = getImages()
-            StoredPage(url, "", keyWords, hrefs, images)
+            StoredPage(url, "", keyWords, hrefs, images, md5(raw_page))
         }
     }
 
