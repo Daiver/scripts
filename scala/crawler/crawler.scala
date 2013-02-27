@@ -93,7 +93,7 @@ object Appp  {
                     println(pages.size  + " walking page url " + page.URL + "  num of hrefs " + page.links.length + " hash " + page.hash.toList)
                     pages.put(url, page)
                     if (depth < max_depth)
-                        page.links.filter(_.startsWith(major_url)).foreach((x:String) => {
+                        page.links.filter(_.startsWith(major_url)).par.foreach((x:String) => {
                             try {    
                                 walker(x, depth+1)
                             } catch {
@@ -106,7 +106,7 @@ object Appp  {
             pages
         }
         val major_url = "http://habrahabr.ru/"
-        val pages = grabHost(major_url, 1)
+        val pages = grabHost(major_url, 2)
         println("Start search")
         search(args(0), pages).foreach((x:StoredPage) => println(x.URL))
     }
