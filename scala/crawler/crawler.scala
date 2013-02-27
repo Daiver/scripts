@@ -54,20 +54,44 @@ object Appp  {
                 }
             }
             
-            //println(raw_page.split(" ")(1))
-            var keyWords = new scala.collection.mutable.HashMap[String, Int]()
+            var keyWords = new scala.collection.mutable.HashMap[String, Int]()//TODO: FIX IT
             for(word <- raw_page.split(" ")) {
-               keyWords.put(word, 1)
+                keyWords.put(word, 1)
             }
-            val hrefs = getHref().filter(!_.endsWith(".png"))
+            val hrefs = getHref().filter(!_.endsWith(".png")).filter(!_.endsWith(".ico")).filter(!_.endsWith(".jpg"))
+
+
             val images = getImages()
             StoredPage(url, "", keyWords, hrefs, images)
         }
     }
+
+    def search(query : String, pages : List[StoredPage]) = {
+        val keyWords = query.split(" ")
+        def filterFunc(page : StoredPage, words : Array[String]) : Boolean = {
+            if (words.length == 0) {
+                return true
+            }
+            else {
+                if (! page.keyWords.contains(words.head)) false
+                else (filterFunc(page, words.tail))
+            }
+        }
+        pages.filter((x:StoredPage) => filterFunc(x, keyWords))
+    }
     
     def main(args : Array[String]) = {
         val crawler = new Crawler()
-        println(crawler.grabUrl("http://ya.ru"))
+        var pages = List[StoredPage]()
+
+        def walker(url : String, depth : Int) : StoredPage = {
+            val page = crawler.grabUrl(url)
+            pages ::= page
+            if (depth < 1)
+                page.links.foreach{(x:String) => println("!!!!!!!!!!!!!!!!!!!!!!!!!!\n" + walker(x, depth+1) + "\n")}
+            page
+        }
+        walker("http://vk.ru", 0)
     }
 
 }
