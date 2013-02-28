@@ -59,7 +59,7 @@ object Appp  {
             }
             
             var keyWords = new scala.collection.mutable.HashMap[String, Int]()//TODO: FIX IT
-            for(word <- raw_page.split(" ")) {
+            for(word <- raw_page.toLowerCase.split(" ")) {
                 keyWords.put(word, 1)
             }
             val hrefs = getHref().filter((x : String) => !(x.endsWith(".jpg") || x.endsWith(".ico") || x.endsWith(".png") || x.endsWith(".gif")))
@@ -105,14 +105,25 @@ object Appp  {
         def grabHost(major_url : String, max_depth : Int = 1) = {
             val crawler = new Crawler()
             //var pages = List[StoredPage]()
-            //var pages = scala.collection.mutable.HashMap[String, StoredPage]()
-            var pages = DeSerialisePages("index")
+            var pages = scala.collection.mutable.HashMap[String, StoredPage]()
+            //var pages = DeSerialisePages("index")
             println("Start grabing " + major_url)
             def walker(url : String, depth : Int) : Unit = {
                 if (!pages.contains(url)) {
-                    val page = crawler.grabUrl(url)
-                    println(pages.size  + " walking page url " + page.URL + "  num of hrefs " + page.links.length + " hash " + page.hash.toList)
-                    pages.put(url, page)
+                val page = crawler.grabUrl(url)
+                println(pages.size  + " walking page url " + page.URL + "  num of hrefs " + page.links.length + " hash " + page.hash.toList)
+                pages.put(url, page)
+                if (depth < max_depth)
+                    page.links.filter(_.startsWith(major_url)).par.foreach((x:String) => {
+                        try {    
+                            walker(x, depth+1)
+                        } catch {
+                            case e: Exception => println(e)
+                        }
+                    })
+                } else {
+                    println("passing " + url) 
+                    /*val page = pages(url)
                     if (depth < max_depth)
                         page.links.filter(_.startsWith(major_url)).par.foreach((x:String) => {
                             try {    
@@ -120,14 +131,13 @@ object Appp  {
                             } catch {
                                 case e: Exception => println(e)
                             }
-                        })
-                } else {
-                    println("passing " + url)
+                        })*/
                 }
             }
             walker(major_url, 0)
             pages
         }
+        //val major_url = "http://habrahabr.ru/"
         val major_url = "http://habrahabr.ru/"
         val pages = grabHost(major_url, 1)
         SerialisePages("index", pages)
