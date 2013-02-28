@@ -60,7 +60,8 @@ object Appp  {
             
             var keyWords = new scala.collection.mutable.HashMap[String, Int]()//TODO: FIX IT
             for(word <- raw_page.toLowerCase.split(" ")) {
-                keyWords.put(word, 1)
+                if (!keyWords.contains(word)) keyWords.put(word, 0)
+                keyWords(word) += 1
             }
             val hrefs = getHref().filter((x : String) => !(x.endsWith(".jpg") || x.endsWith(".ico") || x.endsWith(".png") || x.endsWith(".gif")))
             //val images = getImages()
@@ -80,7 +81,13 @@ object Appp  {
                 else (filterFunc(page, words.tail))
             }
         }
-        pages.filter((x : (String, StoredPage)) => filterFunc(x._2, keyWords)).values
+
+        def freqRange(x : StoredPage) = {
+            x.keyWords.filter((x : (String, Int)) => keyWords.contains(x._1)).values.sum
+        }
+
+        val listtosort = pages.filter((x : (String, StoredPage)) => filterFunc(x._2, keyWords)).values.toList
+        listtosort sortWith {freqRange(_) > freqRange(_) }
     }
     
     def SerialisePages(fname : String, foo : scala.collection.mutable.HashMap[String, StoredPage]) = {
@@ -140,6 +147,7 @@ object Appp  {
         //val major_url = "http://habrahabr.ru/"
         val major_url = "http://habrahabr.ru/"
         val pages = grabHost(major_url, 1)
+        //var pages = DeSerialisePages("index")
         SerialisePages("index", pages)
         println("Index size: " + pages.size)
         println("Start search")
