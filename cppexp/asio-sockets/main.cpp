@@ -15,7 +15,7 @@ int main(int argc, char **argv)
         }
         boost::asio::io_service io_service;
         tcp::resolver resolver(io_service);
-        tcp::resolver::query query(argv[1], "1300");
+        tcp::resolver::query query(argv[1], 1300);
         tcp::resolver::iterator endpoint_iterator = resolver.resolve(query);
         tcp::socket socket(io_service);
         boost::asio::connect(socket, endpoint_iterator);
