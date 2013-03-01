@@ -108,7 +108,7 @@ object Appp  {
     }
 
     def main(args : Array[String]) = {
-        println("Searching with " + args(0))
+        //println("Searching with " + args(0))
         def grabHost(major_url : String, max_depth : Int = 1) = {
             val crawler = new Crawler()
             //var pages = List[StoredPage]()
@@ -150,7 +150,16 @@ object Appp  {
         //var pages = DeSerialisePages("index")
         SerialisePages("index", pages)
         println("Index size: " + pages.size)
-        println("Start search")
-        search(args(0), pages).foreach((x:StoredPage) => println(x.URL))
+        println("Ready to search")
+        var ok = true
+        while( ok ) {
+            val ln = readLine()
+            ok = ln != null
+            if( ok ) {
+                search(ln, pages).foreach((x:StoredPage) => println(x.URL))
+
+            }
+        }
+        //search(args(0), pages).foreach((x:StoredPage) => println(x.URL))
     }
 }
