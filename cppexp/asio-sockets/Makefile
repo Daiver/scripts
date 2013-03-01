@@ -1,5 +1,9 @@
 
-server: server.cpp client
+clean: server client
+	#rm *.o
+	ls
+
+server: server.cpp 
 	g++ -o server server.cpp -lboost_system -lpthread
 
 client: client.cpp
