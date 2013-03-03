@@ -14,28 +14,40 @@ void exec_block(void (^block)(void))//del it
     f();
 }
 
-int tmp_data = 0;
+int tmp_data1 = 0;
+int tmp_data2 = 0;
 
 void foo(void *data)
 {
-    printf("foo! %d\n", (*(int*)data));
+    tmp_data2 = *(int*)data;
+    printf("foo! %d\n", tmp_data2);
     //std::cout<<"foo2"<<std::endl<<std::cout.flush();
 }
 
 void foo2(void *data)
 {
-    printf("foo2!\n");
+    tmp_data1 += 10;
+    printf("foo2! %d\n", tmp_data1);
+
 }
 
 void foo3(void *data)
 {
-    printf("foo3\n");
+    tmp_data1 *= 3;
+    printf("foo3 %d\n", tmp_data1);
 }
 
 void foo4(void *data)
 {
-    printf("foo4\n");
+    printf("foo4 %d\n", tmp_data1);
 }
+
+void foo5(void *data)
+{
+    tmp_data1 *= tmp_data2;
+    printf("foo5 %d\n", tmp_data1);
+}
+
 
 int main(int argc, char** argv)
 {
@@ -45,15 +57,20 @@ int main(int argc, char** argv)
     FunctionOperation op2(foo2, NULL);
     FunctionOperation op3(foo3, NULL);
     FunctionOperation op4(foo4, NULL);
-    op1.set_priority(low);
+    FunctionOperation op5(foo5, NULL);
+    //op4.set_priority(low);
     //pool.async(&op2);
     //pool.async(&op2);
     //pool.async(&op1);
     //pool.async(&op2);
-    op4.add_dependency(&op1);
+    op3.add_dependency(&op4);
     op3.add_dependency(&op2);
-    op4.add_dependency(&op3);
-    pool.async(&op4);
+    op3.add_dependency(&op1);
+    op3.add_dependency(&op4);
+    op3.add_dependency(&op4);
+    op3.add_dependency(&op4);
+    op5.add_dependency(&op3);
+    pool.async(&op5);
 
     //run_Operation_async(queue, &op2);
     //dispatch_group_t group = dispatch_group_create()
