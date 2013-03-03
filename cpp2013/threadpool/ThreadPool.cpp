@@ -1,8 +1,9 @@
 
 #include "ThreadPool.h"
 
-ThreadPool::ThreadPool()
+ThreadPool::ThreadPool(long max_tasks_count)
 {
+    this->max_tasks_count = max_tasks_count;
     this->queue[4] = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
     this->queue[3] = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
     this->queue[2] = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);

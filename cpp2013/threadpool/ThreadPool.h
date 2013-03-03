@@ -8,10 +8,11 @@
 class ThreadPool
 {
 public:
-    ThreadPool();
+    ThreadPool(long max_tasks_count);
     void async(Operation *op);
 private:
     dispatch_queue_t queue[QUEUE_COUNT];
+    long max_tasks_count;
 };
 #else
 #endif

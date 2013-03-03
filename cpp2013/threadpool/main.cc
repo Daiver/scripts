@@ -32,10 +32,9 @@ void tmpfoo()
     });
     dispatch_release(queue);
 }
-
 int main(int argc, char** argv)
 {
-    ThreadPool pool;
+    ThreadPool pool(3);
     int tst = 100;
     FunctionOperation op2(foo2, &tst);
     FunctionOperation op(foo3, NULL);
