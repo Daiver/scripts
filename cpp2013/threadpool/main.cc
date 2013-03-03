@@ -1,5 +1,6 @@
 #include <dispatch/dispatch.h>
 #include <iostream>
+#include <stdio.h> //temporary
 
 #include "Operation.h"
 #include "FunctionOperation.h"
@@ -15,12 +16,18 @@ void foo(void (^block)(void))
 
 void foo2(void *data)
 {
+    printf("foo2!\n");
     //std::cout<<"foo2"<<std::endl<<std::cout.flush();
 }
 
 void foo3(void *data)
 {
-    //std::cout<<"foo3"<<std::endl<<std::cout.flush();
+    printf("foo3!\n");
+}
+
+void foo4(void *data)
+{
+    printf("foo4\n");
 }
 
 void tmpfoo()
@@ -38,10 +45,13 @@ int main(int argc, char** argv)
     FunctionOperation op2(foo2, &tst);
     FunctionOperation op(foo3, NULL);
     op.set_priority(low);
-    pool.async(&op2);
-    pool.async(&op2);
-    pool.async(&op);
-    pool.async(&op2);
+    //pool.async(&op2);
+    //pool.async(&op2);
+    //pool.async(&op);
+    //pool.async(&op2);
+    FunctionOperation op3(foo4, NULL);
+    op3.add_dependency(&op);
+    pool.async(&op3);
     //run_Operation_async(queue, &op2);
     //dispatch_group_t group = dispatch_group_create()
     //foo(^(void){ printf("!!!!!!\n");});

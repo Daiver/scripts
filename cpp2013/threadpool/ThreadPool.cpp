@@ -20,7 +20,7 @@ void ThreadPool::run_Operation_async(dispatch_queue_t queue, Operation *op)//thi
     int index = this->cur_index++;
     cur_tasks.insert(index);
     dispatch_async(queue, ^(void) {
-        std::cout<<"Start task #" << index << " s:" << cur_tasks.size() << std::endl;//<<std::cout.flush();
+        //std::cout<<"Start task #" << index << " s:" << cur_tasks.size() << std::endl;//<<std::cout.flush();
         op->Execute();
         cur_tasks.erase(index);
     });
@@ -32,5 +32,10 @@ void ThreadPool::async(Operation *op)
     {
         std::cout<<"Limit reached!"<<std::endl;
     }
+    std::vector<Operation*> dependency = op->get_dependences();
+    for(auto it = dependency.begin(); it != dependency.end(); ++it) {
+        this->async(*it);
+    }
+
     run_Operation_async(this->queue[op->get_priority()], op);
 }
