@@ -36,7 +36,13 @@ void tmpfoo()
     dispatch_queue_t queue = dispatch_queue_create("com.mydomain.myapp.longrunningfunction", DISPATCH_QUEUE_CONCURRENT);
     dispatch_async(queue, ^(void) {
     });
+    dispatch_group_t gr = dispatch_group_create();
+    dispatch_group_async(gr, queue, ^(void) {
+        printf("Wait me\n");
+    });
+    dispatch_group_wait(gr, 100000000000000);
     dispatch_release(queue);
+    printf("End tmp foo\n");
 }
 int main(int argc, char** argv)
 {
@@ -49,13 +55,15 @@ int main(int argc, char** argv)
     //pool.async(&op2);
     //pool.async(&op);
     //pool.async(&op2);
-    FunctionOperation op3(foo4, NULL);
-    op3.add_dependency(&op);
-    pool.async(&op3);
+    //FunctionOperation op3(foo4, NULL);
+    //op3.add_dependency(&op);
+    //pool.async(&op3);
+
     //run_Operation_async(queue, &op2);
     //dispatch_group_t group = dispatch_group_create()
     //foo(^(void){ printf("!!!!!!\n");});
-    sleep(1);
+    //sleep(1);
+    tmpfoo();
     std::cout<<"THE END";
     return 0;
 }
