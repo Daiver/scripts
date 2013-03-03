@@ -1,7 +1,9 @@
 
 #include "ThreadPool.h"
 
-ThreadPool::ThreadPool(long max_tasks_count)
+#include <iostream>
+
+ThreadPool::ThreadPool(int max_tasks_count)
 {
     this->cur_index = 0;
     this->max_tasks_count = max_tasks_count;
@@ -13,14 +15,22 @@ ThreadPool::ThreadPool(long max_tasks_count)
     //dispatch_queue_create("com.mydomain.myapp.longrunningfunction", DISPATCH_QUEUE_CONCURRENT);
 }
 
-void run_Operation_async(dispatch_queue_t queue, Operation *op)
+void ThreadPool::run_Operation_async(dispatch_queue_t queue, Operation *op)//this operation is NOT thread safe now, fix it!
 {
+    int index = this->cur_index++;
+    cur_tasks.insert(index);
     dispatch_async(queue, ^(void) {
+        std::cout<<"Start task #" << index << " s:" << cur_tasks.size() << std::endl;//<<std::cout.flush();
         op->Execute();
+        cur_tasks.erase(index);
     });
 }
 
 void ThreadPool::async(Operation *op)
 {
+    if (this->cur_tasks.size() >= this->max_tasks_count)
+    {
+        std::cout<<"Limit reached!"<<std::endl;
+    }
     run_Operation_async(this->queue[op->get_priority()], op);
 }
