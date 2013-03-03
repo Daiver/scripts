@@ -13,6 +13,7 @@ public:
 private:
     dispatch_queue_t queue[QUEUE_COUNT];
     long max_tasks_count;
+    long cur_index;
 };
 #else
 #endif
