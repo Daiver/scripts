@@ -13,7 +13,7 @@ public:
     ThreadPool(int max_tasks_count);
     void async(Operation *op);
 private:
-    void run_Operation_async(dispatch_queue_t queue, Operation *op);
+    void run_Operation_async(dispatch_group_t group, Operation *op);
     dispatch_queue_t queue[QUEUE_COUNT];
     long max_tasks_count;
     int cur_index;

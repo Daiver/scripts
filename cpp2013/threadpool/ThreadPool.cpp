@@ -15,11 +15,25 @@ ThreadPool::ThreadPool(int max_tasks_count)
     //dispatch_queue_create("com.mydomain.myapp.longrunningfunction", DISPATCH_QUEUE_CONCURRENT);
 }
 
-void ThreadPool::run_Operation_async(dispatch_queue_t queue, Operation *op)//this operation is NOT thread safe now, fix it!
+void ThreadPool::run_Operation_async(dispatch_group_t group, Operation *op)//this operation is NOT thread safe now, fix it!
 {
+    if (this->cur_tasks.size() >= this->max_tasks_count)
+    {
+        std::cout<<"Limit reached!"<<std::endl;
+    }
+    std::vector<Operation*> dependency = op->get_dependences();
+    if (dependency.size() > 0) 
+    {
+        dispatch_group_t tmp_gr = dispatch_group_create();
+        for(auto it = dependency.begin(); it != dependency.end(); ++it) {
+            this->run_Operation_async(tmp_gr, *it);
+        }
+        dispatch_group_wait(tmp_gr, DISPATCH_TIME_FOREVER);
+    }
     int index = this->cur_index++;
     cur_tasks.insert(index);
-    dispatch_async(queue, ^(void) {
+    dispatch_queue_t queue = this->queue[op->get_priority()];
+    dispatch_group_async(group, queue, ^(void) {
         //std::cout<<"Start task #" << index << " s:" << cur_tasks.size() << std::endl;//<<std::cout.flush();
         op->Execute();
         cur_tasks.erase(index);
@@ -28,14 +42,6 @@ void ThreadPool::run_Operation_async(dispatch_queue_t queue, Operation *op)//thi
 
 void ThreadPool::async(Operation *op)
 {
-    if (this->cur_tasks.size() >= this->max_tasks_count)
-    {
-        std::cout<<"Limit reached!"<<std::endl;
-    }
-    std::vector<Operation*> dependency = op->get_dependences();
-    for(auto it = dependency.begin(); it != dependency.end(); ++it) {
-        this->async(*it);
-    }
-
-    run_Operation_async(this->queue[op->get_priority()], op);
+    dispatch_group_t group = dispatch_group_create();
+    run_Operation_async(group, op);
 }

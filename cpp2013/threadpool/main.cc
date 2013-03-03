@@ -40,7 +40,13 @@ void tmpfoo()
     dispatch_group_async(gr, queue, ^(void) {
         printf("Wait me\n");
     });
-    dispatch_group_wait(gr, 100000000000000);
+    dispatch_group_async(gr, queue, ^(void) {
+        printf("Wait me 2\n");
+    });
+    dispatch_group_async(gr, queue, ^(void) {
+        printf("Wait me 3\n");
+    });
+    dispatch_group_wait(gr,  DISPATCH_TIME_FOREVER);
     dispatch_release(queue);
     printf("End tmp foo\n");
 }
@@ -50,20 +56,22 @@ int main(int argc, char** argv)
     int tst = 100;
     FunctionOperation op2(foo2, &tst);
     FunctionOperation op(foo3, NULL);
+    op.add_dependency(&op2);
     op.set_priority(low);
     //pool.async(&op2);
     //pool.async(&op2);
     //pool.async(&op);
     //pool.async(&op2);
-    //FunctionOperation op3(foo4, NULL);
-    //op3.add_dependency(&op);
-    //pool.async(&op3);
+    FunctionOperation op3(foo4, NULL);
+    op3.add_dependency(&op);
+    op3.add_dependency(&op);
+    pool.async(&op3);
 
     //run_Operation_async(queue, &op2);
     //dispatch_group_t group = dispatch_group_create()
     //foo(^(void){ printf("!!!!!!\n");});
-    //sleep(1);
-    tmpfoo();
+    sleep(1);
+    //tmpfoo();
     std::cout<<"THE END";
     return 0;
 }
