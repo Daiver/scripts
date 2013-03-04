@@ -21,9 +21,16 @@ int main(int argc, char **argv)
         boost::asio::connect(socket, endpoint_iterator);
         for (;;)
         {
-            std::string message = "Hi\n";
+            boost::array<float, 7> b;
+            b[0] = 3; b[1] = 10; b[2] = 11; b[3]; b[4] = 1; b[5] = 99; b[6] = 9;
             boost::system::error_code ignored_error;
-            boost::asio::write(socket, boost::asio::buffer(message), ignored_error);
+            boost::asio::write(socket, boost::asio::buffer(b), ignored_error);
+            for(int i = 0; i < 3; i++)
+            {
+                boost::array<float, 3> b2;
+                b2[0] = 117.0; b2[1] = 9878.0; b2[2] = 98.0;
+                boost::asio::write(socket, boost::asio::buffer(b2), ignored_error);
+            }
                                             
             /*
             boost::array<char, 128> buf;
