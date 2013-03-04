@@ -21,6 +21,11 @@ int main(int argc, char **argv)
         boost::asio::connect(socket, endpoint_iterator);
         for (;;)
         {
+            std::string message = "Hi\n";
+            boost::system::error_code ignored_error;
+            boost::asio::write(socket, boost::asio::buffer(message), ignored_error);
+                                            
+            /*
             boost::array<char, 128> buf;
             boost::system::error_code error;
             size_t len = socket.read_some(boost::asio::buffer(buf), error);
@@ -29,6 +34,7 @@ int main(int argc, char **argv)
                 else if (error)
                     throw boost::system::system_error(error); // Some other error.
                 std::cout.write(buf.data(), len);
+            */
         }
     }
     catch (std::exception& e)
