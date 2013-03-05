@@ -2,3 +2,5 @@
 *.pyc
 vk/vk_config.py
 vk/musicchache/*
+
+*.class
