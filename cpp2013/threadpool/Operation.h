@@ -20,9 +20,17 @@ public:
     void set_priority(Operation_Priority priority);
     void add_dependency(Operation *op);
     std::vector<Operation*> get_dependences();
+    long get_ID();
 private:
     std::vector<Operation*> dependency;
     Operation_Priority priority;
+    long id;
+    static long get_new_ID()
+    {
+        static long inner_index = 0;
+        return inner_index++;
+    }
+
 };
 #else
 #endif

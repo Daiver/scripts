@@ -58,6 +58,10 @@ int main(int argc, char** argv)
     FunctionOperation op3(foo3, NULL);
     FunctionOperation op4(foo4, NULL);
     FunctionOperation op5(foo5, NULL);
+    std::cout<<"op1 "<< op1.get_ID()<<std::endl;
+    std::cout<<"op2 "<< op2.get_ID()<<std::endl;
+    std::cout<<"op3 "<< op3.get_ID()<<std::endl;
+    std::cout<<"op1 "<< op1.get_ID()<<std::endl;
     //op4.set_priority(low);
     //pool.async(&op2);
     //pool.async(&op2);
