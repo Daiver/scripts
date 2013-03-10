@@ -22,6 +22,13 @@ def match_flann(desc1, desc2, r_threshold = 0.6):
 def draw_match(img1, img2, p1, p2, status = None, H = None):
     h1, w1 = img1.shape[:2]
     h2, w2 = img2.shape[:2]
+    print 'p1', p1
+    print 'p2', p2
+    vis = img1.copy()
+    for x, y in np.int32(p1):
+        cv2.circle(vis, (x, y), 2, (255, 0, 0), -1)
+        
+    '''
     vis = np.zeros((max(h1, h2), w1+w2), np.uint8)
     vis[:h1, :w1] = img1
     vis[:h2, w1:w1+w2] = img2
@@ -49,6 +56,7 @@ def draw_match(img1, img2, p1, p2, status = None, H = None):
             cv2.line(vis, (x1-r, y1+r), (x1+r, y1-r), col, thickness)
             cv2.line(vis, (x2+w1-r, y2-r), (x2+w1+r, y2+r), col, thickness)
             cv2.line(vis, (x2+w1-r, y2+r), (x2+w1+r, y2-r), col, thickness)
+    '''
     return vis
 
 def params_from_image(img, surf=None):
