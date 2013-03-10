@@ -86,7 +86,7 @@ if __name__ == '__main__':
 
     img1 = cv2.imread(fn1, 0)
     img2 = cv2.imread(fn2, 0)
-    camCap = cv2.VideoCapture(1)
+    camCap = cv2.VideoCapture(0)
     is_ready = False
     template = None
     i = 0
