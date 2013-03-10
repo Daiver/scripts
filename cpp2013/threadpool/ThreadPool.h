@@ -18,6 +18,7 @@ private:
     long max_tasks_count;
     int cur_index;
     std::set<long> cur_tasks;
+    std::set<long> executed_tasks;
 };
 #else
 #endif

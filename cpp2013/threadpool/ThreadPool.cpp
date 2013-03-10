@@ -30,13 +30,14 @@ void ThreadPool::run_Operation_async(dispatch_group_t group, Operation *op)//thi
         }
         dispatch_group_wait(tmp_gr, DISPATCH_TIME_FOREVER);
     }
-    int index = this->cur_index++;
+    int index = op->get_ID();
     cur_tasks.insert(index);
     dispatch_queue_t queue = this->queue[op->get_priority()];
     dispatch_group_async(group, queue, ^(void) {
         //std::cout<<"Start task #" << index << " s:" << cur_tasks.size() << std::endl;//<<std::cout.flush();
         op->Execute();
-        cur_tasks.erase(index);
+        this->cur_tasks.erase(index);
+        this->executed_tasks.insert(index);
     });
 }
 
