@@ -81,7 +81,7 @@ int main(int argc, char** argv)
     //foo(^(void){ printf("!!!!!!\n");});
     sleep(1);
     //tmpfoo();
-    std::cout<<"THE END";
+    std::cout<<"THE END"<<std::endl;
     return 0;
 }
 
