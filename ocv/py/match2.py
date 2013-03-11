@@ -43,10 +43,16 @@ def draw_match(img1, img2, p1, p2, status = None, H = None):
         status = np.ones(len(p1), np.bool_)
     green = (0, 255, 0)
     red = (0, 0, 255)
+    
+    res_error = 0
+    count = 0
+
     for (x1, y1), (x2, y2), inlier in zip(np.int32(p1), np.int32(p2), status):
         col = [red, green][inlier]
         if inlier:
             cv2.line(vis, (x1, y1), (x2+w1, y2), col)
+            res_error += abs(x1 - x2) + abs(y1 - y2)
+            count += 1
             cv2.circle(vis, (x1, y1), 2, col, -1)
             cv2.circle(vis, (x2+w1, y2), 2, col, -1)
         else:
@@ -56,7 +62,7 @@ def draw_match(img1, img2, p1, p2, status = None, H = None):
             cv2.line(vis, (x1-r, y1+r), (x1+r, y1-r), col, thickness)
             cv2.line(vis, (x2+w1-r, y2-r), (x2+w1+r, y2+r), col, thickness)
             cv2.line(vis, (x2+w1-r, y2+r), (x2+w1+r, y2-r), col, thickness)
-    
+    print 'error', res_error/float(count)
     return vis
 
 def params_from_image(img, surf=None):
