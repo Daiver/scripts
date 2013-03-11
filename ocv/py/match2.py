@@ -94,7 +94,7 @@ if __name__ == '__main__':
 
     img1 = cv2.imread(fn1, 0)
     img2 = cv2.imread(fn2, 0)
-    camCap = cv2.VideoCapture(1)
+    camCap = cv2.VideoCapture(0)
     is_ready = False
     template = None
     i = 0
@@ -106,11 +106,7 @@ if __name__ == '__main__':
         if is_ready:
             template = frame
         if template != None and i % 5 == 0:
-            r1img = cv2.resize(template, (50, 50))
-            r2img = cv2.resize(frame, (50, 50))
-            print sum(sum(sum(r1img-r2img)))
-            cv2.imshow('123', r1img)
-            '''surf = cv2.SURF(1000)
+            surf = cv2.SURF(1000)
             pr1 = params_from_image(cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY))#img1)
             pr2 = params_from_image(cv2.cvtColor(template, cv2.COLOR_BGR2GRAY))#img2)
             print 'img1 - %d features, img2 - %d features' % (len(pr1['kp']), len(pr2['kp']))
@@ -118,7 +114,7 @@ if __name__ == '__main__':
             print 'flann match:',
             if status != None:
                 print '%d / %d  inliers/matched' % (np.sum(status), len(status))
-            cv2.imshow('find_obj SURF flann', vis_flann)'''
+            cv2.imshow('find_obj SURF flann', vis_flann)
         else:
             cv2.imshow('', frame)
 
