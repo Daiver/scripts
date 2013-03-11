@@ -30,7 +30,7 @@ def twiddle(estimate, p, tol = 0.2): #Make this tolerance bigger if you are timi
 
 
 if __name__ == '__main__':
-    p = [0, 0, 0, 0, 0, 0]
+    p = [1, 1, 1, 1, 1, 1]
     def f(p):
         return p[0]*2 + p[1]*3 + p[2]*p[5] - 5*p[3]*p[4]
 
