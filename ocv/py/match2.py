@@ -20,25 +20,25 @@ def match_flann(desc1, desc2, r_threshold = 0.6):
     return pairs[mask]
 
 def draw_match(img1, img2, p1, p2, status = None, H = None):
-    h1, w1 = img1.shape[:2]
-    h2, w2 = img2.shape[:2]
+    h1, w1 = 0, 0 #img1.shape[:2]
+    h2, w2 = 0, 0 #img2.shape[:2]
     vis = cv2.cvtColor(img1.copy(), cv2.COLOR_GRAY2BGR)
-    for x, y in np.int32(p2):
-        cv2.circle(vis, (x, y), 2, (255, 0, 0), -1)
-    for x, y in np.int32(p1):
-        cv2.circle(vis, (x, y), 2, (0, 0, 255), -1)
+    #for x, y in np.int32(p2):
+    #    cv2.circle(vis, (x, y), 2, (255, 0, 0), -1)
+    #for x, y in np.int32(p1):
+    #    cv2.circle(vis, (x, y), 2, (0, 0, 255), -1)
 
     '''
     vis = np.zeros((max(h1, h2), w1+w2), np.uint8)
     vis[:h1, :w1] = img1
     vis[:h2, w1:w1+w2] = img2
     vis = cv2.cvtColor(vis, cv2.COLOR_GRAY2BGR)
-
+    
     if H is not None:
         corners = np.float32([[0, 0], [w1, 0], [w1, h1], [0, h1]])
         corners = np.int32( cv2.perspectiveTransform(corners.reshape(1, -1, 2), H).reshape(-1, 2) + (w1, 0) )
         #cv2.polylines(vis, [corners], True, (255, 255, 255))
-    
+    '''
     if status is None:
         status = np.ones(len(p1), np.bool_)
     green = (0, 255, 0)
@@ -56,7 +56,7 @@ def draw_match(img1, img2, p1, p2, status = None, H = None):
             cv2.line(vis, (x1-r, y1+r), (x1+r, y1-r), col, thickness)
             cv2.line(vis, (x2+w1-r, y2-r), (x2+w1+r, y2+r), col, thickness)
             cv2.line(vis, (x2+w1-r, y2+r), (x2+w1+r, y2-r), col, thickness)
-    '''
+    
     return vis
 
 def params_from_image(img, surf=None):
