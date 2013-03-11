@@ -1,11 +1,11 @@
-
+from twiddle import *
 from random import random
 
 def f(p):
     return p[0]*2 + p[1]*3 + p[2]*p[5] - 5*p[3]*p[4]
 
 def fitness(p):
-    return f(p) - 1009
+    return f(p) - 109
 
 def mutate(p):
     res = p[:]
@@ -22,7 +22,7 @@ def cross(p1, p2):
 
 def gen_alg(p):
     best_err = abs(fitness(p))
-    max_pop = 1000
+    max_pop = 100
     #pop = [mutate(p) for i in xrange(max_pop)]
     j = 0
     pop = [p for i in xrange(max_pop)]
