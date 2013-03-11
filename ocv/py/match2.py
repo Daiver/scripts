@@ -62,7 +62,7 @@ def draw_match(img1, img2, p1, p2, status = None, H = None):
             cv2.line(vis, (x1-r, y1+r), (x1+r, y1-r), col, thickness)
             cv2.line(vis, (x2+w1-r, y2-r), (x2+w1+r, y2+r), col, thickness)
             cv2.line(vis, (x2+w1-r, y2+r), (x2+w1+r, y2-r), col, thickness)
-    print 'error', res_error/float(count)
+    print 'error', res_error/float(count) if count > 0 else 0.000001
     return vis
 
 def params_from_image(img, surf=None):
@@ -100,7 +100,7 @@ if __name__ == '__main__':
 
     img1 = cv2.imread(fn1, 0)
     img2 = cv2.imread(fn2, 0)
-    camCap = cv2.VideoCapture(0)
+    camCap = cv2.VideoCapture(1)
     is_ready = False
     template = None
     i = 0
