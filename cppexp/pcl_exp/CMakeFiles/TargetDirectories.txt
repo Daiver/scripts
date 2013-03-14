@@ -1,1 +1,0 @@
-/home/kirill/coding/MyPy/scripts/cppexp/pcl_exp/CMakeFiles/pcd_write.dir
