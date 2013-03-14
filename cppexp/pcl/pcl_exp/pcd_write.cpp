@@ -6,7 +6,7 @@
 
 int main (int argc, char** argv)
 {
-    std::ifstream in("/home/kirill/360");
+    std::ifstream in("/home/kirill/500");
     std::vector<float> raw_data;
 
     //for (int i = 0; i < 6; i++)
