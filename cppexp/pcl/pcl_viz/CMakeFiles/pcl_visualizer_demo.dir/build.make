@@ -35,10 +35,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/kirill/coding/MyPy/scripts/cppexp/pcl_viz
+CMAKE_SOURCE_DIR = /home/kirill/coding/MyPy/scripts/cppexp/pcl/pcl_viz
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/kirill/coding/MyPy/scripts/cppexp/pcl_viz
+CMAKE_BINARY_DIR = /home/kirill/coding/MyPy/scripts/cppexp/pcl/pcl_viz
 
 # Include any dependencies generated for this target.
 include CMakeFiles/pcl_visualizer_demo.dir/depend.make
@@ -51,17 +51,17 @@ include CMakeFiles/pcl_visualizer_demo.dir/flags.make
 
 CMakeFiles/pcl_visualizer_demo.dir/pcl_visualizer_demo.cpp.o: CMakeFiles/pcl_visualizer_demo.dir/flags.make
 CMakeFiles/pcl_visualizer_demo.dir/pcl_visualizer_demo.cpp.o: pcl_visualizer_demo.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/kirill/coding/MyPy/scripts/cppexp/pcl_viz/CMakeFiles $(CMAKE_PROGRESS_1)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/kirill/coding/MyPy/scripts/cppexp/pcl/pcl_viz/CMakeFiles $(CMAKE_PROGRESS_1)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/pcl_visualizer_demo.dir/pcl_visualizer_demo.cpp.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/pcl_visualizer_demo.dir/pcl_visualizer_demo.cpp.o -c /home/kirill/coding/MyPy/scripts/cppexp/pcl_viz/pcl_visualizer_demo.cpp
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/pcl_visualizer_demo.dir/pcl_visualizer_demo.cpp.o -c /home/kirill/coding/MyPy/scripts/cppexp/pcl/pcl_viz/pcl_visualizer_demo.cpp
 
 CMakeFiles/pcl_visualizer_demo.dir/pcl_visualizer_demo.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/pcl_visualizer_demo.dir/pcl_visualizer_demo.cpp.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/kirill/coding/MyPy/scripts/cppexp/pcl_viz/pcl_visualizer_demo.cpp > CMakeFiles/pcl_visualizer_demo.dir/pcl_visualizer_demo.cpp.i
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/kirill/coding/MyPy/scripts/cppexp/pcl/pcl_viz/pcl_visualizer_demo.cpp > CMakeFiles/pcl_visualizer_demo.dir/pcl_visualizer_demo.cpp.i
 
 CMakeFiles/pcl_visualizer_demo.dir/pcl_visualizer_demo.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/pcl_visualizer_demo.dir/pcl_visualizer_demo.cpp.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/kirill/coding/MyPy/scripts/cppexp/pcl_viz/pcl_visualizer_demo.cpp -o CMakeFiles/pcl_visualizer_demo.dir/pcl_visualizer_demo.cpp.s
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/kirill/coding/MyPy/scripts/cppexp/pcl/pcl_viz/pcl_visualizer_demo.cpp -o CMakeFiles/pcl_visualizer_demo.dir/pcl_visualizer_demo.cpp.s
 
 CMakeFiles/pcl_visualizer_demo.dir/pcl_visualizer_demo.cpp.o.requires:
 .PHONY : CMakeFiles/pcl_visualizer_demo.dir/pcl_visualizer_demo.cpp.o.requires
@@ -131,6 +131,6 @@ CMakeFiles/pcl_visualizer_demo.dir/clean:
 .PHONY : CMakeFiles/pcl_visualizer_demo.dir/clean
 
 CMakeFiles/pcl_visualizer_demo.dir/depend:
-	cd /home/kirill/coding/MyPy/scripts/cppexp/pcl_viz && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/kirill/coding/MyPy/scripts/cppexp/pcl_viz /home/kirill/coding/MyPy/scripts/cppexp/pcl_viz /home/kirill/coding/MyPy/scripts/cppexp/pcl_viz /home/kirill/coding/MyPy/scripts/cppexp/pcl_viz /home/kirill/coding/MyPy/scripts/cppexp/pcl_viz/CMakeFiles/pcl_visualizer_demo.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/kirill/coding/MyPy/scripts/cppexp/pcl/pcl_viz && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/kirill/coding/MyPy/scripts/cppexp/pcl/pcl_viz /home/kirill/coding/MyPy/scripts/cppexp/pcl/pcl_viz /home/kirill/coding/MyPy/scripts/cppexp/pcl/pcl_viz /home/kirill/coding/MyPy/scripts/cppexp/pcl/pcl_viz /home/kirill/coding/MyPy/scripts/cppexp/pcl/pcl_viz/CMakeFiles/pcl_visualizer_demo.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/pcl_visualizer_demo.dir/depend
 

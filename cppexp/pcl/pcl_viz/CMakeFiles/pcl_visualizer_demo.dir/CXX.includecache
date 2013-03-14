@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/home/kirill/coding/MyPy/scripts/cppexp/pcl_viz/pcl_visualizer_demo.cpp
+/home/kirill/coding/MyPy/scripts/cppexp/pcl/pcl_viz/pcl_visualizer_demo.cpp
 iostream
 -
 boost/thread/thread.hpp

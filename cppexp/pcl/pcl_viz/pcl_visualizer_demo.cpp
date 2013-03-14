@@ -314,7 +314,8 @@ main (int argc, char** argv)
       b += 12;
     }
   }*/
-    if (pcl::io::loadPCDFile<pcl::PointXYZ> ("test_pcd.pcd", *basic_cloud_ptr) == -1) //* load the file
+    //if (pcl::io::loadPCDFile<pcl::PointXYZ> ("test_pcd.pcd", *basic_cloud_ptr) == -1) //* load the file
+    if (pcl::io::loadPCDFile<pcl::PointXYZ> (argv[2], *basic_cloud_ptr) == -1) //* load the file
     {
         PCL_ERROR ("Couldn't read file test_pcd.pcd \n");
         return (-1);
