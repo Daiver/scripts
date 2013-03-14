@@ -1,12 +1,13 @@
 #include <iostream>
+#include <stdio.h>
 #include <pcl/io/pcd_io.h>
 #include <pcl/point_types.h>
 #include <fstream>
 #include <vector>
 
-int main (int argc, char** argv)
+void convert2pcd(char *source, char *dest)
 {
-    std::ifstream in("/home/kirill/500");
+    std::ifstream in(source);
     std::vector<float> raw_data;
 
     //for (int i = 0; i < 6; i++)
@@ -37,11 +38,22 @@ int main (int argc, char** argv)
         cloud.points[i].z = 1024 * rand () / (RAND_MAX + 1.0f);*/
     }
 
-    pcl::io::savePCDFileASCII ("test_pcd.pcd", cloud);
+    pcl::io::savePCDFileASCII (dest, cloud);
     std::cerr << "Saved " << cloud.points.size () << " data points to test_pcd.pcd." << std::endl;
 
     for (size_t i = 0; i < cloud.points.size (); ++i)
         std::cerr << "    " << cloud.points[i].x << " " << cloud.points[i].y << " " << cloud.points[i].z << std::endl;
 
+
+}
+
+int main (int argc, char** argv)
+{
+    for(int i = 1; i < argc; i++)
+    {
+        char buf[1024];
+        sprintf(buf, "%d.pcd", i);
+        convert2pcd(argv[i], buf);
+    }
     return (0);
 }

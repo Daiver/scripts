@@ -9,6 +9,8 @@
 /home/kirill/coding/MyPy/scripts/cppexp/pcl/pcl_exp/pcd_write.cpp
 iostream
 -
+stdio.h
+-
 pcl/io/pcd_io.h
 -
 pcl/point_types.h
