@@ -12,16 +12,20 @@ def make_markov(text):
 def gen(dct):
     prefix = dct.keys()[int(random() * len(dct))]
     res = ' '.join(prefix)
+    count = 0
+    max_count = 100
     while prefix in dct:
         word = dct[prefix][int(random() * len(dct[prefix]))]
         res += ' ' + word
         #print(res)
         prefix = (prefix[1], word)
+        count += 1
+        if count > max_count: break
     return res
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
-        text = ' '.join(open(sys.argv[1]).read().split('\n'))
+        text = ' '.join(open(sys.argv[1]).read().decode('cp1251').split('\n'))
         print(gen(make_markov(text)))
     else:
         print('NO')
