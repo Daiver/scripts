@@ -11,6 +11,6 @@ def make_markov(text):
 if __name__ == '__main__':
     if len(sys.argv) > 1:
         text = ' '.join(open(sys.argv[1]).read().split('\n'))
-        print(text)
+        print(make_markov(text))
     else:
         print('NO')
