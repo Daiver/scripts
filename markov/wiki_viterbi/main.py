@@ -1,6 +1,7 @@
 states = ('Healthy', 'Fever')
  
 observations = ('normal', 'cold', 'dizzy')
+#observations = ('normal', 'dizzy', 'dizzy', 'dizzy', 'normal')
  
 start_probability = {'Healthy': 0.6, 'Fever': 0.4}
  
