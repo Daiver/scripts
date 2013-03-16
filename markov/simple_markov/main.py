@@ -13,7 +13,7 @@ def gen(dct):
     prefix = dct.keys()[int(random() * len(dct))]
     res = ' '.join(prefix)
     count = 0
-    max_count = 100
+    max_count = 150
     while prefix in dct:
         word = dct[prefix][int(random() * len(dct[prefix]))]
         res += ' ' + word
@@ -25,7 +25,7 @@ def gen(dct):
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
-        text = ' '.join(open(sys.argv[1]).read().decode('cp1251').split('\n'))
+        text = open(sys.argv[1]).read().decode('cp1251').replace(',', ' ').replace('.', ' ').replace('\n', ' ').replace('-', ' ')
         print(gen(make_markov(text)))
     else:
         print('NO')
