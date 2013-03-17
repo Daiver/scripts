@@ -6,15 +6,25 @@ transition_probability = np.array([
     ])
 
 observations = [
-    np.array([[0.9, 0.0], [0.0, 0.2]]),
-    np.array([[0.9, 0.0], [0.0, 0.2]]),
-    np.array([[0.1, 0.0], [0.0, 0.8]]),
-    np.array([[0.9, 0.0], [0.0, 0.2]]),
-    np.array([[0.9, 0.0], [0.0, 0.2]]),
+    np.array([[0.9, 0.0], 
+            [0.0, 0.2]]
+    ),
+    np.array([[0.9, 0.0], 
+            [0.0, 0.2]]
+    ),
+    np.array([[0.1, 0.0], 
+            [0.0, 0.8]]
+    ),
+    np.array([[0.9, 0.0], 
+            [0.0, 0.2]]
+    ),
+    np.array([[0.9, 0.0], 
+            [0.0, 0.2]]
+    ),
 ]
 
-def fw(obs, transition_probability):
-    normalize = lambda x: x / sum(x.reshape(-1))
+def forward_backward(obs, transition_probability):
+    def normalize(x): return x / sum(x.reshape(-1))
     f = [np.array([[0.5], [0.5]])]
     for x in obs:
         new_f = np.dot(
@@ -31,7 +41,7 @@ def fw(obs, transition_probability):
     gamma = [normalize(i_f * i_b) for i_f, i_b in zip(f, reversed(b))]
     return f, b, gamma
 
-for sample in fw(observations, transition_probability):
+for sample in forward_backward(observations, transition_probability):
     print '===================='
     for line in sample:
         print line
