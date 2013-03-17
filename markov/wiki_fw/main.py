@@ -1,6 +1,7 @@
 states = ('Healthy', 'Fever')
 end_state = 'E'
  
+#observations = ('normal', 'cold', 'dizzy')
 observations = ('normal', 'cold', 'dizzy')
  
 start_probability = {'Healthy': 0.6, 'Fever': 0.4}
@@ -58,7 +59,7 @@ def fwd_bkw(x, states, a_0, a, e, end_st):
     for st in states:
         posterior[st] = [fwd[i][st]*bkw[i][st]/p_fwd for i in xrange(L)]
  
-    assert p_fwd == p_bkw
+    #assert p_fwd == p_bkw
     return fwd, bkw, posterior
 
 def example():
@@ -69,7 +70,12 @@ def example():
                    emission_probability,
                    end_state)
 
-print example()[2]
+ans = example()[2]
+res = ""
+for i in xrange(len(ans[states[0]])):
+    res += states[0] if ans[states[0]][i] > ans[states[1]][i] else states[1]
+    res += ' '
+print res
 #for line in example():
 #    print line
 #    #print ' '.join(map(str, line))
