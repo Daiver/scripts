@@ -30,12 +30,16 @@ def forward_backward(obs, transition_probability):
     def normalize(x): return x / sum(x.reshape(-1))
     f = [np.array([[0.5] for _ in states])]
     for x in obs:
-        new_f = np.dot(np.dot(x, transition_probability.transpose()), f[end])
-        f.append(normalize(new_f))
+        f.append(normalize(
+                np.dot(np.dot(x, transition_probability.transpose()), f[end])
+            ))
+        #f.append(normalize(new_f))
     b = [np.array([[1.0] for _ in states])]
     for x in reversed(obs):
-        new_b = np.dot(np.dot(transition_probability, x), b[end])
-        b.append(normalize(new_b))
+        b.append(normalize(
+                np.dot(np.dot(transition_probability, x), b[end]
+            ))
+        #b.append(normalize(new_b))
     gamma = [normalize(i_f * i_b) for i_f, i_b in zip(f, reversed(b))]
     return f, b, gamma
 
