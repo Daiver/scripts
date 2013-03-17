@@ -15,13 +15,14 @@ enum Operation_Priority
 class Operation
 {
 public:
+    friend class ThreadPool;
     virtual void Execute() = 0;
     Operation_Priority get_priority();
     void set_priority(Operation_Priority priority);
     void add_dependency(Operation *op);
-    std::vector<Operation*> get_dependences();
     long get_ID();
 private:
+    std::vector<Operation*> get_dependences();
     std::vector<Operation*> dependency;
     Operation_Priority priority;
     long id;
