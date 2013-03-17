@@ -16,24 +16,6 @@ transition_probability = np.array([
         [0.3, 0.7]
     ])
 
-observations = [
-    np.array([[0.9, 0.0], 
-            [0.0, 0.2]]
-    ),
-    np.array([[0.9, 0.0], 
-            [0.0, 0.2]]
-    ),
-    np.array([[0.1, 0.0], 
-            [0.0, 0.8]]
-    ),
-    np.array([[0.9, 0.0], 
-            [0.0, 0.2]]
-    ),
-    np.array([[0.9, 0.0], 
-            [0.0, 0.2]]
-    ),
-]
-
 def make_obs(obs):
     res = np.zeros((len(states), len(states)), dtype=np.float)
     for i in xrange(len(emission_prob[obs])):
