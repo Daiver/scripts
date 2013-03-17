@@ -6,7 +6,6 @@
 #include "FunctionOperation.h"
 #include "ThreadPool.h"
 
-
 void exec_block(void (^block)(void))//del it
 {
     void (^f)(void);
@@ -58,23 +57,16 @@ int main(int argc, char** argv)
     FunctionOperation op3(foo3, NULL);
     FunctionOperation op4(foo4, NULL);
     FunctionOperation op5(foo5, NULL);
-    std::cout<<"op1 "<< op1.get_ID()<<std::endl;
-    std::cout<<"op2 "<< op2.get_ID()<<std::endl;
-    std::cout<<"op3 "<< op3.get_ID()<<std::endl;
-    std::cout<<"op1 "<< op1.get_ID()<<std::endl;
-    //op4.set_priority(low);
-    //pool.async(&op2);
-    //pool.async(&op2);
-    //pool.async(&op1);
-    //pool.async(&op2);
     op3.add_dependency(&op4);
     op3.add_dependency(&op2);
     op3.add_dependency(&op1);
-    op3.add_dependency(&op4);
-    op3.add_dependency(&op4);
-    op3.add_dependency(&op4);
     op5.add_dependency(&op3);
     pool.async(&op5);
+    /*pool.async(&op4);
+    pool.async(&op1);
+    pool.async(&op3);
+    pool.async(&op2);
+    */
 
     //run_Operation_async(queue, &op2);
     //dispatch_group_t group = dispatch_group_create()
