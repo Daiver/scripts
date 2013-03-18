@@ -62,11 +62,11 @@ int main(int argc, char** argv)
     op3.add_dependency(&op1);
     op5.add_dependency(&op3);
     pool.async(&op5);
-    /*pool.async(&op4);
+    pool.async(&op4);
     pool.async(&op1);
     pool.async(&op3);
     pool.async(&op2);
-    */
+    
 
     //run_Operation_async(queue, &op2);
     //dispatch_group_t group = dispatch_group_create()

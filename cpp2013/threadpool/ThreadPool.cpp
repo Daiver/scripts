@@ -18,11 +18,13 @@ ThreadPool::ThreadPool(int max_tasks_count)
 bool ThreadPool::is_ready_to_execute(Operation* op)
 {
     std::vector<Operation*> dependency = op->get_dependences();
+    int i = 0;
     for (auto it = op->dependency.begin(); it != dependency.end(); it++)
     {
         auto it2 = this->executed_tasks.find((*it)->get_ID());
         if (it2 == this->executed_tasks.end())
             return false;
+        i++;
     }
     return true;
 }
@@ -51,18 +53,19 @@ void ThreadPool::run_Operation_async(dispatch_group_t group, Operation *op)//thi
 
 void ThreadPool::async(Operation *op)
 {
-    dispatch_group_t group = dispatch_group_create();
-    run_Operation_async(group, op);
-    //run_Operation_async(op);
+    //dispatch_group_t group = dispatch_group_create();
+    //run_Operation_async(group, op);
+    run_Operation_async(op);
 }
 
 void ThreadPool::run_Operation_async(Operation *op)//this operation is NOT thread safe now, fix it!
 {
     if(!this->is_ready_to_execute(op))
     {
-        this->for_execute.insert(op);
+        this->for_execute.push_back(op);
         return;
     }
+    
     int index = op->get_ID();
     cur_tasks.insert(index);
     dispatch_queue_t queue = this->queue[op->get_priority()];
@@ -71,11 +74,29 @@ void ThreadPool::run_Operation_async(Operation *op)//this operation is NOT threa
         op->Execute();
         this->cur_tasks.erase(index);
         this->executed_tasks.insert(index);
+        std::vector<Operation*> for_ex;
+        for(int i = 0; i < this->for_execute.size();)
+        {
+            if (this->is_ready_to_execute(this->for_execute[i]))
+            {
+                for_ex.push_back(this->for_execute[i]);
+                std::cout<<"!!!\n";
+                this->for_execute.erase(this->for_execute.begin() + i);
+                //this->run_Operation_async(*it);
+            }
+            else
+            {
+                i++;
+            }
+        }
+        for (int i = 0; i < for_ex.size(); i++)
+        {
+            this->run_Operation_async(for_ex[i]);
+        }
+
+
     });
-    for(auto it = this->for_execute.begin(); it != this->for_execute.end(); it++)
-    {
-        this->run_Operation_async(*it);
-    }
+
 }
 
 

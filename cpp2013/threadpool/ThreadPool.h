@@ -4,6 +4,7 @@
 #include <dispatch/dispatch.h>
 
 #include <set>
+#include <vector>
 
 #define QUEUE_COUNT 5
 
@@ -21,7 +22,7 @@ private:
     int cur_index;
     std::set<long> cur_tasks;
     std::set<long> executed_tasks;
-    std::set<Operation*> for_execute;
+    std::vector<Operation*> for_execute;
 };
 #else
 #endif
