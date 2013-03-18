@@ -1,7 +1,7 @@
 states = ['health', 'fever']
 observations = ['normal', 'cold', 'dizzy']
 
-observations_seq = (0, 1, 2)
+observations_seq = (2, 1, 1, 2)
 
 trans = [
     [0.7, 0.3],
