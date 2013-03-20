@@ -3,22 +3,25 @@
 #include <string>
 #include "Matrix.h"
 #include <fstream>
+#include <map>
 
-const char *states[2] = {"health", "fever"};
+//const char *states[2] = {"health", "fever"};
+std::map<std::string, int> states;
+std::map<std::string, int> obs_types;
 int num_of_states = 2;
 
 std::vector<int> obs_seq;
-double trans_m[4] = {0.7, 0.3, 0.4, 0.6};
+double trans_m[4] = {0.969, 0.029, 0.063, 0.935};
 Matrix trans(2, 2, trans_m);
 
-double start_m[2] = {0.6, 0.4};
+double start_m[2] = {0.526, 0.474};
 Matrix start_prob(1, 2, start_m);
 
-double emission_m[6] = {0.5, 0.4, 0.1, 0.1, 0.3, 0.6};
+double emission_m[6] = {0.005, 0.775, 0.220, 0.604, 0.277, 0.119};
 Matrix emission(2, 3, emission_m);
 
-//std::vector<int>
-void Viterbi(std::vector<int> obs_seq)
+std::vector<int>
+ Viterbi(std::vector<int> obs_seq)
 {
     std::vector<std::vector<int> > path;
     std::vector<std::vector<double> > V;
@@ -62,10 +65,12 @@ void Viterbi(std::vector<int> obs_seq)
     {
         if(V[V.size() - 1][i] > max) {max = V[V.size() - 1][i]; max_state = i;}
     }
+    return path[max_state];
+    /*
     for(int i = 0; i < path[max_state].size(); i++)
     {
         printf("%d ", path[max_state][i]);
-    }
+    }*/
 
 /*    for(int j = 0; j < V.size(); j++)
     {
@@ -89,15 +94,27 @@ void Viterbi(std::vector<int> obs_seq)
 
 int main(int argc, char** argv)
 {
+    states["St1"] = 0;
+    states["St2"] = 1;
+    obs_types["a"] = 0;
+    obs_types["b"] = 1;
+    obs_types["c"] = 2;
+
     std::vector<int> obs;
+    std::vector<int> res;
     std::ifstream in("hmmdata");
     std::string str;
     in>>str;
-    printf("%s\n", str.c_str());
     in>>str;
-    printf("%s\n", str.c_str());
     in>>str;
-    printf("%s\n", str.c_str());
+    while (!in.eof())
+    {
+        in>>str;
+        in>>str;
+        res.push_back(states[str]);
+        in>>str;
+        obs.push_back(obs_types[str]);
+    }
     in.close();
     //obs_seq.push_back(0);
     //obs_seq.push_back(1);
@@ -105,7 +122,12 @@ int main(int argc, char** argv)
     //obs_seq.push_back(2);
     //emission.print();
     //printf("%f\n", emission.get_element(0, 1));
-    //Viterbi(obs);
+    std::vector<int> ans = Viterbi(obs);
+    printf("wfeergrgg");
+    for(int i = 0; i < ans.size(); i++)
+    {
+        printf("%d %d \n", ans[i], res[i]);
+    }
     //printf("%f\n", trans.get_element(1, 0));
     //start_prob.print();
     return 0;
