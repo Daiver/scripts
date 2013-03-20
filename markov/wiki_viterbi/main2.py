@@ -68,6 +68,9 @@ def example():
                    start_probability,
                    transition_probability,
                    emission_probability)
+    tst = {True:0, False:0}
     for i, x in enumerate(res):
-        print x == vi[1][i]
+        if x=='St1':
+            tst[x == vi[1][i]] += 1
+    print tst
 print example()
