@@ -1,7 +1,7 @@
 states = ('Healthy', 'Fever')
  
-observations = ('normal', 'cold', 'dizzy')
-#observations = ('dizzy', 'cold', 'cold', 'dizzy')
+#observations = ('normal', 'cold', 'dizzy')
+observations = ('dizzy', 'cold', 'normal', 'dizzy')
  
 start_probability = {'Healthy': 0.6, 'Fever': 0.4}
  
@@ -45,7 +45,7 @@ def viterbi(obs, states, start_p, trans_p, emit_p):
             (prob, state) = max([(V[t-1][y0] * trans_p[y0][y] * emit_p[y][obs[t]], y0) for y0 in states])
             V[t][y] = prob
             newpath[y] = path[state] + [y]
- 
+            print state, prob
         # Don't need to remember the old paths
         path = newpath
  
