@@ -42,17 +42,16 @@ void Viterbi(std::vector<int> obs_seq)
             for(int old_state = 0; old_state < num_of_states; old_state++)
             {
                 double tmp = emission.get_element(j_state, obs_seq[i_obs]) * V[i_obs - 1][old_state] * trans.get_element(old_state, j_state);
-                printf("++++++%f \n", tmp);
+                //printf("++++++%f \n", tmp);
                 if (tmp > max_value) {max_value = tmp;st = old_state;}
             }
-            printf("======%d %f\n", st, max_value);
+            //printf("======%d %f\n", st, max_value);
             tmp_V[j_state] = max_value;
-            //tmp_path = path[j_state];
-            path[j_state].push_back(st);
-            //tmp_path.push_back(st);
-            //new_path.push_back(tmp_path);
+            tmp_path = path[st];            
+            tmp_path.push_back(j_state);
+            new_path.push_back(tmp_path);
         }
-        //path = new_path;
+        path = new_path;
         V.push_back(tmp_V);
     }
     
@@ -78,14 +77,14 @@ void Viterbi(std::vector<int> obs_seq)
 int main(int argc, char** argv)
 {
     printf("HI!\n");
-    obs_seq.push_back(0);
-    obs_seq.push_back(1);
     obs_seq.push_back(2);
-    //obs_seq.push_back(2);
+    obs_seq.push_back(1);
+    obs_seq.push_back(0);
+    obs_seq.push_back(2);
     //emission.print();
     //printf("%f\n", emission.get_element(0, 1));
     Viterbi(obs_seq);
-    //trans.print();
+    //printf("%f\n", trans.get_element(1, 0));
     //start_prob.print();
     return 0;
 }
