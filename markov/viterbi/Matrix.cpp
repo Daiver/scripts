@@ -7,7 +7,7 @@ void Matrix::print()
     {
         for(long j = 0; j < this->height; j++)
         {
-            printf("%f ", this->value[i*width + j]);
+            printf("%f ", this->value[i*height + j]);
         }
         printf("\n");
     }
@@ -18,9 +18,9 @@ Matrix Matrix::dot(Matrix *a)
     //assert (this->width == a->height);
     Matrix res(this->height, a->width);
 
-    for (int row = 0; row < 3; row++) {
-        for (int col = 0; col < 3; col++) {
-            for (int inner = 0; inner < 2; inner++) {
+    for (int row = 0; row < this->height; row++) {
+        for (int col = 0; col < a->width; col++) {
+            for (int inner = 0; inner < this->width; inner++) {
                 res.set_element(row, col, res.get_element(row, col) + this->get_element(row, inner) * a->get_element(inner, col));
             }
         }
@@ -31,7 +31,6 @@ Matrix Matrix::dot(Matrix *a)
 
 bool Matrix::set_element(long row, long col, double value)
 {
-    if ((row >= this->width) || (col >= this->height)) return false;
     this->value[row*this->height + col] = value;
     return true;
 }

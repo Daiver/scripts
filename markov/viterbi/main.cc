@@ -97,5 +97,9 @@ int main(int argc, char** argv)
         else
             fp++;
     printf("%d %d \n", tp, fp);
+    
+    emission.print();
+    printf("%f\n", emission.get_element(1, 0));
+
     return 0;
 }

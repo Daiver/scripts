@@ -13,7 +13,7 @@ public:
     void print();
     Matrix dot(Matrix *a);
 protected:
-    long width;
+    long width;//with values are mixed =(
     long height;
     double* value;
 };
