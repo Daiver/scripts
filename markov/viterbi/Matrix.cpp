@@ -32,6 +32,15 @@ Matrix Matrix::dot(Matrix *a)
     return res;
 }
 
+Matrix Matrix::trans()
+{
+    Matrix res(this->height, this->width);
+    for (int i = 0; i < this->width; i++)
+        for(int j = 0; j < this->height; j++)
+            res.set_element(j, i, this->get_element(i, j));
+    return res;
+}
+
 bool Matrix::set_element(long row, long col, double value)
 {
     this->value[row*this->height + col] = value;

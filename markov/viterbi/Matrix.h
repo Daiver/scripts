@@ -12,6 +12,7 @@ public:
     double get_element(long row, long col); //!
     void print();
     Matrix dot(Matrix *a);
+    Matrix trans();
 protected:
     long width;//with values are mixed =(
     long height;
