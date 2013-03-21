@@ -41,6 +41,10 @@ double Matrix::get_element(long row, long col)
     return this->value[row*this->height + col];
 }
 
+Matrix::~Matrix()
+{
+    delete this->value;
+}
 Matrix::Matrix(long width, long height)
 {
     this->width = width;
@@ -56,5 +60,6 @@ Matrix::Matrix(long width, long height, double *value)
 {
     this->width = width;
     this->height = height;
-    this->value = value;
+    this->value = new double[width*height];
+    for(int i = 0; i < width*height; i++) this->value[i] = value[i];
 }
