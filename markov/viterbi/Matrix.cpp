@@ -15,14 +15,17 @@ void Matrix::print()
 
 Matrix Matrix::dot(Matrix *a)
 {
-    //assert (this->width == a->height);
-    Matrix res(this->height, a->width);
+    //assert (this->height == a->width);
+    Matrix res(this->width, a->height);
 
-    for (int row = 0; row < this->height; row++) {
-        for (int col = 0; col < a->width; col++) {
-            for (int inner = 0; inner < this->width; inner++) {
-                res.set_element(row, col, res.get_element(row, col) + this->get_element(row, inner) * a->get_element(inner, col));
+    for (int row = 0; row < this->width; row++) {
+        for (int col = 0; col < a->height; col++) {
+            double sum = 0;
+            for (int inner = 0; inner < this->height; inner++) {
+                sum += this->get_element(row, inner) * a->get_element(inner, col);
+                //res.set_element(row, col, res.get_element(row, col) + this->get_element(row, inner) * a->get_element(inner, col));
             }
+            res.set_element(row, col, sum);
         }
     }
 
