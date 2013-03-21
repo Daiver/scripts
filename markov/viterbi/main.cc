@@ -5,7 +5,6 @@
 #include <fstream>
 #include <map>
 
-//const char *states[2] = {"health", "fever"};
 std::map<std::string, int> states;
 std::map<std::string, int> obs_types;
 int num_of_states = 2;
@@ -20,8 +19,7 @@ Matrix start_prob(1, 2, start_m);
 double emission_m[6] = {0.005, 0.775, 0.220, 0.604, 0.277, 0.119};
 Matrix emission(2, 3, emission_m);
 
-std::vector<int>
- Viterbi(std::vector<int> obs_seq)
+std::vector<int> Viterbi(std::vector<int> obs_seq)
 {
     std::vector<std::vector<int> > path;
     std::vector<std::vector<double> > V;
@@ -29,9 +27,9 @@ std::vector<int>
     for(int i = 0; i < num_of_states; i++)
     {
         std::vector<int> tmp_path;
-       tmp_V.push_back(emission.get_element(i, obs_seq[0]) * start_prob.get_element(0, i));
-       tmp_path.push_back(i);
-       path.push_back(tmp_path);
+        tmp_V.push_back(emission.get_element(i, obs_seq[0]) * start_prob.get_element(0, i));
+        tmp_path.push_back(i);
+        path.push_back(tmp_path);
     }
     V.push_back(tmp_V);
 
@@ -46,10 +44,8 @@ std::vector<int>
             for(int old_state = 0; old_state < num_of_states; old_state++)
             {
                 double tmp = emission.get_element(j_state, obs_seq[i_obs]) * V[i_obs - 1][old_state] * trans.get_element(old_state, j_state);
-                //printf("++++++%f \n", tmp);
                 if (tmp > max_value) {max_value = tmp;st = old_state;}
             }
-            //printf("======%d %f\n", st, max_value);
             tmp_V[j_state] = max_value;
             tmp_path = path[st];            
             tmp_path.push_back(j_state);
@@ -58,7 +54,6 @@ std::vector<int>
         path = new_path;
         V.push_back(tmp_V);
     }
-  
     double max = 0.0;
     int max_state = -1;
     for(int i = 0; i < num_of_states; i++)
@@ -66,30 +61,6 @@ std::vector<int>
         if(V[V.size() - 1][i] > max) {max = V[V.size() - 1][i]; max_state = i;}
     }
     return path[max_state];
-    /*
-    for(int i = 0; i < path[max_state].size(); i++)
-    {
-        printf("%d ", path[max_state][i]);
-    }*/
-
-/*    for(int j = 0; j < V.size(); j++)
-    {
-        for(int i = 0; i < V[j].size(); i++)
-        {
-            printf("%f ", V[j][i]);
-        }
-        printf("\n");
-    }
-    //return path[0];
-    for(int j = 0; j < path.size(); j++)
-    {
-        for(int i = 0; i < path[j].size(); i++)
-        {
-            printf("%d ", path[j][i]);
-        }
-        printf("\n");
-    }
-*/
 }
 
 int main(int argc, char** argv)
@@ -110,25 +81,21 @@ int main(int argc, char** argv)
     while (!in.eof())
     {
         in>>str;
+        if(in.eof()) break;
         in>>str;
         res.push_back(states[str]);
         in>>str;
         obs.push_back(obs_types[str]);
     }
     in.close();
-    //obs_seq.push_back(0);
-    //obs_seq.push_back(1);
-    //obs_seq.push_back(2);
-    //obs_seq.push_back(2);
-    //emission.print();
-    //printf("%f\n", emission.get_element(0, 1));
     std::vector<int> ans = Viterbi(obs);
-    printf("wfeergrgg");
+    int fp = 0, tp = 0;
+    printf("length %ld\n", res.size());
     for(int i = 0; i < ans.size(); i++)
-    {
-        printf("%d %d \n", ans[i], res[i]);
-    }
-    //printf("%f\n", trans.get_element(1, 0));
-    //start_prob.print();
+        if (ans[i] == res[i])
+            tp++;
+        else
+            fp++;
+    printf("%d %d \n", tp, fp);
     return 0;
 }
