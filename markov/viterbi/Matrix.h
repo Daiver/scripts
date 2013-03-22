@@ -4,6 +4,7 @@
 class Matrix
 {
 public: 
+    Matrix(const Matrix &m);
     Matrix(long width, long height, double *value);
     Matrix(long width, long height); //ZEROS
     ~Matrix();

@@ -74,3 +74,11 @@ Matrix::Matrix(long width, long height, double *value)
     this->value = new double[width*height];
     for(int i = 0; i < width*height; i++) this->value[i] = value[i];
 }
+
+Matrix::Matrix(const Matrix &m)
+{
+    this->width = m.width;
+    this->height = m.height;
+    this->value = new double[m.width*m.height];
+    for(int i = 0; i < m.width*m.height; i++) this->value[i] = m.value[i];
+}

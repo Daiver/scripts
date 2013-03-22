@@ -63,6 +63,40 @@ std::vector<int> Viterbi(std::vector<int> obs_seq)
     return path[max_state];
 }
 
+void Viterbi_Test(std::vector<int> obs, std::vector<int> res)
+{
+    std::vector<int> ans = Viterbi(obs);
+    int fp = 0, tp = 0;
+    printf("length %ld\n", res.size());
+    for(int i = 0; i < ans.size(); i++)
+        if (ans[i] == res[i])
+            tp++;
+        else
+            fp++;
+    printf("%d %d \n", tp, fp);
+}
+
+Matrix make_obs(int obs, Matrix emission)
+{
+    Matrix res(num_of_states, num_of_states);
+    for(int i = 0; i < num_of_states; i++)
+    {
+        res.set_element(i, i, emission.get_element(obs, i));
+    }
+    return res;
+}
+
+void Forward_Backward(Matrix trans, Matrix emission, Matrix start_prob, std::vector<int> obs_seq)
+{
+    std::vector<Matrix> obs;
+    //Matrix m(2, 2);
+    //obs.push_back(m);
+    //emission.print();
+    //printf("%f\n", emission.get_element(2, 1));
+    for (int i = 0; i < obs_seq.size(); i++) obs.push_back(make_obs(obs_seq[i], emission));
+    for (int i = 0; i < obs_seq.size(); i++) obs[i].print();
+}
+
 int main(int argc, char** argv)
 {
     states["St1"] = 0;
@@ -88,18 +122,7 @@ int main(int argc, char** argv)
         obs.push_back(obs_types[str]);
     }
     in.close();
-    std::vector<int> ans = Viterbi(obs);
-    int fp = 0, tp = 0;
-    printf("length %ld\n", res.size());
-    for(int i = 0; i < ans.size(); i++)
-        if (ans[i] == res[i])
-            tp++;
-        else
-            fp++;
-    printf("%d %d \n", tp, fp);
-    
-    emission.print();
-    printf("%f\n", emission.get_element(1, 0));
-
+    Viterbi_Test(obs, res);
+    Forward_Backward(trans.trans(), emission.trans(), start_prob.trans(), obs);
     return 0;
 }
