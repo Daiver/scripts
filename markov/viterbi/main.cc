@@ -4,6 +4,7 @@
 #include "Matrix.h"
 #include <fstream>
 #include <map>
+#include <algorithm>
 
 std::map<std::string, int> states;
 std::map<std::string, int> obs_types;
@@ -63,9 +64,8 @@ std::vector<int> Viterbi(std::vector<int> obs_seq)
     return path[max_state];
 }
 
-void Viterbi_Test(std::vector<int> obs, std::vector<int> res)
+void Viterbi_Test(std::vector<int> obs, std::vector<int> res, std::vector<int> ans)
 {
-    std::vector<int> ans = Viterbi(obs);
     int fp = 0, tp = 0;
     printf("length %ld\n", res.size());
     for(int i = 0; i < ans.size(); i++)
@@ -86,7 +86,7 @@ Matrix make_obs(int obs, Matrix emission)
     return res;
 }
 
-void Forward_Backward(Matrix trans, Matrix emission, Matrix start_prob, std::vector<int> obs_seq)
+std::vector<int> Forward_Backward(Matrix trans, Matrix emission, Matrix start_prob, std::vector<int> obs_seq)
 {
     std::vector<Matrix> obs;
     for (int i = 0; i < obs_seq.size(); i++) obs.push_back(make_obs(obs_seq[i], emission));
@@ -116,12 +116,27 @@ void Forward_Backward(Matrix trans, Matrix emission, Matrix start_prob, std::vec
             trans.dot(&obs[i]).dot(&B[B.size() - 1]).normalize()
         );
     }
-    for (int i = 0; i < B.size(); i++)
+    /*for (int i = 0; i < B.size(); i++)
     {
         B[i].print();
         printf("\n");
+    }*/
+    //std::reverse(B.begin(), B.end());
+    std::vector<Matrix> gamma;
+    for (int i = 0; i < F.size(); i++)
+    {
+        gamma.push_back(
+            F[i].mul(&B[B.size() - i - 1]).normalize()
+        );
     }
-
+    /*for (int i = 0; i < gamma.size(); i++)
+    {
+        gamma[i].print();
+        printf("\n");
+    }*/
+    std::vector<int> res;
+    for(int i = 1; i < gamma.size(); i++) res.push_back(gamma[i].max_value_index());
+    return res;
 }
 
 int main(int argc, char** argv)
@@ -149,7 +164,9 @@ int main(int argc, char** argv)
         obs.push_back(obs_types[str]);
     }
     in.close();
-    Viterbi_Test(obs, res);
-    Forward_Backward(trans, emission.trans(), start_prob.trans(), obs);
+    std::vector<int> ans = Viterbi(obs);
+    Viterbi_Test(obs, res, ans);
+    ans = Forward_Backward(trans, emission.trans(), start_prob.trans(), obs);
+    Viterbi_Test(obs, res, ans);
     return 0;
 }

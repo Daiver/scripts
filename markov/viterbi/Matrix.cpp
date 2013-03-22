@@ -56,6 +56,26 @@ Matrix Matrix::normalize()
     return res;
 }
 
+Matrix Matrix::mul(Matrix *m)
+{
+    Matrix res(this->width, this->height);
+    for(int i = 0; i < this->width*this->height; i++) res.value[i] = m->value[i] * this->value[i];
+    return res;
+}
+
+long Matrix::max_value_index()
+{
+    long index = -1;
+    double max_value = 0.0;
+    for(long i = 0; i < this->width*this->height; i++) 
+        if (this->value[i] > max_value)
+        {
+            max_value = this->value[i];
+            index = i;
+        }
+    return index;
+}
+
 bool Matrix::set_element(long row, long col, double value)
 {
     this->value[row*this->height + col] = value;
