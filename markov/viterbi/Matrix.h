@@ -14,6 +14,8 @@ public:
     void print();
     Matrix dot(Matrix *a);
     Matrix trans();
+    Matrix normalize();
+    double sum();
 protected:
     long width;//with values are mixed =(
     long height;

@@ -89,12 +89,39 @@ Matrix make_obs(int obs, Matrix emission)
 void Forward_Backward(Matrix trans, Matrix emission, Matrix start_prob, std::vector<int> obs_seq)
 {
     std::vector<Matrix> obs;
-    //Matrix m(2, 2);
-    //obs.push_back(m);
-    //emission.print();
-    //printf("%f\n", emission.get_element(2, 1));
     for (int i = 0; i < obs_seq.size(); i++) obs.push_back(make_obs(obs_seq[i], emission));
-    for (int i = 0; i < obs_seq.size(); i++) obs[i].print();
+    Matrix trans_trans = trans.trans();//WTF? :)
+    std::vector<Matrix> F;
+    F.push_back(start_prob);
+    for(int i = 0; i < obs.size(); i++)
+    {
+        F.push_back(
+            obs[i].dot(&trans_trans).dot(&F[F.size() - 1]).normalize()
+        );
+    }
+    //trans.print();
+    /*for (int i = 0; i < F.size(); i++)
+    {
+        F[i].print();
+        printf("\n");
+    }*/
+    Matrix b_start(num_of_states, 1);
+    for(int i = 0; i < num_of_states; i++) b_start.set_element(i, 0, 1.0);
+    //b_start.print();
+    std::vector<Matrix> B;
+    B.push_back(b_start);
+    for(int i = obs.size() - 1; i >= 0; i--)
+    {
+        B.push_back(
+            trans.dot(&obs[i]).dot(&B[B.size() - 1]).normalize()
+        );
+    }
+    for (int i = 0; i < B.size(); i++)
+    {
+        B[i].print();
+        printf("\n");
+    }
+
 }
 
 int main(int argc, char** argv)
@@ -123,6 +150,6 @@ int main(int argc, char** argv)
     }
     in.close();
     Viterbi_Test(obs, res);
-    Forward_Backward(trans.trans(), emission.trans(), start_prob.trans(), obs);
+    Forward_Backward(trans, emission.trans(), start_prob.trans(), obs);
     return 0;
 }

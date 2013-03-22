@@ -41,6 +41,21 @@ Matrix Matrix::trans()
     return res;
 }
 
+double Matrix::sum()
+{
+    double res = 0; 
+    for(int i = 0; i < this->width*this->height; i++) res += this->value[i];
+    return res;
+}
+
+Matrix Matrix::normalize()
+{
+    Matrix res(this->width, this->height, this->value);
+    double sum = this->sum();
+    for(int i = 0; i < this->width*this->height; i++) res.value[i] /= sum;
+    return res;
+}
+
 bool Matrix::set_element(long row, long col, double value)
 {
     this->value[row*this->height + col] = value;

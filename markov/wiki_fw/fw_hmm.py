@@ -62,10 +62,11 @@ with open('hmmdata') as f:
         obs_seq.append(observations[tmp[2]])
         res.append(states[tmp[1]])
 
-ans = forward_backward(map(make_obs, obs_seq), transition_probability, start_prob)[2]
-
+ans = forward_backward(map(make_obs, obs_seq), transition_probability, start_prob)
+for x in ans[1]: print x
+exit()
 fp = 0; tp = 0
-for i, x in enumerate(map(find_max_state, ans[1:])):
+for i, x in enumerate(map(find_max_state, ans[2][1:])):
     if x == res[i]: tp +=1
     else: fp += 1
 print tp, fp
