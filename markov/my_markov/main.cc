@@ -1,25 +1,12 @@
 #include <stdio.h>
 #include <vector>
 #include <string>
-#include "Matrix.h"
 #include <fstream>
 #include <map>
 
-std::map<std::string, int> states;
-std::map<std::string, int> obs_types;
-int num_of_states = 2;
+#include "Matrix.h"
 
-std::vector<int> obs_seq;
-double trans_m[4] = {0.969, 0.029, 0.063, 0.935};
-Matrix trans(2, 2, trans_m);
-
-double start_m[2] = {0.526, 0.474};
-Matrix start_prob(1, 2, start_m);
-
-double emission_m[6] = {0.005, 0.775, 0.220, 0.604, 0.277, 0.119};
-Matrix emission(2, 3, emission_m);
-
-std::vector<int> Viterbi(Matrix emission, Matrix trans, Matrix start_prob, std::vector<int> obs_seq)
+std::vector<int> Viterbi(int num_of_states, Matrix trans, Matrix emission, Matrix start_prob, std::vector<int> obs_seq)
 {
     std::vector<std::vector<int> > path;
     std::vector<std::vector<double> > V;
@@ -84,7 +71,7 @@ void Stat_Test(std::vector<int> obs, std::vector<int> res, std::vector<int> ans,
     printf("True positive: %d\nTrue negative: %d\nFalse positive: %d\nFalse negative: %d\nF-score: %f \n", tp, tn, fp, fn, F_score);
 }
 
-Matrix make_obs(int obs, Matrix emission)
+Matrix make_obs(int obs, long num_of_states, Matrix emission)
 {
     Matrix res(num_of_states, num_of_states);
     for(int i = 0; i < num_of_states; i++)
@@ -94,10 +81,10 @@ Matrix make_obs(int obs, Matrix emission)
     return res;
 }
 
-std::vector<int> Forward_Backward(Matrix trans, Matrix emission, Matrix start_prob, std::vector<int> obs_seq)
+std::vector<int> Forward_Backward(long num_of_states, Matrix trans, Matrix emission, Matrix start_prob, std::vector<int> obs_seq)
 {
     std::vector<Matrix> obs;
-    for (int i = 0; i < obs_seq.size(); i++) obs.push_back(make_obs(obs_seq[i], emission));
+    for (int i = 0; i < obs_seq.size(); i++) obs.push_back(make_obs(obs_seq[i], num_of_states, emission));
     Matrix trans_trans = trans.trans();
     std::vector<Matrix> F;
     F.push_back(start_prob);
@@ -131,6 +118,20 @@ std::vector<int> Forward_Backward(Matrix trans, Matrix emission, Matrix start_pr
 
 int main(int argc, char** argv)
 {
+    std::map<std::string, int> states;
+    std::map<std::string, int> obs_types;
+    int num_of_states = 2;
+
+    std::vector<int> obs_seq;
+    double trans_m[4] = {0.969, 0.029, 0.063, 0.935};
+    Matrix trans(2, 2, trans_m);
+
+    double start_m[2] = {0.526, 0.474};
+    Matrix start_prob(1, 2, start_m);
+
+    double emission_m[6] = {0.005, 0.775, 0.220, 0.604, 0.277, 0.119};
+    Matrix emission(2, 3, emission_m);
+
     states["St1"] = 0;
     states["St2"] = 1;
     obs_types["a"] = 0;
@@ -154,9 +155,9 @@ int main(int argc, char** argv)
         obs.push_back(obs_types[str]);
     }
     in.close();
-    std::vector<int> ans = Viterbi(emission, trans, start_prob, obs);
+    std::vector<int> ans = Viterbi(num_of_states, trans, emission, start_prob, obs);
     Stat_Test(obs, res, ans, 0);
-    ans = Forward_Backward(trans, emission.trans(), start_prob.trans(), obs);
+    ans = Forward_Backward(num_of_states, trans, emission.trans(), start_prob.trans(), obs);
     Stat_Test(obs, res, ans, 0);
     return 0;
 }
