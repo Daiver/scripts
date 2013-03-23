@@ -194,9 +194,6 @@ void HMM::data_from_file(std::string fname, std::vector<int> *res, std::vector<i
 
 int main(int argc, char** argv)
 {
-
-    //std::vector<int> obs_seq;
-
     HMM hmm;
     std::vector<int> obs;
     std::vector<int> res;
