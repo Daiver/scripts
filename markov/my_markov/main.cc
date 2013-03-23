@@ -148,51 +148,59 @@ public:
         delete this->start_prob;
     }
 
-    std::vector<int> Viterbi(std::vector<int> &obs)
-    {
-        return Viterbi_impl(this->num_of_states, *this->trans, *this->emission, *this->start_prob, obs);
-    }
-
-    std::vector<int> Forward_Backward(std::vector<int> &obs)
-    {
-        Matrix emission_trans = emission->trans();
-        Matrix start_prob_trans = start_prob->trans();
-        return Forward_Backward_impl(this->num_of_states, *this->trans, emission_trans, start_prob_trans, obs);
-    }
-
-    std::map<std::string, int> states;
-    std::map<std::string, int> obs_types;
+    void data_from_file(std::string fname, std::vector<int> *res, std::vector<int> *obs);
+    std::vector<int> Viterbi(std::vector<int> &obs);
+    std::vector<int> Forward_Backward(std::vector<int> &obs);
 
 private:
     int num_of_states;
     Matrix *emission;
     Matrix *trans;
     Matrix *start_prob;
+    std::map<std::string, int> states;
+    std::map<std::string, int> obs_types;
 };
 
-int main(int argc, char** argv)
+std::vector<int> HMM::Viterbi(std::vector<int> &obs)
 {
+    return Viterbi_impl(this->num_of_states, *this->trans, *this->emission, *this->start_prob, obs);
+}
 
-    std::vector<int> obs_seq;
+std::vector<int> HMM::Forward_Backward(std::vector<int> &obs)
+{
+    Matrix emission_trans = emission->trans();
+    Matrix start_prob_trans = start_prob->trans();
+    return Forward_Backward_impl(this->num_of_states, *this->trans, emission_trans, start_prob_trans, obs);
+}
 
-    std::vector<int> obs;
-    std::vector<int> res;
-    std::ifstream in("hmmdata");
+void HMM::data_from_file(std::string fname, std::vector<int> *res, std::vector<int> *obs)
+{    
+    std::ifstream in(fname.c_str());
     std::string str;
     in>>str;
     in>>str;
     in>>str;
-    HMM hmm;
     while (!in.eof())
     {
         in>>str;
         if(in.eof()) break;
         in>>str;
-        res.push_back(hmm.states[str]);
+        res->push_back(this->states[str]);
         in>>str;
-        obs.push_back(hmm.obs_types[str]);
+        obs->push_back(this->obs_types[str]);
     }
     in.close();
+}
+
+int main(int argc, char** argv)
+{
+
+    //std::vector<int> obs_seq;
+
+    HMM hmm;
+    std::vector<int> obs;
+    std::vector<int> res;
+    hmm.data_from_file("hmmdata", &res, &obs);
     std::vector<int> ans = hmm.Viterbi(obs);
     Stat_Test(obs, res, ans, 0, "Viterbi");
     ans = hmm.Forward_Backward(obs);
