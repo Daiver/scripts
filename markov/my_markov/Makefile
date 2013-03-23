@@ -1,5 +1,5 @@
-CXX = clang++
-#CXX = g++
+#CXX = clang++
+CXX = g++
 
 main: main.cc Matrix.o
 	$(CXX) -o main main.cc Matrix.o

@@ -119,27 +119,61 @@ void Stat_Test(std::vector<int> &obs, std::vector<int> &res, std::vector<int> &a
     printf("True positive: %d\nTrue negative: %d\nFalse positive: %d\nFalse negative: %d\nF-score: %f \n\n", tp, tn, fp, fn, F_score);
 }
 
-int main(int argc, char** argv)
+class HMM
 {
+public:
+    HMM()
+    {
+        double trans_m[4] = {0.969, 0.029, 0.063, 0.935};
+        this->trans = new Matrix(2, 2, trans_m);
+
+        double start_m[2] = {0.526, 0.474};
+        this->start_prob = new Matrix(1, 2, start_m);
+
+        double emission_m[6] = {0.005, 0.775, 0.220, 0.604, 0.277, 0.119};
+        this->emission = new Matrix(2, 3, emission_m);
+
+        states["St1"] = 0;
+        states["St2"] = 1;
+        this->num_of_states = 2;
+        obs_types["a"] = 0;
+        obs_types["b"] = 1;
+        obs_types["c"] = 2;
+    }
+
+    ~HMM()
+    {
+        delete this->emission;
+        delete this->trans;
+        delete this->start_prob;
+    }
+
+    std::vector<int> Viterbi(std::vector<int> &obs)
+    {
+        return Viterbi_impl(this->num_of_states, *this->trans, *this->emission, *this->start_prob, obs);
+    }
+
+    std::vector<int> Forward_Backward(std::vector<int> &obs)
+    {
+        Matrix emission_trans = emission->trans();
+        Matrix start_prob_trans = start_prob->trans();
+        return Forward_Backward_impl(this->num_of_states, *this->trans, emission_trans, start_prob_trans, obs);
+    }
+
     std::map<std::string, int> states;
     std::map<std::string, int> obs_types;
-    int num_of_states = 2;
+
+private:
+    int num_of_states;
+    Matrix *emission;
+    Matrix *trans;
+    Matrix *start_prob;
+};
+
+int main(int argc, char** argv)
+{
 
     std::vector<int> obs_seq;
-    double trans_m[4] = {0.969, 0.029, 0.063, 0.935};
-    Matrix trans(2, 2, trans_m);
-
-    double start_m[2] = {0.526, 0.474};
-    Matrix start_prob(1, 2, start_m);
-
-    double emission_m[6] = {0.005, 0.775, 0.220, 0.604, 0.277, 0.119};
-    Matrix emission(2, 3, emission_m);
-
-    states["St1"] = 0;
-    states["St2"] = 1;
-    obs_types["a"] = 0;
-    obs_types["b"] = 1;
-    obs_types["c"] = 2;
 
     std::vector<int> obs;
     std::vector<int> res;
@@ -148,21 +182,20 @@ int main(int argc, char** argv)
     in>>str;
     in>>str;
     in>>str;
+    HMM hmm;
     while (!in.eof())
     {
         in>>str;
         if(in.eof()) break;
         in>>str;
-        res.push_back(states[str]);
+        res.push_back(hmm.states[str]);
         in>>str;
-        obs.push_back(obs_types[str]);
+        obs.push_back(hmm.obs_types[str]);
     }
     in.close();
-    std::vector<int> ans = Viterbi_impl(num_of_states, trans, emission, start_prob, obs);
+    std::vector<int> ans = hmm.Viterbi(obs);//Viterbi_impl(num_of_states, trans, emission, start_prob, obs);
     Stat_Test(obs, res, ans, 0, "Viterbi");
-    Matrix emission_trans = emission.trans();
-    Matrix start_prob_trans = start_prob.trans();
-    ans = Forward_Backward_impl(num_of_states, trans, emission_trans, start_prob_trans, obs);
+    ans = hmm.Forward_Backward(obs);
     Stat_Test(obs, res, ans, 0, "Forward-Backward");
     return 0;
 }
