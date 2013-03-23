@@ -193,7 +193,7 @@ int main(int argc, char** argv)
         obs.push_back(hmm.obs_types[str]);
     }
     in.close();
-    std::vector<int> ans = hmm.Viterbi(obs);//Viterbi_impl(num_of_states, trans, emission, start_prob, obs);
+    std::vector<int> ans = hmm.Viterbi(obs);
     Stat_Test(obs, res, ans, 0, "Viterbi");
     ans = hmm.Forward_Backward(obs);
     Stat_Test(obs, res, ans, 0, "Forward-Backward");
