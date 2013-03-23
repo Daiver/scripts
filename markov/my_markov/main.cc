@@ -50,28 +50,8 @@ std::vector<int> Viterbi(int num_of_states, Matrix trans, Matrix emission, Matri
     return path[max_state];
 }
 
-void Stat_Test(std::vector<int> obs, std::vector<int> res, std::vector<int> ans, const int state_for_detect)
-{
-    int fp = 0, tp = 0, tn = 0, fn = 0;
-    printf("set length %ld\n", res.size());
-    for(int i = 0; i < ans.size(); i++)
-    {
-        if(res[i] == state_for_detect)
-        {
-            if (ans[i] == state_for_detect) tp++;
-            else fn++;
-        }
-        else
-        {
-            if (ans[i] != state_for_detect) tn++;
-            else fp++;
-        }
-    }
-    double F_score = (double)(2.* tp)/(2.*tp+fn+fp);
-    printf("True positive: %d\nTrue negative: %d\nFalse positive: %d\nFalse negative: %d\nF-score: %f \n", tp, tn, fp, fn, F_score);
-}
 
-Matrix make_obs(int obs, long num_of_states, Matrix emission)
+Matrix make_obs_for_forward_backward(int obs, long num_of_states, Matrix emission)
 {
     Matrix res(num_of_states, num_of_states);
     for(int i = 0; i < num_of_states; i++)
@@ -84,7 +64,7 @@ Matrix make_obs(int obs, long num_of_states, Matrix emission)
 std::vector<int> Forward_Backward(long num_of_states, Matrix trans, Matrix emission, Matrix start_prob, std::vector<int> obs_seq)
 {
     std::vector<Matrix> obs;
-    for (int i = 0; i < obs_seq.size(); i++) obs.push_back(make_obs(obs_seq[i], num_of_states, emission));
+    for (int i = 0; i < obs_seq.size(); i++) obs.push_back(make_obs_for_forward_backward(obs_seq[i], num_of_states, emission));
     Matrix trans_trans = trans.trans();
     std::vector<Matrix> F;
     F.push_back(start_prob);
@@ -114,6 +94,28 @@ std::vector<int> Forward_Backward(long num_of_states, Matrix trans, Matrix emiss
     std::vector<int> res;
     for(int i = 1; i < gamma.size(); i++) res.push_back(gamma[i].max_value_index());
     return res;
+}
+
+void Stat_Test(std::vector<int> obs, std::vector<int> res, std::vector<int> ans, const int state_for_detect, std::string alg_name)
+{
+    printf("Alg: %s\n", alg_name.c_str());
+    int fp = 0, tp = 0, tn = 0, fn = 0;
+    printf("set length %ld\n", res.size());
+    for(int i = 0; i < ans.size(); i++)
+    {
+        if(res[i] == state_for_detect)
+        {
+            if (ans[i] == state_for_detect) tp++;
+            else fn++;
+        }
+        else
+        {
+            if (ans[i] != state_for_detect) tn++;
+            else fp++;
+        }
+    }
+    double F_score = (double)(2.* tp)/(2.*tp+fn+fp);
+    printf("True positive: %d\nTrue negative: %d\nFalse positive: %d\nFalse negative: %d\nF-score: %f \n\n", tp, tn, fp, fn, F_score);
 }
 
 int main(int argc, char** argv)
@@ -156,8 +158,8 @@ int main(int argc, char** argv)
     }
     in.close();
     std::vector<int> ans = Viterbi(num_of_states, trans, emission, start_prob, obs);
-    Stat_Test(obs, res, ans, 0);
+    Stat_Test(obs, res, ans, 0, "Viterbi");
     ans = Forward_Backward(num_of_states, trans, emission.trans(), start_prob.trans(), obs);
-    Stat_Test(obs, res, ans, 0);
+    Stat_Test(obs, res, ans, 0, "Forward-Backward");
     return 0;
 }
