@@ -4,7 +4,6 @@
 #include "Matrix.h"
 #include <fstream>
 #include <map>
-#include <algorithm>
 
 std::map<std::string, int> states;
 std::map<std::string, int> obs_types;
@@ -20,7 +19,7 @@ Matrix start_prob(1, 2, start_m);
 double emission_m[6] = {0.005, 0.775, 0.220, 0.604, 0.277, 0.119};
 Matrix emission(2, 3, emission_m);
 
-std::vector<int> Viterbi(std::vector<int> obs_seq)
+std::vector<int> Viterbi(Matrix emission, Matrix trans, Matrix start_prob, std::vector<int> obs_seq)
 {
     std::vector<std::vector<int> > path;
     std::vector<std::vector<double> > V;
@@ -155,7 +154,7 @@ int main(int argc, char** argv)
         obs.push_back(obs_types[str]);
     }
     in.close();
-    std::vector<int> ans = Viterbi(obs);
+    std::vector<int> ans = Viterbi(emission, trans, start_prob, obs);
     Stat_Test(obs, res, ans, 0);
     ans = Forward_Backward(trans, emission.trans(), start_prob.trans(), obs);
     Stat_Test(obs, res, ans, 0);

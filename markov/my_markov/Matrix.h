@@ -1,6 +1,8 @@
 #ifndef __MATRIX_H__
 #define __MATRIX_H__
 
+//Простой класс "матрица", для алгоритмов viterbi и forward-backward
+//Лучшим вариантом было бы использовать какую-нибудь готовую библиотеку для работы с линейной алгеброй
 class Matrix
 {
 public: 
@@ -19,9 +21,9 @@ public:
     long max_value_index();
     double sum();
 protected:
-    long width;//with values are mixed =(
+    long width;//Небольшая путаница - width это число строк, height - число столбцов
     long height;
-    double* value;
+    double* value;//значения элементов матрицы. Такое представление мне показалось удобней чем представление ввиде double**
 };
 
 #endif

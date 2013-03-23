@@ -13,25 +13,23 @@ void Matrix::print()
     }
 }
 
+//Умножение по правилам умножения матриц
 Matrix Matrix::dot(Matrix *a)
 {
-    //assert (this->height == a->width);
     Matrix res(this->width, a->height);
-
     for (int row = 0; row < this->width; row++) {
         for (int col = 0; col < a->height; col++) {
             double sum = 0;
             for (int inner = 0; inner < this->height; inner++) {
                 sum += this->get_element(row, inner) * a->get_element(inner, col);
-                //res.set_element(row, col, res.get_element(row, col) + this->get_element(row, inner) * a->get_element(inner, col));
             }
             res.set_element(row, col, sum);
         }
     }
-
     return res;
 }
 
+//Транспонирование матрицы
 Matrix Matrix::trans()
 {
     Matrix res(this->height, this->width);
@@ -41,6 +39,7 @@ Matrix Matrix::trans()
     return res;
 }
 
+//Сумма всех элементов
 double Matrix::sum()
 {
     double res = 0; 
@@ -48,6 +47,7 @@ double Matrix::sum()
     return res;
 }
 
+//Нормализация матрицы
 Matrix Matrix::normalize()
 {
     Matrix res(this->width, this->height, this->value);
@@ -56,6 +56,7 @@ Matrix Matrix::normalize()
     return res;
 }
 
+//Умножение по-элементно
 Matrix Matrix::mul(Matrix *m)
 {
     Matrix res(this->width, this->height);
@@ -63,6 +64,7 @@ Matrix Matrix::mul(Matrix *m)
     return res;
 }
 
+//Индекс наибольшего элемента
 long Matrix::max_value_index()
 {
     long index = -1;
@@ -76,12 +78,14 @@ long Matrix::max_value_index()
     return index;
 }
 
+//Устанавливает значение элемента
 bool Matrix::set_element(long row, long col, double value)
 {
     this->value[row*this->height + col] = value;
     return true;
 }
 
+//Возвращает элемент
 double Matrix::get_element(long row, long col)
 {
     return this->value[row*this->height + col];
