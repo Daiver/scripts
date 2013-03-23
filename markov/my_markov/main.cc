@@ -6,6 +6,7 @@
 
 #include "Matrix.h"
 #include "alg_impl.h"
+#include "HMM.h"
 
 void Stat_Test(std::vector<int> &obs, std::vector<int> &res, std::vector<int> &ans, const int state_for_detect, std::string alg_name)//Вычисляет А-меру, и т.д
 {
@@ -28,7 +29,7 @@ void Stat_Test(std::vector<int> &obs, std::vector<int> &res, std::vector<int> &a
     double F_score = (double)(2.* tp)/(2.*tp+fn+fp);
     printf("True positive: %d\nTrue negative: %d\nFalse positive: %d\nFalse negative: %d\nF-score: %f \n\n", tp, tn, fp, fn, F_score);
 }
-
+/*
 class HMM
 {
 public:
@@ -101,6 +102,7 @@ void HMM::data_from_file(std::string fname, std::vector<int> *res, std::vector<i
     }
     in.close();
 }
+*/
 
 int main(int argc, char** argv)
 {
