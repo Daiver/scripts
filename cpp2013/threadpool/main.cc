@@ -57,6 +57,8 @@ int main(int argc, char** argv)
     FunctionOperation op3(foo3, NULL);
     FunctionOperation op4(foo4, NULL);
     FunctionOperation op5(foo5, NULL);
+    FunctionOperation op_for_copy(op4);
+    std::cout<<"op4 id " << op4.get_ID() << " op_for_copy id " << op_for_copy.get_ID() << std::endl;
     op3.add_dependency(&op4);
     op3.add_dependency(&op2);
     op3.add_dependency(&op1);

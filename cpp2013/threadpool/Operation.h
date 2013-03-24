@@ -22,7 +22,8 @@ public:
     void set_priority(Operation_Priority priority);
     void add_dependency(Operation *op);
     long get_ID();
-private:
+    
+protected:
     std::vector<Operation*> get_dependences();
     std::vector<Operation*> dependency;
     Operation_Priority priority;
