@@ -3,6 +3,7 @@
 #include "Operation.h"
 #include <dispatch/dispatch.h>
 
+#include <pthread.h>
 #include <set>
 #include <vector>
 
@@ -23,6 +24,8 @@ private:
     std::set<long> cur_tasks;
     std::set<long> executed_tasks;
     std::vector<Operation*> for_execute;
+    pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;;
+    pthread_mutex_t mutex2 = PTHREAD_MUTEX_INITIALIZER;;
 };
 #else
 #endif

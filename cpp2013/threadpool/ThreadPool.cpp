@@ -15,20 +15,6 @@ ThreadPool::ThreadPool(int max_tasks_count)
     //dispatch_queue_create("com.mydomain.myapp.longrunningfunction", DISPATCH_QUEUE_CONCURRENT);
 }
 
-bool ThreadPool::is_ready_to_execute(Operation* op)
-{
-    std::vector<Operation*> dependency = op->get_dependences();
-    int i = 0;
-    for (auto it = op->dependency.begin(); it != dependency.end(); it++)
-    {
-        auto it2 = this->executed_tasks.find((*it)->get_ID());
-        if (it2 == this->executed_tasks.end())
-            return false;
-        i++;
-    }
-    return true;
-}
-
 void ThreadPool::run_Operation_async(dispatch_group_t group, Operation *op)//this operation is NOT thread safe now, fix it!
 {
     std::vector<Operation*> dependency = op->get_dependences();
@@ -53,9 +39,9 @@ void ThreadPool::run_Operation_async(dispatch_group_t group, Operation *op)//thi
 
 void ThreadPool::async(Operation *op)
 {
-    //dispatch_group_t group = dispatch_group_create();
-    //run_Operation_async(group, op);
-    run_Operation_async(op);
+    dispatch_group_t group = dispatch_group_create();
+    run_Operation_async(group, op);
+    //run_Operation_async(op);
 }
 
 void ThreadPool::run_Operation_async(Operation *op)//this operation is NOT thread safe now, fix it!
@@ -97,6 +83,20 @@ void ThreadPool::run_Operation_async(Operation *op)//this operation is NOT threa
 
     });
 
+}
+
+bool ThreadPool::is_ready_to_execute(Operation* op)
+{
+    std::vector<Operation*> dependency = op->get_dependences();
+    int i = 0;
+    for (auto it = op->dependency.begin(); it != dependency.end(); it++)
+    {
+        auto it2 = this->executed_tasks.find((*it)->get_ID());
+        if (it2 == this->executed_tasks.end())
+            return false;
+        i++;
+    }
+    return true;
 }
 
 

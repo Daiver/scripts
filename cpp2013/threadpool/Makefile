@@ -1,3 +1,5 @@
+CXX = clang++
+
 clean: main Operation.o
 	rm *.o
 
@@ -15,5 +17,5 @@ FunctionOperation.o: Operation.o FunctionOperation.h FunctionOperation.cpp
 	clang++ -o FunctionOperation.o -c FunctionOperation.cpp Operation.o -fblocks -ldispatch
 
 ThreadPool.o: Operation.o ThreadPool.h ThreadPool.cpp
-	clang++ -o ThreadPool.o -c ThreadPool.cpp Operation.o -fblocks -I /usr/local/include -L /usr/local/lub -ldispatch
+	clang++ -o ThreadPool.o -c ThreadPool.cpp Operation.o -fblocks -I /usr/local/include -L /usr/local/lub -ldispatch -lpthread
 	

@@ -19,14 +19,14 @@ int tmp_data2 = 0;
 void foo(void *data)
 {
     tmp_data2 = *(int*)data;
-    printf("foo! %d\n", tmp_data2);
+    printf("foo1 %d\n", tmp_data2);
     //std::cout<<"foo2"<<std::endl<<std::cout.flush();
 }
 
 void foo2(void *data)
 {
     tmp_data1 += 10;
-    printf("foo2! %d\n", tmp_data1);
+    printf("foo2 %d\n", tmp_data1);
 
 }
 
@@ -62,11 +62,11 @@ int main(int argc, char** argv)
     op3.add_dependency(&op1);
     op5.add_dependency(&op3);
     pool.async(&op5);
-    pool.async(&op4);
+    /*pool.async(&op4);
     pool.async(&op1);
     pool.async(&op3);
     pool.async(&op2);
-    
+    */
 
     //run_Operation_async(queue, &op2);
     //dispatch_group_t group = dispatch_group_create()

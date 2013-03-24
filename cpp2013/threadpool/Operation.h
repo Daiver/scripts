@@ -2,6 +2,7 @@
 #define __OPERATION_H__
 
 #include <vector>
+#include <pthread.h>
 
 enum Operation_Priority
 {
@@ -29,7 +30,11 @@ private:
     static long get_new_ID()
     {
         static long inner_index = 0;
-        return inner_index++;
+        static pthread_mutex_t inner_mutex = PTHREAD_MUTEX_INITIALIZER;
+        pthread_mutex_lock(&inner_mutex);
+        long tmp = inner_index++;
+        pthread_mutex_unlock(&inner_mutex);
+        return tmp;
     }
 
 };
