@@ -9,12 +9,12 @@ class FunctionOperation : public Operation
 public:
     void Execute();
     FunctionOperation(function foo, void *args);
-    FunctionOperation(FunctionOperation &op)
+    FunctionOperation(const FunctionOperation &op):Operation(op)
     {
         this->foo = op.foo;
         this->args = op.args;
-        this->dependency = op.dependency;
-        this->id = this->get_new_ID();
+        //this->dependency = op.dependency;
+        //this->id = this->get_new_ID();
     }
 private:
     function foo;

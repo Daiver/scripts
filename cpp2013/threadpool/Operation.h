@@ -22,6 +22,11 @@ public:
     void set_priority(Operation_Priority priority);
     void add_dependency(Operation *op);
     long get_ID();
+    Operation(const Operation &op)
+    {
+        this->dependency = op.dependency;
+        this->id = get_new_ID();
+    }
     
 protected:
     std::vector<Operation*> get_dependences();
