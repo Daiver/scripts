@@ -1,5 +1,5 @@
 CXX = clang++
-Options = ""
+Options = -O3 
 LIBS = -lpthread
 
 main: main.cc hashtable.h
