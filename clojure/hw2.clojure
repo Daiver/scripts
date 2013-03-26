@@ -1,0 +1,3 @@
+(def my_fn (fn [] "HI!"))
+(println (my_fn))
+(println (my_fn))
