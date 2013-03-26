@@ -12,11 +12,10 @@ public:
     }
     ~ListItem()
     {
-        delete this->next;
+        //delete this->next;
     }
 
     ListItem<K, V> *next;
-private:
     K key;
     V value;
 };
@@ -31,7 +30,44 @@ public:
     }
     ~LinkedList()
     {
-        delete this->tail;
+        ListItem<K, V> *tmp = this->tail;
+        while(tmp != NULL)
+        {
+            ListItem<K, V> *tmp2 = tmp;
+            tmp = tmp->next;
+            delete tmp2;
+        }
+    }
+
+    ListItem<K, V> *find(const K& key)
+    {
+        ListItem<K, V> *tmp = this->tail;
+        while((tmp != NULL) && (tmp->key != key))
+            tmp = tmp->next;
+        return tmp;
+    }
+
+    bool erase(const K& key)
+    {
+        if(this->tail == NULL) return false;
+        if(this->tail->key == key)
+        {
+            ListItem<K, V> *tmp = this->tail;
+            this->tail = this->tail->next;
+            delete tmp;
+            return true;
+        }
+        ListItem<K, V> *old = this->tail;
+        ListItem<K, V> *tmp = this->tail->next;
+        while((tmp != NULL) && (tmp->key != key))
+        {
+            old = tmp;
+            tmp = tmp->next;
+        }
+        if (NULL == tmp) return false;
+        old->next = tmp->next;
+        delete tmp;
+        return true;
     }
 
     void add(const K& key, const V& value)
