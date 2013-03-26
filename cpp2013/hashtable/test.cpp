@@ -7,7 +7,6 @@
 
 void printList(LinkedList<int, int> *list)
 {
-    ListItem<int, int> *tmp = NULL;
 }
 
 bool testLinkedListAdd(LinkedList<int, int> *list)
@@ -82,6 +81,7 @@ void runAllTests()
     LinkedList<int, int> *list = new LinkedList<int, int>();
     printTestRes(testLinkedListAdd(list), "LinkedList add test");
     printTestRes(testLinkedListFind(list), "LinkedList find test");
+    printList(list);
     printTestRes(testLinkedListErase(list), "LinkedList erase test");
     delete list;
 }
