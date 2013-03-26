@@ -7,6 +7,9 @@
 
 void printList(LinkedList<int, int> *list)
 {
+    /*for(auto it = list->begin(); it != list->end(); it = it->next)
+        printf("%d ", it->value);
+    printf("\n");*/
 }
 
 bool testLinkedListAdd(LinkedList<int, int> *list)
@@ -42,6 +45,7 @@ bool testLinkedListFind(LinkedList<int, int> *list)
 bool testLinkedListErase(LinkedList<int, int> *list)
 {
     list->erase(1);
+    printList(list);
     if(list->size() != 3) return false;
     if(list->find(5)->value != 5) return false;
     if(list->find(2)->value != 2) return false;
@@ -52,6 +56,7 @@ bool testLinkedListErase(LinkedList<int, int> *list)
     if(list->find(6) != NULL) return false;
     if(list->find(1) != NULL) return false;
     list->erase(5);
+    printList(list);
     if(list->size() != 2) return false;
     if(list->find(5) != NULL) return false;
     if(list->find(2)->value != 2) return false;
@@ -62,12 +67,25 @@ bool testLinkedListErase(LinkedList<int, int> *list)
     if(list->find(6) != NULL) return false;
     if(list->find(1) != NULL) return false;
     list->erase(3);
+    printList(list);
     if(list->size() != 1) return false;
     if(list->find(3) != NULL) return false;
     if(list->find(2)->value != 2) return false;
     return true; 
 }
 
+bool testLinkedListErase2(LinkedList<int, int> *list)
+{
+    list->erase(2);
+    printList(list);
+    if(list->size() != 0) return false;
+    if(list->find(5) != NULL) return false;
+    if(list->find(2) != NULL) return false;
+    if(list->find(1) != NULL) return false;
+    if(list->find(6) != NULL) return false;
+    if(list->find(1) != NULL) return false;
+    return true;
+}
 
 void printTestRes(bool res, std::string test_name)
 {
@@ -81,8 +99,12 @@ void runAllTests()
     LinkedList<int, int> *list = new LinkedList<int, int>();
     printTestRes(testLinkedListAdd(list), "LinkedList add test");
     printTestRes(testLinkedListFind(list), "LinkedList find test");
-    printList(list);
     printTestRes(testLinkedListErase(list), "LinkedList erase test");
+    printTestRes(testLinkedListErase2(list), "LinkedList erase2 test");
+    printTestRes(testLinkedListAdd(list), "LinkedList add test");
+    printTestRes(testLinkedListFind(list), "LinkedList find test");
+    printTestRes(testLinkedListErase(list), "LinkedList erase test");
+    printTestRes(testLinkedListErase2(list), "LinkedList erase2 test");
     delete list;
 }
 

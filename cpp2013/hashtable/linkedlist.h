@@ -43,6 +43,16 @@ public:
         }
     }
 
+    ListItem<K, V> *begin()
+    {
+        return this->tail;
+    }
+
+    ListItem<K, V> *end()
+    {
+        return NULL;
+    }
+
     ListItem<K, V> *find(const K& key)
     {
         ListItem<K, V> *tmp = this->tail;
