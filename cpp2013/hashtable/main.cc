@@ -13,11 +13,27 @@ bool testLinkedListAdd(LinkedList<int, int> *list)
     list->add(1, 1);
     list->add(2, 2);
     list->add(3, 3);
+    if(list->find(900) != NULL) return false;
     if(list->find(1)->value != 1) return false;
     if(list->find(2)->value != 2) return false;
     if(list->find(3)->value != 3) return false;
     if(list->find(1)->value != 1) return false;
+    if(list->find(3)->value != 3) return false;
+    if(list->find(2)->value != 2) return false;
     return true;
+}
+
+bool testLinkedListFind(LinkedList<int, int> *list)
+{
+    list->add(5, 5);
+    if(list->find(5)->value != 5) return false;
+    if(list->find(2)->value != 2) return false;
+    if(list->find(3)->value != 3) return false;
+    if(list->find(1)->value != 1) return false;
+    if(list->find(3)->value != 3) return false;
+    if(list->find(2)->value != 2) return false;
+    if(list->find(6) != NULL) return false;
+    return true; 
 }
 
 void printTestRes(bool res, std::string test_name)
@@ -31,6 +47,7 @@ void runAllTests()
 {
     LinkedList<int, int> *list = new LinkedList<int, int>();
     printTestRes(testLinkedListAdd(list), "LinkedList add test");
+    printTestRes(testLinkedListFind(list), "LinkedList add test");
 }
 
 int main(int argc, char** argv)
