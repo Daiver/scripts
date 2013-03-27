@@ -2,6 +2,8 @@
 
 #include <stdio.h>
 #include <string>
+#include <sstream>
+
 #include "hashtable.h"
 #include "linkedlist.h"
 
@@ -122,7 +124,7 @@ long strHash(std::string string)
     return hash ^ (hash >> 16);
 }
 
-bool testHashTableAdd(HashTable<std::string, int, strHash> *table)
+bool testHashTableAddFindAndDelete(HashTable<std::string, int, strHash> *table)
 {
     table->set("A", 12);
     if(table->size() != 1) return false;
@@ -136,13 +138,46 @@ bool testHashTableAdd(HashTable<std::string, int, strHash> *table)
     table->erase("daiver");
     if(table->size() != 1) return false;
     if(table->getOrDef("daiver", 0) != 0) return false;
+    table->erase("A");
+    if(table->size() != 0) return false;
+    if(table->getOrDef("A", 0) != 0) return false;
+    if(table->getOrDef("daiver", 0) != 0) return false;
+    return true;
+}
+
+bool testHashTableRandom1(HashTable<std::string, int, strHash> *table)
+{
+    long big_size = 1000000;
+    for(int i = 0; i < big_size; i++)
+    {
+        std::stringstream ss;
+        ss << i;
+        std::string tmp_key;
+        ss >> tmp_key;
+        //printf("%s\n", tmp_key.c_str());
+        table->set(tmp_key, i);
+        if(table->size() != i + 1) return false;
+        if(table->getOrDef(tmp_key, -1) != i) return false;
+    }
+    for(int i = 0; i < big_size; i++)
+    {
+        std::stringstream ss;
+        ss << i;
+        std::string tmp_key;
+        ss >> tmp_key;
+        //printf("%s\n", tmp_key.c_str());
+        table->set(tmp_key, i*10);
+        //if(table->size() != i + 1) return false;
+        if(table->getOrDef(tmp_key, -1) != i*10) return false;
+    }
     return true;
 }
 
 void testHashTable()
 {
     HashTable<std::string, int, strHash> table;
-    printTestRes(testHashTableAdd(&table), "test HashTable Add");
+    printTestRes(testHashTableAddFindAndDelete(&table), "test HashTable Add");
+    printTestRes(testHashTableRandom1(&table), "test HashTable random");
 }
 
 void runAllTests()

@@ -8,7 +8,7 @@ class HashTable
 public:
     HashTable()
     {
-        this->sizeOfTable = 300;
+        this->sizeOfTable = 30000;
         this->_size = 0;
         this->values = new LinkedList<K, V> *[sizeOfTable];
         for(int i = 0; i < this->sizeOfTable; i++)
