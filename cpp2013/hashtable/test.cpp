@@ -145,9 +145,9 @@ bool testHashTableAddFindAndDelete(HashTable<std::string, int, strHash> *table)
     return true;
 }
 
-bool testHashTableRandom1(HashTable<std::string, int, strHash> *table)
+long big_size = 1000000;
+bool testHashTableBigData1(HashTable<std::string, int, strHash> *table)
 {
-    long big_size = 1000000;
     for(int i = 0; i < big_size; i++)
     {
         std::stringstream ss;
@@ -159,6 +159,11 @@ bool testHashTableRandom1(HashTable<std::string, int, strHash> *table)
         if(table->size() != i + 1) return false;
         if(table->getOrDef(tmp_key, -1) != i) return false;
     }
+    return true;
+}
+
+bool testHashTableBigData2(HashTable<std::string, int, strHash> *table)
+{
     for(int i = 0; i < big_size; i++)
     {
         std::stringstream ss;
@@ -167,9 +172,10 @@ bool testHashTableRandom1(HashTable<std::string, int, strHash> *table)
         ss >> tmp_key;
         //printf("%s\n", tmp_key.c_str());
         table->set(tmp_key, i*10);
-        //if(table->size() != i + 1) return false;
+        if(table->size() != big_size) return false;
         if(table->getOrDef(tmp_key, -1) != i*10) return false;
     }
+    printf("%ld\n", table->size());
     return true;
 }
 
@@ -177,7 +183,8 @@ void testHashTable()
 {
     HashTable<std::string, int, strHash> table;
     printTestRes(testHashTableAddFindAndDelete(&table), "test HashTable Add");
-    printTestRes(testHashTableRandom1(&table), "test HashTable random");
+    printTestRes(testHashTableBigData1(&table), "test HashTable big data1");
+    printTestRes(testHashTableBigData2(&table), "test HashTable big data2");
 }
 
 void runAllTests()
