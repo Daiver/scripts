@@ -15,9 +15,14 @@ public:
             this->values[i] = NULL;
     }
 
-    void add(const V& value, const K& key)
+    void set(const K& key, const V& value)
     {
         
+    }
+
+    V get(const K& key)
+    {
+        return 0;
     }
 
     ~HashTable()

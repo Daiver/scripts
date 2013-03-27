@@ -89,7 +89,7 @@ bool testLinkedListErase2(LinkedList<int, int> *list)
 
 void printTestRes(bool res, std::string test_name)
 {
-    printf("Test %s ", test_name.c_str());
+    printf(">Test %s ", test_name.c_str());
     if(res) printf("PASSED\n");
     else printf("FAILED\n");
 }
@@ -124,17 +124,24 @@ long strHash(std::string string)
 
 bool testHashTableAdd(HashTable<std::string, int, strHash> *table)
 {
-    std::string res = "A";
-    table->add(res, 12);
+    table->set("A", 12);
+    if(table->get("A") != 12)
+    {
+        return false;
+    }
     return true;
 }
 
 void testHashTable()
 {
-    
+    HashTable<std::string, int, strHash> table;
+    printTestRes(testHashTableAdd(&table), "test HashTable Add");
 }
 
 void runAllTests()
 {
+    printf("Testing linkedlist...\n");
     testLinkedList();
+    printf("Testing hashtable...\n");
+    testHashTable();
 }
