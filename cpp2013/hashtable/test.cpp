@@ -175,6 +175,32 @@ bool testHashTableBigData2(HashTable<std::string, int, strHash> *table)
         if(table->size() != big_size) return false;
         if(table->getOrDef(tmp_key, -1) != i*10) return false;
     }
+    return true;
+}
+
+bool testHashTableBigData3(HashTable<std::string, int, strHash> *table)
+{
+    int j = 0;
+    for(int i = 0; i < big_size; i += 2)
+    {
+        std::stringstream ss;
+        ss << i;
+        std::string tmp_key;
+        ss >> tmp_key;
+        table->erase(tmp_key);
+        j++;
+        //table->set(tmp_key, i*10);
+        if(table->size() != big_size - j) return false;
+        if(table->getOrDef(tmp_key, -1) != -1) return false;
+    }
+    for(int i = 1; i < big_size; i += 2)
+    {
+        std::stringstream ss;
+        ss << i;
+        std::string tmp_key;
+        ss >> tmp_key;
+        if(table->getOrDef(tmp_key, -1) != i*10) return false;
+    }
     printf("%ld\n", table->size());
     return true;
 }
@@ -185,6 +211,7 @@ void testHashTable()
     printTestRes(testHashTableAddFindAndDelete(&table), "test HashTable Add");
     printTestRes(testHashTableBigData1(&table), "test HashTable big data1");
     printTestRes(testHashTableBigData2(&table), "test HashTable big data2");
+    printTestRes(testHashTableBigData3(&table), "test HashTable big data3");
 }
 
 void runAllTests()
