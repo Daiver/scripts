@@ -125,11 +125,14 @@ long strHash(std::string string)
 bool testHashTableAdd(HashTable<std::string, int, strHash> *table)
 {
     table->set("A", 12);
-    printf("%d\n", table->get("A"));
-    if(table->get("A") != 12)
-    {
-        return false;
-    }
+    if(table->size() != 1) return false;
+    if(table->getOrDef("A", 0) != 12) return false;
+    table->set("A", 10);
+    if(table->size() != 1) return false;
+    if(table->getOrDef("A", 0) != 10) return false;
+    table->set("daiver", 128);
+    if(table->size() != 2) return false;
+    if(table->getOrDef("daiver", 0) != 128) return false;
     return true;
 }
 
