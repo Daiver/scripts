@@ -86,12 +86,18 @@ public:
         return true;
     }
 
-    void add(const K& key, const V& value)
+    ListItem<K, V> *add(const K& key, const V& value)
     {
         ListItem<K, V> *tmp = new ListItem<K, V>(key, value);
+        return this->add(tmp);
+    }
+
+    ListItem<K, V> *add(ListItem<K, V> *tmp)
+    {
         tmp->next = this->tail;
         this->tail = tmp;
         this->_size++;
+        return tmp;
     }
 
     long size()

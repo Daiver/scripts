@@ -10,9 +10,7 @@ public:
     {
         this->sizeOfTable = 30000;
         this->_size = 0;
-        this->values = new LinkedList<K, V> *[sizeOfTable];
-        for(int i = 0; i < this->sizeOfTable; i++)
-            this->values[i] = new LinkedList<K, V>();
+        this->create();
     }
 
     void set(const K& key, const V& value)
@@ -61,9 +59,7 @@ public:
 
     ~HashTable()
     {
-        for(int i = 0; i < this->sizeOfTable; i++)
-            delete this->values[i];
-        delete[] this->values;
+        this->clear();
     }
 
     long size()
@@ -77,7 +73,34 @@ private:
         return H(key) % this->sizeOfTable;
     }
 
+    void clear()
+    {
+        for(int i = 0; i < this->sizeOfTable; i++)
+            delete this->values[i];
+        delete[] this->values;
+    }
+
+    void create()
+    {
+        this->values = new LinkedList<K, V> *[sizeOfTable];
+        for(int i = 0; i < this->sizeOfTable; i++)
+            this->values[i] = new LinkedList<K, V>();
+    }
+
+    void reset()
+    {
+        this->clear();
+        this->create();
+    }
+
+    void expand()
+    {
+        HashTable<K, V, H> tmp_table;
+        this->reset();
+    }
+
     long sizeOfTable;
     long _size;
     LinkedList<K, V>** values;
+    LinkedList<K, V> linked_values;
 };
