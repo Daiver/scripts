@@ -133,6 +133,9 @@ bool testHashTableAdd(HashTable<std::string, int, strHash> *table)
     table->set("daiver", 128);
     if(table->size() != 2) return false;
     if(table->getOrDef("daiver", 0) != 128) return false;
+    table->erase("daiver");
+    if(table->size() != 1) return false;
+    if(table->getOrDef("daiver", 0) != 0) return false;
     return true;
 }
 

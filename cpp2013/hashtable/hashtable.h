@@ -45,6 +45,20 @@ public:
         return *tmp;
     }
 
+    bool erase(const K& key)
+    {
+        long index = this->getIndex(key);
+        bool res = this->values[index]->erase(key);
+        if(res)
+        {
+            this->_size--;
+            return true;
+        }
+        return false;
+        //if(NULL == tmp) return false;
+
+    }
+
     ~HashTable()
     {
         for(int i = 0; i < this->sizeOfTable; i++)
