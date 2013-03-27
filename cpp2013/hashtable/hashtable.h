@@ -12,17 +12,28 @@ public:
         this->size = 0;
         this->values = new LinkedList<K, V> *[sizeOfTable];
         for(int i = 0; i < this->sizeOfTable; i++)
-            this->values[i] = NULL;
+            this->values[i] = new LinkedList<K, V>();
     }
 
     void set(const K& key, const V& value)
     {
-        
+        long index = this->getIndex(key);
+        ListItem<K, V> *tmp = this->values[index]->find(key);
+        if(NULL == tmp)
+        {
+            this->values[index]->add(key, value);
+        }
+        else
+        {
+            tmp->value = value;
+        }
     }
 
     V get(const K& key)
     {
-        return 0;
+        long index = this->getIndex(key);
+        ListItem<K, V> *tmp = this->values[index]->find(key);
+        return tmp->value;
     }
 
     ~HashTable()
@@ -33,6 +44,11 @@ public:
     }
 
 private:
+    long getIndex(const K& key)
+    {
+        return H(key) % this->sizeOfTable;
+    }
+
     long sizeOfTable;
     long size;
     LinkedList<K, V>** values;

@@ -125,6 +125,7 @@ long strHash(std::string string)
 bool testHashTableAdd(HashTable<std::string, int, strHash> *table)
 {
     table->set("A", 12);
+    printf("%d\n", table->get("A"));
     if(table->get("A") != 12)
     {
         return false;
