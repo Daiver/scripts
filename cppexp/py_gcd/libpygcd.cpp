@@ -1,9 +1,15 @@
 #include <stdio.h>
 #include <dispatch/dispatch.h>
 
-void work3(int(*f)(void))
+void work3(void *(*f)(int))
 {
-    printf(">%d\n", f());
+    dispatch_queue_t queue = dispatch_queue_create("com.mydomain.myapp.longrunningfunction", DISPATCH_QUEUE_CONCURRENT);
+    int *r = new int [100];//10000;
+    for(int i = 0; i < 100; i++) r[i] = i;
+
+    dispatch_apply(100, queue, ^(size_t i) {
+        f(r[i]);
+    });
 }
 
 void work2(int i, int j)
