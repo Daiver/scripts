@@ -1,23 +1,23 @@
-class Container
+class MyCls
 {
 public:
-Container()
+MyCls()
 {this->value = new int[100];}
-~Container()
+~MyCls()
 {delete this->value;}
 
 int* value;
 };
 
-Container getContainer()
+MyCls getContainer()
 {
-Container res;
+MyCls res;
 return res;
 }
 
 int main()
 {
-Container res;
+MyCls res;
 res = getContainer();
 res.value[0] = 90;
 return 0;

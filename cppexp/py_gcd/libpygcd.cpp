@@ -3,12 +3,13 @@
 
 void work3(void *(*f)(int))
 {
-    dispatch_queue_t queue = dispatch_queue_create("com.mydomain.myapp.longrunningfunction", DISPATCH_QUEUE_CONCURRENT);
-    int *r = new int [100];//10000;
-    for(int i = 0; i < 100; i++) r[i] = i;
+    long count = 20;
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);//dispatch_queue_create("com.mydomain.myapp.longrunningfunction", DISPATCH_QUEUE_CONCURRENT);
+    //int *r = new int [count];//10000;
+    //for(int i = 0; i < count; i++) r[i] = i;
 
-    dispatch_apply(100, queue, ^(size_t i) {
-        f(r[i]);
+    dispatch_apply(count, queue, ^(size_t i) {
+        f(i);
     });
 }
 

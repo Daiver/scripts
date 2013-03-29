@@ -67,6 +67,12 @@ public:
         return this->_size;
     }
 
+    void reset()
+    {
+        this->clear();
+        this->create();
+    }
+
 private:
     long getIndex(const K& key)
     {
@@ -87,17 +93,6 @@ private:
             this->values[i] = new LinkedList<K, V>();
     }
 
-    void reset()
-    {
-        this->clear();
-        this->create();
-    }
-
-    void expand()
-    {
-        HashTable<K, V, H> tmp_table;
-        this->reset();
-    }
 
     long sizeOfTable;
     long _size;
