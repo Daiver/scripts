@@ -24,6 +24,47 @@ public:
 };
 
 template <class K, class V>
+class ListItemIterator
+{
+public:
+    ListItemIterator(ListItem<K, V>* item)
+    {
+        inner_item = item;
+    }
+
+    ListItemIterator& operator++ (int)
+    {
+        ListItemIterator<K, V> tmp(*this);
+        if(NULL != this->inner_item)
+            this->inner_item = this->inner_item->next;
+        return tmp;
+
+    }
+    
+    V& operator *()
+    {
+        return this->inner_item->value;
+    }
+
+    ListItemIterator& operator++ ()
+    {
+        if(NULL != this->inner_item)
+            this->inner_item = this->inner_item->next;
+        return *this;
+    }
+
+    bool operator==(const ListItemIterator<K, V>& o) const
+    {
+        return this->inner_item == o.inner_item;
+    }
+    bool operator!=(const ListItemIterator<K, V>& o) const { return !(*this == o); }
+
+
+private:
+    ListItem<K, V> *inner_item;
+};
+
+template <class K, class V>
 class LinkedList
 {
 public:
@@ -43,14 +84,16 @@ public:
         }
     }
 
-    ListItem<K, V> *begin()
+    //ListItem<K, V> *begin()
+    ListItemIterator<K, V> begin()
     {
-        return this->tail;
+        return ListItemIterator<K, V>(this->tail);
     }
 
-    ListItem<K, V> *end()
+    //ListItem<K, V> *end()
+    ListItemIterator<K, V> end()
     {
-        return NULL;
+        return ListItemIterator<K, V>(NULL);
     }
 
     ListItem<K, V> *find(const K& key)

@@ -9,8 +9,8 @@
 
 void printList(LinkedList<int, int> *list)
 {
-    for(auto it = list->begin(); it != list->end(); it = it->next)
-        printf("%d ", it->value);
+    for(auto it = list->begin(); it != list->end(); it++)
+        printf("%d ", (*it));
     printf("\n");
 }
 
@@ -27,6 +27,7 @@ bool testLinkedListAdd(LinkedList<int, int> *list)
     if(list->find(1)->value != 1) return false;
     if(list->find(3)->value != 3) return false;
     if(list->find(2)->value != 2) return false;
+    printList(list);
     return true;
 }
 
@@ -41,6 +42,7 @@ bool testLinkedListFind(LinkedList<int, int> *list)
     if(list->find(3)->value != 3) return false;
     if(list->find(2)->value != 2) return false;
     if(list->find(6) != NULL) return false;
+    printList(list);
     return true; 
 }
 
@@ -67,6 +69,7 @@ bool testLinkedListErase(LinkedList<int, int> *list)
     if(list->find(6) != NULL) return false;
     if(list->find(1) != NULL) return false;
     list->erase(3);
+    printList(list);
     if(list->size() != 1) return false;
     if(list->find(3) != NULL) return false;
     if(list->find(2)->value != 2) return false;
