@@ -1,3 +1,5 @@
+#ifndef __HASHTABLE_H__
+#define __HASHTABLE_H__
 #include <pthread.h>
 #include <stdio.h>
 
@@ -9,7 +11,7 @@ class HashTable
 public:
     HashTable()
     {
-        this->sizeOfTable = 300000;
+        this->sizeOfTable = 100000000;
         this->_size = 0;
         this->create();
     }
@@ -102,3 +104,15 @@ private:
     LinkedList<K, V>** values;
     LinkedList<K, ListItem<K, V> *> *linked_values;
 };
+
+template<class K, class V>
+class HashTableIterator : public ListItemIterator<K, ListItem<K, V> *>
+{
+public:
+    V& operator *()
+    {
+        return this->inner_item->value->value;
+    }
+};
+
+#endif

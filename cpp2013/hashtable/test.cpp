@@ -204,6 +204,11 @@ bool testHashTableBigData3(HashTable<std::string, int, strHash> *table)
     return true;
 }
 
+bool testHashTableManual(HashTable<std::string, int, strHash> *table)
+{
+    return true;
+}
+
 void testHashTable()
 {
     HashTable<std::string, int, strHash> table;
@@ -215,6 +220,8 @@ void testHashTable()
     printTestRes(testHashTableBigData1(&table), "test HashTable big data1");
     printTestRes(testHashTableBigData2(&table), "test HashTable big data2");
     printTestRes(testHashTableBigData3(&table), "test HashTable big data3");
+    table.reset();
+    printTestRes(testHashTableManual(&table), "test HashTable manual");
 }
 
 void runAllTests()
