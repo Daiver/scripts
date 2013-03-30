@@ -211,6 +211,10 @@ void testHashTable()
     printTestRes(testHashTableBigData1(&table), "test HashTable big data1");
     printTestRes(testHashTableBigData2(&table), "test HashTable big data2");
     printTestRes(testHashTableBigData3(&table), "test HashTable big data3");
+    table.reset();
+    printTestRes(testHashTableBigData1(&table), "test HashTable big data1");
+    printTestRes(testHashTableBigData2(&table), "test HashTable big data2");
+    printTestRes(testHashTableBigData3(&table), "test HashTable big data3");
 }
 
 void runAllTests()

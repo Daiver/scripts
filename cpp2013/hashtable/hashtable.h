@@ -1,4 +1,5 @@
 #include <pthread.h>
+#include <stdio.h>
 
 #include "linkedlist.h"
 
@@ -8,7 +9,7 @@ class HashTable
 public:
     HashTable()
     {
-        this->sizeOfTable = 30000;
+        this->sizeOfTable = 300000;
         this->_size = 0;
         this->create();
     }
@@ -20,7 +21,7 @@ public:
         if(NULL == tmp)
         {
             this->_size++;
-            this->values[index]->add(key, value);
+            this->linked_values->add(key, this->values[index]->add(key, value));
         }
         else
         {
@@ -52,9 +53,8 @@ public:
             this->_size--;
             return true;
         }
+        this->linked_values->erase(key);
         return false;
-        //if(NULL == tmp) return false;
-
     }
 
     ~HashTable()
@@ -70,6 +70,7 @@ public:
     void reset()
     {
         this->clear();
+        this->_size = 0;
         this->create();
     }
 
@@ -81,6 +82,7 @@ private:
 
     void clear()
     {
+        delete this->linked_values;
         for(int i = 0; i < this->sizeOfTable; i++)
             delete this->values[i];
         delete[] this->values;
@@ -88,6 +90,7 @@ private:
 
     void create()
     {
+        this->linked_values = new LinkedList<K, ListItem<K, V> *>();
         this->values = new LinkedList<K, V> *[sizeOfTable];
         for(int i = 0; i < this->sizeOfTable; i++)
             this->values[i] = new LinkedList<K, V>();
@@ -97,5 +100,5 @@ private:
     long sizeOfTable;
     long _size;
     LinkedList<K, V>** values;
-    LinkedList<K, V> linked_values;
+    LinkedList<K, ListItem<K, V> *> *linked_values;
 };
