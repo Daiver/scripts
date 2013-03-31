@@ -5,7 +5,7 @@
 
 #include "linkedlist.h"
 
-template<class K, class V>
+/*template<class K, class V>
 class HashTableIterator : public ListItemIterator<K, V>
 {
 public:
@@ -19,45 +19,16 @@ public:
     {
         this->inner_item = it.inner_item;
     }
-};
+};*/
 
 template <class K, class V, long H(K)>
 class HashTable
 {
 public:
-
-    ListItemIterator<K, ListItem<K, V> *> begin()
-    {
-        return this->linked_values->begin();
-    }
-
-    ListItemIterator<K, ListItem<K, V> *> end()
-    {
-        return this->linked_values->end();
-    }
-
-    HashTable()
-    {
-        this->sizeOfTable = 100000;
-        this->_size = 0;
-        this->create();
-    }
-
-    void set(const K& key, const V& value)
-    {
-        long index = this->getIndex(key);
-        ListItem<K, V> *tmp = this->values[index]->find(key);
-        if(NULL == tmp)
-        {
-            this->_size++;
-            this->linked_values->add(key, this->values[index]->add(key, value));
-        }
-        else
-        {
-            tmp->value = value;
-        }
-    }
-
+    ListItemIterator<K, ListItem<K, V> *> begin();
+    ListItemIterator<K, ListItem<K, V> *> end();
+    HashTable();
+    void set(const K& key, const V& value);
     V* get(const K& key);
     V getOrDef(const K& key, const V& def);
     bool erase(const K& key);
@@ -73,6 +44,42 @@ private:
     LinkedList<K, V>** values;
     LinkedList<K, ListItem<K, V> *> *linked_values;
 };
+
+template <class K, class V, long H(K)>
+ListItemIterator<K, ListItem<K, V> *> HashTable<K, V, H>::begin()
+{
+    return this->linked_values->begin();
+}
+
+template <class K, class V, long H(K)>
+ListItemIterator<K, ListItem<K, V> *> HashTable<K, V, H>::end()
+{
+    return this->linked_values->end();
+}
+
+template <class K, class V, long H(K)>
+HashTable<K, V, H>::HashTable()
+{
+    this->sizeOfTable = 100000;
+    this->_size = 0;
+    this->create();
+}
+
+template <class K, class V, long H(K)>
+void HashTable<K, V, H>::set(const K& key, const V& value)
+{
+    long index = this->getIndex(key);
+    ListItem<K, V> *tmp = this->values[index]->find(key);
+    if(NULL == tmp)
+    {
+        this->_size++;
+        this->linked_values->add(key, this->values[index]->add(key, value));
+    }
+    else
+    {
+        tmp->value = value;
+    }
+}
 
 template <class K, class V, long H(K)>
 V* HashTable<K, V, H>::get(const K& key)
