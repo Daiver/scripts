@@ -125,7 +125,7 @@ long strHash(std::string string)
 
 void printTable(HashTable<std::string, int, strHash> *table)
 {
-    for(auto it = table->begin(); it != table->end(); it++) printf("%d ", (*it)->value);
+    for(auto it = table->begin(); it != table->end(); it++) printf("%d ", (*it));
     printf("\n");
 }
 

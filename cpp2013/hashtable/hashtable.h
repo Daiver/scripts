@@ -5,6 +5,64 @@
 
 #include "linkedlist.h"
 
+template <class K, class V>
+class HashTableIterator
+{
+public:
+    HashTableIterator(ListItemIterator<K, ListItem<K, V>* > *item);
+
+    HashTableIterator& operator++ (int);
+    V& operator *();
+    HashTableIterator& operator++ ();
+    bool operator==(const HashTableIterator<K, V>& o) const;
+    bool operator!=(const HashTableIterator<K, V>& o) const;
+
+protected:
+    ListItem<K, ListItem<K, V> *> *inner_item;
+};
+
+template<class K, class V>
+HashTableIterator<K, V>::HashTableIterator(ListItemIterator<K, ListItem<K, V>* > *item)
+{
+    inner_item = item->getInner();
+}
+
+template<class K, class V>
+HashTableIterator<K, V>& HashTableIterator<K, V>::operator++ (int)
+{
+    HashTableIterator<K, V> tmp(*this);
+    if(NULL != this->inner_item)
+        this->inner_item = this->inner_item->next;
+    return tmp;
+}
+
+template<class K, class V>
+V& HashTableIterator<K, V>::operator *()
+{
+    return this->inner_item->value->value;
+}
+
+template<class K, class V>
+HashTableIterator<K, V>& HashTableIterator<K, V>::operator++ ()
+{
+    if(NULL != this->inner_item)
+        this->inner_item = this->inner_item->next;
+    return *this;
+}
+
+template<class K, class V>
+bool HashTableIterator<K, V>::operator==(const HashTableIterator<K, V>& o) const 
+{
+    return this->inner_item == o.inner_item;
+}
+
+template<class K, class V>
+bool HashTableIterator<K, V>::operator!=(const HashTableIterator<K, V>& o) const 
+{ 
+    return !(*this == o); 
+}
+
+
 /*template<class K, class V>
 class HashTableIterator : public ListItemIterator<K, V>
 {
@@ -12,21 +70,21 @@ public:
 
     V& operator *()
     {
-        return this->inner_item->value->value;
+        auto tmp = this->inner_item->value->value;
+        return tmp;
     }
 
-    HashTableIterator(ListItemIterator<K, V>& it)
-    {
-        this->inner_item = it.inner_item;
-    }
+    HashTableIterator(ListItemIterator<K, V>& it):ListItemIterator<K, V>(it){}
 };*/
 
 template <class K, class V, long H(K)>
 class HashTable
 {
 public:
-    ListItemIterator<K, ListItem<K, V> *> begin();
-    ListItemIterator<K, ListItem<K, V> *> end();
+    HashTableIterator<K, V> begin();
+    HashTableIterator<K, V> end();
+    //ListItemIterator<K, ListItem<K, V> *> begin();
+    //ListItemIterator<K, ListItem<K, V> *> end();
     HashTable();
     void set(const K& key, const V& value);
     V* get(const K& key);
@@ -46,15 +104,20 @@ private:
 };
 
 template <class K, class V, long H(K)>
-ListItemIterator<K, ListItem<K, V> *> HashTable<K, V, H>::begin()
+//ListItemIterator<K, ListItem<K, V> *> HashTable<K, V, H>::begin()
+HashTableIterator<K, V> HashTable<K, V, H>::begin()
 {
-    return this->linked_values->begin();
+    auto tmp = this->linked_values->begin();
+    HashTableIterator<K, V> tmp2(&tmp);
+    return tmp2;//this->linked_values->begin();
 }
 
 template <class K, class V, long H(K)>
-ListItemIterator<K, ListItem<K, V> *> HashTable<K, V, H>::end()
+//ListItemIterator<K, ListItem<K, V> *> HashTable<K, V, H>::end()
+HashTableIterator<K, V> HashTable<K, V, H>::end()
 {
-    return this->linked_values->end();
+    auto tmp = this->linked_values->end();
+    return HashTableIterator<K, V>(&tmp);//this->linked_values->end();
 }
 
 template <class K, class V, long H(K)>
