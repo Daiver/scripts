@@ -8,45 +8,13 @@ template <class K, class V>
 class LinkedList
 {
 public:
-    LinkedList()
-    {
-        this->tail = NULL;
-        this->_size = 0;
-    }
-    ~LinkedList()
-    {
-        ListItem<K, V> *tmp = this->tail;
-        while(tmp != NULL)
-        {
-            ListItem<K, V> *tmp2 = tmp;
-            tmp = tmp->next;
-            delete tmp2;
-        }
-    }
+    LinkedList();
+    ~LinkedList();
 
-    //ListItem<K, V> *begin()
-    ListItemIterator<K, V> begin()
-    {
-        return ListItemIterator<K, V>(this->tail);
-    }
-
-    //ListItem<K, V> *end()
-    ListItemIterator<K, V> end()
-    {
-        return ListItemIterator<K, V>(NULL);
-    }
-
-    ListItem<K, V> *find(const K& key)
-    {
-        ListItem<K, V> *tmp = this->tail;
-        while((tmp != NULL) && (tmp->key != key))
-            tmp = tmp->next;
-        return tmp;
-    }
-
+    ListItemIterator<K, V> begin();
+    ListItemIterator<K, V> end();
     bool erase(const K& key);
-
-
+    ListItem<K, V> *find(const K& key);
     ListItem<K, V> *add(const K& key, const V& value);
     ListItem<K, V> *add(ListItem<K, V> *tmp);
     long size();
@@ -56,6 +24,45 @@ private:
     long _size;
 };
 
+template<class K, class V>
+LinkedList<K, V>::LinkedList()
+{
+    this->tail = NULL;
+    this->_size = 0;
+}
+
+template<class K, class V>
+LinkedList<K, V>::~LinkedList()
+{
+    ListItem<K, V> *tmp = this->tail;
+    while(tmp != NULL)
+    {
+        ListItem<K, V> *tmp2 = tmp;
+        tmp = tmp->next;
+        delete tmp2;
+    }
+}
+
+template<class K, class V>
+ListItemIterator<K, V> LinkedList<K, V>::begin()
+{
+    return ListItemIterator<K, V>(this->tail);
+}
+
+template<class K, class V>
+ListItemIterator<K, V> LinkedList<K, V>::end()
+{
+    return ListItemIterator<K, V>(NULL);
+}
+
+template<class K, class V>
+ListItem<K, V> *LinkedList<K, V>::find(const K& key)
+{
+    ListItem<K, V> *tmp = this->tail;
+    while((tmp != NULL) && (tmp->key != key))
+        tmp = tmp->next;
+    return tmp;
+}
 
 template<class K, class V>
 bool LinkedList<K, V>::erase(const K& key)
