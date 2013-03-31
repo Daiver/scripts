@@ -2,7 +2,6 @@
 #define __LINKEDLIST_H__
 
 #include <stdio.h>
-
 #include "listitem.h"
 
 template <class K, class V>
@@ -84,16 +83,17 @@ public:
         return tmp;
     }
 
-    long size()
-    {
-        return this->_size;
-    }
+    long size();
 
 private:
     ListItem<K, V> *tail;
     long _size;
 };
 
-
+template<class K, class V>
+long LinkedList<K, V>::size()
+{
+    return this->_size;
+}
 
 #endif
