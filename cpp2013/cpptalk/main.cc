@@ -11,8 +11,8 @@ void lambdaTest();
 
 int main(int argc, char** argv)
 {
-    //autoTest();
-    lambdaTest();
+    autoTest();
+    //lambdaTest();
     //forTest();
     return 0;
 }
