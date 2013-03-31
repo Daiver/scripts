@@ -5,13 +5,40 @@
 
 #include "linkedlist.h"
 
+template<class K, class V>
+class HashTableIterator : public ListItemIterator<K, V>
+{
+public:
+
+    V& operator *()
+    {
+        return this->inner_item->value->value;
+    }
+
+    HashTableIterator(ListItemIterator<K, V>& it)
+    {
+        this->inner_item = it.inner_item;
+    }
+};
+
 template <class K, class V, long H(K)>
 class HashTable
 {
 public:
+
+    ListItemIterator<K, ListItem<K, V> *> begin()
+    {
+        return this->linked_values->begin();
+    }
+
+    ListItemIterator<K, ListItem<K, V> *> end()
+    {
+        return this->linked_values->end();
+    }
+
     HashTable()
     {
-        this->sizeOfTable = 100000000;
+        this->sizeOfTable = 100000;
         this->_size = 0;
         this->create();
     }
@@ -50,12 +77,12 @@ public:
     {
         long index = this->getIndex(key);
         bool res = this->values[index]->erase(key);
+        this->linked_values->erase(key);
         if(res)
         {
             this->_size--;
             return true;
         }
-        this->linked_values->erase(key);
         return false;
     }
 
@@ -105,14 +132,5 @@ private:
     LinkedList<K, ListItem<K, V> *> *linked_values;
 };
 
-template<class K, class V>
-class HashTableIterator : public ListItemIterator<K, ListItem<K, V> *>
-{
-public:
-    V& operator *()
-    {
-        return this->inner_item->value->value;
-    }
-};
 
 #endif

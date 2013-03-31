@@ -123,6 +123,12 @@ long strHash(std::string string)
     return hash ^ (hash >> 16);
 }
 
+void printTable(HashTable<std::string, int, strHash> *table)
+{
+    for(auto it = table->begin(); it != table->end(); it++) printf("%d ", (*it)->value);
+    printf("\n");
+}
+
 bool testHashTableAddFindAndDelete(HashTable<std::string, int, strHash> *table)
 {
     table->set("A", 12);
@@ -132,9 +138,11 @@ bool testHashTableAddFindAndDelete(HashTable<std::string, int, strHash> *table)
     if(table->size() != 1) return false;
     if(table->getOrDef("A", 0) != 10) return false;
     table->set("daiver", 128);
+    printTable(table);
     if(table->size() != 2) return false;
     if(table->getOrDef("daiver", 0) != 128) return false;
     table->erase("daiver");
+    printTable(table);
     if(table->size() != 1) return false;
     if(table->getOrDef("daiver", 0) != 0) return false;
     table->erase("A");
@@ -206,22 +214,25 @@ bool testHashTableBigData3(HashTable<std::string, int, strHash> *table)
 
 bool testHashTableManual(HashTable<std::string, int, strHash> *table)
 {
+    table->set("me", 0);
+
     return true;
 }
 
 void testHashTable()
 {
     HashTable<std::string, int, strHash> table;
+    printTestRes(testHashTableManual(&table), "test HashTable manual");
+    table.reset();
     printTestRes(testHashTableAddFindAndDelete(&table), "test HashTable Add");
     printTestRes(testHashTableBigData1(&table), "test HashTable big data1");
     printTestRes(testHashTableBigData2(&table), "test HashTable big data2");
-    printTestRes(testHashTableBigData3(&table), "test HashTable big data3");
+    //printTestRes(testHashTableBigData3(&table), "test HashTable big data3");
     table.reset();
     printTestRes(testHashTableBigData1(&table), "test HashTable big data1");
     printTestRes(testHashTableBigData2(&table), "test HashTable big data2");
-    printTestRes(testHashTableBigData3(&table), "test HashTable big data3");
+    //printTestRes(testHashTableBigData3(&table), "test HashTable big data3");
     table.reset();
-    printTestRes(testHashTableManual(&table), "test HashTable manual");
 }
 
 void runAllTests()
