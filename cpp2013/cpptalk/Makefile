@@ -1,5 +1,5 @@
-#CXX = g++
-CXX = clang++
+CXX = g++
+#CXX = clang++
 Options = -O3  -std=c++11
 
 main: main.cc 
