@@ -2,6 +2,7 @@
 #define __HASHTABLE_H__
 #include <pthread.h>
 #include <stdio.h>
+#include <string>
 
 #include "linkedlist.h"
 
@@ -78,19 +79,19 @@ public:
 };*/
 
 template <class K, class V, long H(K)>
-class HashTable
+class HashTableAbs
 {
 public:
     HashTableIterator<K, V> begin();
     HashTableIterator<K, V> end();
     //ListItemIterator<K, ListItem<K, V> *> begin();
     //ListItemIterator<K, ListItem<K, V> *> end();
-    HashTable();
+    HashTableAbs();
     void set(const K& key, const V& value);
     V* get(const K& key);
     V getOrDef(const K& key, const V& def);
     bool erase(const K& key);
-    ~HashTable();
+    ~HashTableAbs();
     long size();
     void reset();
 private:
@@ -104,8 +105,8 @@ private:
 };
 
 template <class K, class V, long H(K)>
-//ListItemIterator<K, ListItem<K, V> *> HashTable<K, V, H>::begin()
-HashTableIterator<K, V> HashTable<K, V, H>::begin()
+//ListItemIterator<K, ListItem<K, V> *> HashTableAbs<K, V, H>::begin()
+HashTableIterator<K, V> HashTableAbs<K, V, H>::begin()
 {
     auto tmp = this->linked_values->begin();
     HashTableIterator<K, V> tmp2(&tmp);
@@ -113,15 +114,15 @@ HashTableIterator<K, V> HashTable<K, V, H>::begin()
 }
 
 template <class K, class V, long H(K)>
-//ListItemIterator<K, ListItem<K, V> *> HashTable<K, V, H>::end()
-HashTableIterator<K, V> HashTable<K, V, H>::end()
+//ListItemIterator<K, ListItem<K, V> *> HashTableAbs<K, V, H>::end()
+HashTableIterator<K, V> HashTableAbs<K, V, H>::end()
 {
     auto tmp = this->linked_values->end();
     return HashTableIterator<K, V>(&tmp);//this->linked_values->end();
 }
 
 template <class K, class V, long H(K)>
-HashTable<K, V, H>::HashTable()
+HashTableAbs<K, V, H>::HashTableAbs()
 {
     this->sizeOfTable = 100000;
     this->_size = 0;
@@ -129,7 +130,7 @@ HashTable<K, V, H>::HashTable()
 }
 
 template <class K, class V, long H(K)>
-void HashTable<K, V, H>::set(const K& key, const V& value)
+void HashTableAbs<K, V, H>::set(const K& key, const V& value)
 {
     long index = this->getIndex(key);
     ListItem<K, V> *tmp = this->values[index]->find(key);
@@ -145,7 +146,7 @@ void HashTable<K, V, H>::set(const K& key, const V& value)
 }
 
 template <class K, class V, long H(K)>
-V* HashTable<K, V, H>::get(const K& key)
+V* HashTableAbs<K, V, H>::get(const K& key)
 {
     long index = this->getIndex(key);
     ListItem<K, V> *tmp = this->values[index]->find(key);
@@ -154,7 +155,7 @@ V* HashTable<K, V, H>::get(const K& key)
 }
 
 template <class K, class V, long H(K)>
-V HashTable<K, V, H>::getOrDef(const K& key, const V& def)
+V HashTableAbs<K, V, H>::getOrDef(const K& key, const V& def)
 {
     V* tmp = this->get(key);
     if(NULL == tmp) return def;
@@ -162,7 +163,7 @@ V HashTable<K, V, H>::getOrDef(const K& key, const V& def)
 }
 
 template <class K, class V, long H(K)>
-bool HashTable<K, V, H>::erase(const K& key)
+bool HashTableAbs<K, V, H>::erase(const K& key)
 {
     long index = this->getIndex(key);
     bool res = this->values[index]->erase(key);
@@ -176,19 +177,19 @@ bool HashTable<K, V, H>::erase(const K& key)
 }
 
 template <class K, class V, long H(K)>
-HashTable<K, V, H>::~HashTable()
+HashTableAbs<K, V, H>::~HashTableAbs()
 {
     this->clear();
 }
 
 template <class K, class V, long H(K)>
-long HashTable<K, V, H>::size()
+long HashTableAbs<K, V, H>::size()
 {
     return this->_size;
 }
 
 template <class K, class V, long H(K)>
-void HashTable<K, V, H>::reset()
+void HashTableAbs<K, V, H>::reset()
 {
     this->clear();
     this->_size = 0;
@@ -196,14 +197,14 @@ void HashTable<K, V, H>::reset()
 }
 
 template <class K, class V, long H(K)>
-long HashTable<K, V, H>::getIndex(const K& key)
+long HashTableAbs<K, V, H>::getIndex(const K& key)
 {
     return H(key) % this->sizeOfTable;
 }
 
 
 template <class K, class V, long H(K)>
-void HashTable<K, V, H>::create()
+void HashTableAbs<K, V, H>::create()
 {
     this->linked_values = new LinkedList<K, ListItem<K, V> *>();
     this->values = new LinkedList<K, V> *[sizeOfTable];
@@ -212,11 +213,27 @@ void HashTable<K, V, H>::create()
 }
 
 template <class K, class V, long H(K)>
-void HashTable<K, V, H>::clear()
+void HashTableAbs<K, V, H>::clear()
 {
     delete this->linked_values;
     for(int i = 0; i < this->sizeOfTable; i++)
         delete this->values[i];
     delete[] this->values;
 }
+
+/*long strSimpleHash(std::string string)
+{
+    size_t len = string.size();
+    long hash = 0;
+    for(size_t i = 0; i < len; ++i) 
+        hash = 65599 * hash + string[i];
+    return hash ^ (hash >> 16);
+}*/
+
+template <class K, class V, long H(K)>
+class HashTable:public HashTableAbs<K, V, H> {};
+
+//template <class V> 
+//class HashTable<std::string, V, strSimpleHash>:public HashTableAbs<std::string, V, strSimpleHash> {};
+
 #endif
