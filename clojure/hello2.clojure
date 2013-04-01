@@ -18,8 +18,35 @@
     )
 )
 ;(println (func 1000 10))
-(defn % [x y] (+ -1 x y))
-(println (map % [1, 2, 3] [4, 5, 6]))
-(println
-    (filter + [1, 2, 3])
+;(defn % [x y] (+ -1 x y))
+;(println (map % [1, 2, 3] [4, 5, 6]))
+;(println
+;    (filter + [1, 2, 3])
+;)
+
+;(defn func [x] (> x 5))
+;(defn func2 [x] (str x " "))
+
+;(println
+;    (filter func [1, 2, 3, 4, 5, 6, 7])
+;    (map func [1, 2, 3, 4, 5, 6, 7])
+;    (map func2 "so")
+;    (rest [1,2 ,3])
+;)
+
+(defn stacktest
+    [li n]
+    (if (== (count li) 0)
+        n
+        (stacktest 
+            (rest li) 
+            (if (.equals (first li) "{")
+                (+ n 1)
+                (- n 1)
+            )
+        )
+    )
 )
+(println (stacktest "{}{}{}" 0))
+
+
