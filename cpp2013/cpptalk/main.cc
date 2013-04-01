@@ -6,16 +6,8 @@
 #include <functional>
 
 void autoTest();
-void forTest();
 void lambdaTest();
-
-int main(int argc, char** argv)
-{
-    autoTest();
-    //lambdaTest();
-    //forTest();
-    return 0;
-}
+void forTest();
 
 template<class A, class B>
 auto sum(A a, B b) -> decltype(a + b)
@@ -23,11 +15,75 @@ auto sum(A a, B b) -> decltype(a + b)
     return a + b;
 }
 
+//void f()std:string
+//{/**/}
+int main(int argc, char** argv)
+{
+	//auto i = 5.0;
+	//i = new int[20];
+	//std::vector<std::string> vec;
+	//vec.push_back("Love");
+	//vec.push_back("and");
+	//vec.push_back("Peace");
+    std::vector<std::string> vec;
+    vec.push_back("Be");
+    vec.push_back("or");
+    vec.push_back("not");
+    vec.push_back("to");
+    vec.push_back("be");
+    char separator = '_';
+    std::for_each(vec.begin(), vec.end(), [](std::string s){
+        //std::cout<<s<<separator;
+    });
+    std::cout<<std::endl;
+    for(auto &s : vec)
+    {
+        std::cout<<s<<" ";
+    }
+
+	/*char separator = '_';*/
+    /*std::for_each(vec.begin(), vec.end(), [&separator](std::string s){
+        std::cout<<s<<separator;
+	separator = ' ';
+    });
+    std::cout<<std::endl;*/
+
+	//printf("\n%f\n", sum(1, 2.3));
+	//decltype(1 + 2.5)x;
+	//for(auto it = vec.begin(); it != vec.end(); it++)
+	//	printf("%s ", (*it).c_str());
+    //autoTest();
+    //lambdaTest();
+    //forTest();
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 void autoTest()
 {
-    /*auto i = 10;
+    auto i = 10;
     std::cout<<i<<std::endl;
-    i = 'A';
+    /*i = 'A';
     std::cout<<i<<std::endl;
     i = new int [10];
     std::cout<<i<<std::endl;
@@ -42,7 +98,7 @@ void autoTest()
         std::cout<<*it<<" ";
     }
     std::cout<<std::endl;
-    */
+    
     decltype(2 + 3.9) tmp;
     tmp = 10;
     printf("decl type test %f\n", tmp);
@@ -50,6 +106,7 @@ void autoTest()
     std::cout<<"Sum test2 "<<sum(1, 2.7) <<std::endl;
     printf("Sum test3 %d\n", sum(1, 2));
     printf("Sum test4 %f\n", sum(1, 2.5));
+    */
 }
 
 
@@ -61,7 +118,7 @@ void lambdaTest()
     vec.push_back("not");
     vec.push_back("to");
     vec.push_back("be");
-    
+    /*
     std::for_each(vec.begin(), vec.end(), [](std::string s){
         std::cout<<s<<" ";
     });
@@ -97,6 +154,7 @@ void lambdaTest()
         return f1(a)*10;
     };
     std::cout<<"f3 "<<f3(f2, 3)<<std::endl;
+    */
 }
 
 void forTest()

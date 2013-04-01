@@ -1,0 +1,25 @@
+;(println ((fn [] "hello")))
+;(def i 10)
+;(println i)
+;(defn somefunc
+;    []
+;    (def i 100)
+;    (def res (+ i 12))
+;    res
+;)
+;(println (somefunc))
+;(def v  (cycle [1, 2, 3, 4, 5]))
+;(println (take 100 v))
+;(println (if false 1 2))
+(def func 
+    (fn
+        [x y]
+        (take y (cycle [(* x x)]))
+    )
+)
+;(println (func 1000 10))
+(defn % [x y] (+ -1 x y))
+(println (map % [1, 2, 3] [4, 5, 6]))
+(println
+    (filter + [1, 2, 3])
+)
