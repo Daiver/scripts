@@ -40,13 +40,12 @@
         n
         (stacktest 
             (rest li) 
-            (if (.equals (first li) "{")
+            (if (= (first li) \{)
                 (+ n 1)
                 (- n 1)
             )
         )
     )
 )
-(println (stacktest "{}{}{}" 0))
-
+(println (stacktest "{{}}{}{}{" 0))
 
