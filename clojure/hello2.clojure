@@ -41,8 +41,11 @@
         (stacktest 
             (rest li) 
             (if (= (first li) \{)
-                (+ n 1)
-                (- n 1)
+                (concat n [\{])
+                (if (= (first li) (peek n))
+                    (pop n)
+                    (concat n (first li))
+                )
             )
         )
     )
