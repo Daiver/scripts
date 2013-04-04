@@ -47,6 +47,6 @@
         )
     )
 )
-(println (stacktest "{}{}{}" 0))
+;(println (stacktest "{}{}{}" 0))
 
 

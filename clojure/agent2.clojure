@@ -1,0 +1,14 @@
+(def a (agent 0))  ; начальное значение
+
+(send a inc)
+(println @a)  ; => 1
+
+(send a (fn [x] (Thread/sleep 10) (inc x)))
+(println @a)  ; => 1
+(send a inc)
+(println @a)  ; => 1
+
+(send a inc)
+(println @a)  ; => 2
+(Thread/sleep 10)
+(println @a)  ; => 2
