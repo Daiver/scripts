@@ -68,12 +68,14 @@ def assoc(img):
     img2 = np.zeros((img.shape[0], img.shape[1], 3))
     #img2[:] = img
     color = [0, 0, 200]
+    i = 0
     for x in res:
+        i += 1
         #print x['1']
         #print x['2']
         cv2.rectangle(img2, x['1'], x['2'], color)
         if len(x['points']) < 40: continue
-        for y in x['points']:img2[y[0], y[1]]=(100, 0, 0)
+        for y in x['points']:img2[y[0], y[1]]=(100*(i%3), 100*(i%4), 100*(i%5))
         cv2.imshow('.....', img2)
         #cv2.waitKey()
     cv2.imshow('...', img)
@@ -83,8 +85,8 @@ def assoc(img):
 
 if __name__ == '__main__':
     print 'loading images...'
-    imgL = cv2.pyrDown( cv2.imread('../gpu/aloeL.jpg') )  # downscale images for faster processing
-    imgR = cv2.pyrDown( cv2.imread('../gpu/aloeR.jpg') )
+    imgL = cv2.pyrDown( cv2.imread('aloeL.jpg') )  # downscale images for faster processing
+    imgR = cv2.pyrDown( cv2.imread('aloeR.jpg') )
 
     # disparity range is tuned for 'aloe' image pair
     window_size = 3
@@ -125,5 +127,5 @@ if __name__ == '__main__':
     cv2.imshow('left', imgL)
     cv2.imshow('right', imgR)
     cv2.imshow('disparity', (disp-min_disp)/num_disp)
-    #cv2.waitKey()
+    cv2.waitKey()
     cv2.destroyAllWindows()
