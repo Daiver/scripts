@@ -234,6 +234,7 @@ template <class K, class V, long H(K)>
 class HashTable:public HashTableAbs<K, V, H> {};
 
 //template <class V> 
-//class HashTable<std::string, V, strSimpleHash>:public HashTableAbs<std::string, V, strSimpleHash> {};
+template <std::string, class V, long strSimpleHash(std::string)>
+class HashTable:public HashTableAbs<std::string, V, strSimpleHash> {};
 
 #endif

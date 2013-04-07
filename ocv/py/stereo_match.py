@@ -104,10 +104,11 @@ if __name__ == '__main__':
         fullDP = False
     )
 
+
     print 'computing disparity...'
     disp = stereo.compute(imgL, imgR).astype(np.float32) / 16.0
 
-    print 'generating 3d point cloud...',
+    '''print 'generating 3d point cloud...',
     h, w = imgL.shape[:2]
     f = 0.8*w                          # guess for focal length
     Q = np.float32([[1, 0, 0, -0.5*w],
@@ -118,14 +119,14 @@ if __name__ == '__main__':
     colors = cv2.cvtColor(imgL, cv2.COLOR_BGR2RGB)
     mask = disp > disp.min()
     out_points = points[mask]
-    out_colors = colors[mask]
-    out_fn = 'out.ply'
-    write_ply('out.ply', out_points, out_colors)
+    out_colors = colors[mask]'''
+    #out_fn = 'out.ply'
+    #write_ply('out.ply', out_points, out_colors)
     print '%s saved' % 'out.ply'
     assoc(disp)
     print (disp-min_disp)/num_disp
     cv2.imshow('left', imgL)
     cv2.imshow('right', imgR)
     cv2.imshow('disparity', (disp-min_disp)/num_disp)
-    cv2.waitKey()
+    #cv2.waitKey()
     cv2.destroyAllWindows()
