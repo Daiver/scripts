@@ -4,9 +4,9 @@
 int main() {
     char var;
     cv::Mat img;
-    img = cv::imread("C:/test/img.jpg");
+    img = cv::imread("../tmp2/Image0.jpg");
     cv::namedWindow("Image");
     cv::imshow("Image", img);
-    std::cin >> var;
+    cv::waitKey();
     return 0;
 }
