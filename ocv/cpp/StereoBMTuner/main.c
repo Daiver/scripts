@@ -100,7 +100,9 @@ void computeStereoBM ( ChData *data )
 		NULL
 	);
 	//Update the depth image on the window
-    printf(">>>>%ld %ld\n", time(0), some_time);
+    printf(">>>>%ld \n", some_time);
+    time(&some_time);
+    printf("<<<<%ld \n", some_time);
 	gtk_image_set_from_pixbuf( data->image_depth, pix); 
 	
 }
