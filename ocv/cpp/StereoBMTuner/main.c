@@ -64,7 +64,6 @@ void computeStereoBM ( ChData *data )
 	GdkPixbuf *pix; 
 	IplImage *img;
 	uchar *ptr_dst;
-    printf("here\n");
 	cvFindStereoCorrespondenceBM ( 
 		data->cv_image_left,
 		data->cv_image_right, 
@@ -100,11 +99,11 @@ void computeStereoBM ( ChData *data )
 		NULL
 	);
 	//Update the depth image on the window
-    printf(">>>>%ld \n", some_time);
-    time(&some_time);
-    printf("<<<<%ld \n", some_time);
+    //printf(">>>>%ld \n", some_time);
+    //time(&some_time);
+    //printf("<<<<%ld \n", some_time);
 	gtk_image_set_from_pixbuf( data->image_depth, pix); 
-	
+	//exit(0);
 }
 
 
@@ -327,7 +326,6 @@ main( int    argc,
 
 	/* Create data */
 	data = g_slice_new(ChData);
-    printf("here\n");
 	
 	data->BMState = cvCreateStereoBMState(CV_STEREO_BM_BASIC, 64);
 	if(data->BMState == NULL)
@@ -335,7 +333,6 @@ main( int    argc,
 		fprintf(stderr,"ERROR: Could not create CvStereoBMState\n");
 		return 1;
 	}
-    printf("here\n");
 	data->cv_image_left = cvLoadImage(left_filename, 0);
 	if (data->cv_image_left == NULL) 
 	{
@@ -381,7 +378,6 @@ main( int    argc,
 		return( 1 );
 	}
  
-    printf("here\n");
 	/* Get main window pointer from UI */
 	data->main_window = GTK_WIDGET( gtk_builder_get_object( builder, "window1" ) );
 	data->image_left = GTK_IMAGE( gtk_builder_get_object( builder, "image_left" ) );
@@ -393,7 +389,6 @@ main( int    argc,
 	gtk_image_set_from_file ( data->image_right, right_filename );
 	
 	//TODO: Get all the BM Default parameters from the GUI definition
-    printf("here\n");
 	data->BMState->preFilterSize 		= 5;
 	data->BMState->preFilterCap 		= 63;//1;
 	data->BMState->SADWindowSize 		= 11;//5;
@@ -405,7 +400,6 @@ main( int    argc,
 	data->BMState->speckleRange		= 0;
 	
 	/* Execute first iteration */
-    printf("here!\n");
 	computeStereoBM ( data );
 	
 	/* Connect signals */
