@@ -15,6 +15,21 @@ inline long strSimpleHash(std::string string)
     return hash ^ (hash >> 16);
 }
 
+template<typename K>
+struct HashFunc
+{
+    typedef long (*type)(K);
+};
+
+template<typename K>
+struct DefaultHash;
+
+template<>
+struct DefaultHash<std::string>
+{
+    static constexpr HashFunc<std::string>::type func = &strSimpleHash;
+};
+
 template <class K, class V>
 class HashTableIterator
 {
@@ -87,7 +102,8 @@ public:
     HashTableIterator(ListItemIterator<K, V>& it):ListItemIterator<K, V>(it){}
 };*/
 
-template <class K, class V, long H(K)>
+//template <class K, class V, long H(K)>
+template <class K, class V, typename HashFunc<K>::type H = DefaultHash<K>::func>
 class HashTableAbs
 {
 public:
@@ -96,6 +112,7 @@ public:
     //ListItemIterator<K, ListItem<K, V> *> begin();
     //ListItemIterator<K, ListItem<K, V> *> end();
     HashTableAbs();
+    HashTableAbs(K *keys, V* values, long count);
     void set(const K& key, const V& value);
     V* get(const K& key);
     V getOrDef(const K& key, const V& def);
@@ -111,9 +128,22 @@ private:
     long _size;
     LinkedList<K, V>** values;
     LinkedList<K, ListItem<K, V> *> *linked_values;
+    bool operator==(const HashTableAbs<K, V, H>& o) const {}
+    bool operator!=(const HashTableAbs<K, V, H>& o) const {}
 };
 
-template <class K, class V, long H(K)>
+
+template <class K, class V, typename HashFunc<K>::type H>
+HashTableAbs<K, V, H>::HashTableAbs(K *keys, V* values, long count)
+{
+    for(long i = 0; i < count; i++)
+    {
+        this->set(keys[i], values[i]);
+    }
+}
+
+//template <class K, class V, long H(K)>
+template <class K, class V, typename HashFunc<K>::type H>
 //ListItemIterator<K, ListItem<K, V> *> HashTableAbs<K, V, H>::begin()
 HashTableIterator<K, V> HashTableAbs<K, V, H>::begin()
 {
@@ -122,7 +152,8 @@ HashTableIterator<K, V> HashTableAbs<K, V, H>::begin()
     return tmp2;//this->linked_values->begin();
 }
 
-template <class K, class V, long H(K)>
+//template <class K, class V, long H(K)>
+template <class K, class V, typename HashFunc<K>::type H>
 //ListItemIterator<K, ListItem<K, V> *> HashTableAbs<K, V, H>::end()
 HashTableIterator<K, V> HashTableAbs<K, V, H>::end()
 {
@@ -130,7 +161,9 @@ HashTableIterator<K, V> HashTableAbs<K, V, H>::end()
     return HashTableIterator<K, V>(&tmp);//this->linked_values->end();
 }
 
-template <class K, class V, long H(K)>
+//template <class K, class V, long H(K)>+
+
+template <class K, class V, typename HashFunc<K>::type H>
 HashTableAbs<K, V, H>::HashTableAbs()
 {
     this->sizeOfTable = 100000;
@@ -138,7 +171,8 @@ HashTableAbs<K, V, H>::HashTableAbs()
     this->create();
 }
 
-template <class K, class V, long H(K)>
+//template <class K, class V, long H(K)>
+template <class K, class V, typename HashFunc<K>::type H>
 void HashTableAbs<K, V, H>::set(const K& key, const V& value)
 {
     long index = this->getIndex(key);
@@ -154,7 +188,8 @@ void HashTableAbs<K, V, H>::set(const K& key, const V& value)
     }
 }
 
-template <class K, class V, long H(K)>
+//template <class K, class V, long H(K)>
+template <class K, class V, typename HashFunc<K>::type H>
 V* HashTableAbs<K, V, H>::get(const K& key)
 {
     long index = this->getIndex(key);
@@ -163,7 +198,8 @@ V* HashTableAbs<K, V, H>::get(const K& key)
     return &tmp->value;
 }
 
-template <class K, class V, long H(K)>
+//template <class K, class V, long H(K)>
+template <class K, class V, typename HashFunc<K>::type H>
 V HashTableAbs<K, V, H>::getOrDef(const K& key, const V& def)
 {
     V* tmp = this->get(key);
@@ -171,7 +207,8 @@ V HashTableAbs<K, V, H>::getOrDef(const K& key, const V& def)
     return *tmp;
 }
 
-template <class K, class V, long H(K)>
+//template <class K, class V, long H(K)>
+template <class K, class V, typename HashFunc<K>::type H>
 bool HashTableAbs<K, V, H>::erase(const K& key)
 {
     long index = this->getIndex(key);
@@ -185,19 +222,22 @@ bool HashTableAbs<K, V, H>::erase(const K& key)
     return false;
 }
 
-template <class K, class V, long H(K)>
+//template <class K, class V, long H(K)>
+template <class K, class V, typename HashFunc<K>::type H>
 HashTableAbs<K, V, H>::~HashTableAbs()
 {
     this->clear();
 }
 
-template <class K, class V, long H(K)>
+//template <class K, class V, long H(K)>
+template <class K, class V, typename HashFunc<K>::type H>
 long HashTableAbs<K, V, H>::size()
 {
     return this->_size;
 }
 
-template <class K, class V, long H(K)>
+//template <class K, class V, long H(K)>
+template <class K, class V, typename HashFunc<K>::type H>
 void HashTableAbs<K, V, H>::reset()
 {
     this->clear();
@@ -205,14 +245,16 @@ void HashTableAbs<K, V, H>::reset()
     this->create();
 }
 
-template <class K, class V, long H(K)>
+//template <class K, class V, long H(K)>
+template <class K, class V, typename HashFunc<K>::type H>
 long HashTableAbs<K, V, H>::getIndex(const K& key)
 {
     return H(key) % this->sizeOfTable;
 }
 
 
-template <class K, class V, long H(K)>
+//template <class K, class V, long H(K)>
+template <class K, class V, typename HashFunc<K>::type H>
 void HashTableAbs<K, V, H>::create()
 {
     this->linked_values = new LinkedList<K, ListItem<K, V> *>();
@@ -221,7 +263,8 @@ void HashTableAbs<K, V, H>::create()
         this->values[i] = new LinkedList<K, V>();
 }
 
-template <class K, class V, long H(K)>
+//template <class K, class V, long H(K)>
+template <class K, class V, typename HashFunc<K>::type H>
 void HashTableAbs<K, V, H>::clear()
 {
     delete this->linked_values;
@@ -230,11 +273,11 @@ void HashTableAbs<K, V, H>::clear()
     delete[] this->values;
 }
 
-template <class K, class V, long H(K)>
+//template <class K, class V, long H(K)>
+template <class K, class V, typename HashFunc<K>::type H = DefaultHash<K>::func>
 class HashTable:public HashTableAbs<K, V, H> {};
 
 template <class V> 
-//template <std::string, class V, long strSimpleHash(std::string)>
-class HashTable<std::string, V, strSimpleHash>:public HashTableAbs<std::string, V, strSimpleHash> {};
+class HashTable<std::string, V, DefaultHash<std::string>::func>:public HashTableAbs<std::string, V, DefaultHash<std::string>::func> {};
 
 #endif

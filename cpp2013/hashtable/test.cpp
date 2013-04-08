@@ -123,13 +123,13 @@ long strHash(std::string string)
     return hash ^ (hash >> 16);
 }
 
-void printTable(HashTable<std::string, int, strHash> *table)
+void printTable(HashTable<std::string, int> *table)
 {
     for(auto it = table->begin(); it != table->end(); it++) printf("%d ", (*it));
     printf("\n");
 }
 
-bool testHashTableAddFindAndDelete(HashTable<std::string, int, strHash> *table)
+bool testHashTableAddFindAndDelete(HashTable<std::string, int> *table)
 {
     table->set("A", 12);
     if(table->size() != 1) return false;
@@ -153,7 +153,7 @@ bool testHashTableAddFindAndDelete(HashTable<std::string, int, strHash> *table)
 }
 
 long big_size = 1000000;
-bool testHashTableBigData1(HashTable<std::string, int, strHash> *table)
+bool testHashTableBigData1(HashTable<std::string, int> *table)
 {
     for(int i = 0; i < big_size; i++)
     {
@@ -169,7 +169,7 @@ bool testHashTableBigData1(HashTable<std::string, int, strHash> *table)
     return true;
 }
 
-bool testHashTableBigData2(HashTable<std::string, int, strHash> *table)
+bool testHashTableBigData2(HashTable<std::string, int> *table)
 {
     for(int i = 0; i < big_size; i++)
     {
@@ -185,7 +185,7 @@ bool testHashTableBigData2(HashTable<std::string, int, strHash> *table)
     return true;
 }
 
-bool testHashTableBigData3(HashTable<std::string, int, strHash> *table)
+bool testHashTableBigData3(HashTable<std::string, int> *table)
 {
     int j = 0;
     for(int i = 0; i < big_size; i += 2)
@@ -212,7 +212,7 @@ bool testHashTableBigData3(HashTable<std::string, int, strHash> *table)
     return true;
 }
 
-bool testHashTableManual(HashTable<std::string, int, strHash> *table)
+bool testHashTableManual(HashTable<std::string, int> *table)
 {
     table->set("me", 0);
 
@@ -221,17 +221,16 @@ bool testHashTableManual(HashTable<std::string, int, strHash> *table)
 
 void testHashTable()
 {
-    HashTable<std::string, int, strHash> table;
+    HashTable<std::string, int> table;
+    HashTable<std::string, int, strHash> table2;
     printTestRes(testHashTableManual(&table), "test HashTable manual");
     table.reset();
     printTestRes(testHashTableAddFindAndDelete(&table), "test HashTable Add");
     printTestRes(testHashTableBigData1(&table), "test HashTable big data1");
     printTestRes(testHashTableBigData2(&table), "test HashTable big data2");
-    //printTestRes(testHashTableBigData3(&table), "test HashTable big data3");
     table.reset();
     printTestRes(testHashTableBigData1(&table), "test HashTable big data1");
     printTestRes(testHashTableBigData2(&table), "test HashTable big data2");
-    //printTestRes(testHashTableBigData3(&table), "test HashTable big data3");
     table.reset();
 }
 
