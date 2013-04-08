@@ -10,6 +10,7 @@ import numpy as np
 import cv2
 from Queue import Queue
 import numpy as np
+from time import time
 
 ply_header = '''ply
 format ascii 1.0
@@ -69,14 +70,31 @@ def assoc(img):
     #img2[:] = img
     color = [0, 0, 200]
     i = 0
+    colors = [
+            (0, 0, 0),
+            (100, 0, 0),
+            (0, 100, 0),
+            (0, 0, 100),
+            (80, 150, 0),
+            (150, 0, 100),
+            (0, 150, 150),
+            (255, 255, 255),
+            (200, 130, 80),
+            (0, 100, 200),
+            (100, 0, 130),
+            (80, 100, 110),
+            (90, 0, 190),
+            (50, 180, 90),
+            (90, 50, 150),
+        ]
     for x in res:
-        i += 1
         #print x['1']
         #print x['2']
         cv2.rectangle(img2, x['1'], x['2'], color)
-        if len(x['points']) < 40: continue
-        for y in x['points']:img2[y[0], y[1]]=(100*(i%3), 100*(i%4), 100*(i%5))
+        if len(x['points']) < 120: continue
+        for y in x['points']:img2[y[0], y[1]] = colors[i%len(colors)]
         cv2.imshow('.....', img2)
+        i += 1
         #cv2.waitKey()
     cv2.imshow('...', img)
     cv2.imshow('.....', img2)
@@ -106,6 +124,7 @@ if __name__ == '__main__':
 
 
     print 'computing disparity...'
+    st = time()
     disp = stereo.compute(imgL, imgR).astype(np.float32) / 16.0
 
     '''print 'generating 3d point cloud...',
@@ -122,11 +141,13 @@ if __name__ == '__main__':
     out_colors = colors[mask]'''
     #out_fn = 'out.ply'
     #write_ply('out.ply', out_points, out_colors)
-    print '%s saved' % 'out.ply'
+    print 't1', time() - st
+    st = time()
     assoc(disp)
+    print 't2', time() - st
     print (disp-min_disp)/num_disp
     cv2.imshow('left', imgL)
     cv2.imshow('right', imgR)
     cv2.imshow('disparity', (disp-min_disp)/num_disp)
-    #cv2.waitKey()
+    cv2.waitKey()
     cv2.destroyAllWindows()
