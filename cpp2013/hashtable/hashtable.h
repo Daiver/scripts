@@ -6,6 +6,15 @@
 
 #include "linkedlist.h"
 
+inline long strSimpleHash(std::string string)
+{
+    size_t len = string.size();
+    long hash = 0;
+    for(size_t i = 0; i < len; ++i) 
+        hash = 65599 * hash + string[i];
+    return hash ^ (hash >> 16);
+}
+
 template <class K, class V>
 class HashTableIterator
 {
@@ -221,20 +230,11 @@ void HashTableAbs<K, V, H>::clear()
     delete[] this->values;
 }
 
-/*long strSimpleHash(std::string string)
-{
-    size_t len = string.size();
-    long hash = 0;
-    for(size_t i = 0; i < len; ++i) 
-        hash = 65599 * hash + string[i];
-    return hash ^ (hash >> 16);
-}*/
-
 template <class K, class V, long H(K)>
 class HashTable:public HashTableAbs<K, V, H> {};
 
-//template <class V> 
-template <std::string, class V, long strSimpleHash(std::string)>
-class HashTable:public HashTableAbs<std::string, V, strSimpleHash> {};
+template <class V> 
+//template <std::string, class V, long strSimpleHash(std::string)>
+class HashTable<std::string, V, strSimpleHash>:public HashTableAbs<std::string, V, strSimpleHash> {};
 
 #endif
