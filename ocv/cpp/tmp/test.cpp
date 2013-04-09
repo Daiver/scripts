@@ -17,18 +17,9 @@ int main() {
     cv::Mat adjMap;
     cv::convertScaleAbs(res, adjMap, 255 / max);
     cv::imshow("Out", adjMap);
-    /*cv::Scalar norm = cv::sum(res);
-    int norm_2 = norm[0];
-    std::cout<<norm_2;
-    res /= norm_2;
-    std::cout<<res;*/
 
-    cv::namedWindow("left");
     cv::imshow("left", left);
-    cv::namedWindow("right");
     cv::imshow("right", right);
-    //cv::namedWindow("depth");
-    //cv::imshow("depth", res);
     cv::waitKey();
     return 0;
 }
