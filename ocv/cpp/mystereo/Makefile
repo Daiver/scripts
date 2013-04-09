@@ -6,10 +6,10 @@ LIBRARIES       := `pkg-config --cflags --libs  opencv` #-lopencv_imgproc -lopen
 
 .PHONY: all clean
 
-all: test
+all: main
 
-test: 
-	$(CC) $(CFLAGS) -o test test.cpp $(LIBRARIES)
+main: 
+	$(CC) $(CFLAGS) -o main main.cpp $(LIBRARIES)
 	
 clean:
 	rm -f *.o

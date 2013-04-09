@@ -1,0 +1,97 @@
+#include <vector>
+#include <queue>
+
+class Expander
+{
+	std::vector<int> steps;
+	int width, height;
+	Expander(int width, int height)
+	{
+		this->width  = width;
+		this->height = height;
+		steps.push_back(0);
+		steps.push_back(1);
+		steps.push_back(-1);
+	}
+
+	std::vector<Point> expand(Point pnt)
+	{
+		std::vector<Point> res;
+		for(int i = 0; i < 3; i++)
+			for(int j = 0; j < 3; j++)
+				if(this->steps[i] != 0 || this->steps[j] != 0)
+				{
+					Point tmp (pnt.X + steps[i], pnt.Y + steps[j]);
+					if (tmp.X >= 0 && tmp.Y >= 0 && tmp.Y < this->height && tmp.x < this->width)
+						res.push_back(tmp);
+				}
+		return res;
+	}
+};
+
+class Point
+{
+public:
+	int X;
+	int Y;
+	Point(int x, y)
+	{
+		this->X = x; this->Y = Y;
+	}	
+};
+
+class Component
+{
+public:
+	int X1, Y1, X2, Y2; //boundary box
+	std::vector<Point> points;
+};
+
+Component searchComponent(Point start, cv::Mat &depth_map, cv::Mat &mask, Expander& exp)
+{
+	std::queue<Point> qu;
+	qu.push(start);
+	Component cmp;
+	while(!qu.empty())
+	{
+		Point s = qu.pop();
+		std::vector<Point> tmp = exp.expand(p);
+		for(auto it = tmp.begin(); it != tmp.end(); it++)
+		{
+			mask[*it.X, *it.Y] = 1;
+			qu.push(*it);
+			cmp.points.push_back(*it);
+		}
+	}
+
+	int X1 = 1000000000, X2 = 100000000000, Y1 = 0, Y2 = 0;
+	for(auto it = cmp.points.begin(); it != cmp.points.end(); it++)
+	{
+		if(*it.X < X1) X1 = *it.X1;
+		if(*it.X > X2) X2 = *it.X2;
+		if(*it.Y < Y1) Y1 = *it.Y1;
+		if(*it.Y > Y2) Y2 = *it.Y2;
+	}
+	cmp.X1 = X1; cmp.X2 = X2; cmp.Y1 = Y1, cmp.Y2 = Y2;
+	return cmp;
+}
+
+std::vector<Component> segmentation(cv::Mat &depth_map)
+{
+	Expander exp(width, height);
+	std::vector<Component> res;
+	cv::Mat mask(width, height);//zeros mask
+	for(int i = 0; i < width; i++)
+	{	
+		for(int j = 0; j < height; j++)
+		{	
+			if(mask[i, j] == 0)
+			{
+				res.push_back(searchComponent(Point(i, j), depth_map, mask, exp));
+			}
+		}
+		
+	}
+
+	return res;
+}
