@@ -13,6 +13,13 @@ public:
     Point(int X, int Y) {this->X = X; this->Y = Y;}
 };
 
+class Component
+{
+public:
+    std::vector<Point> points;
+    int X1, X2, Y1, Y2;
+};
+
 class Expander
 {
 public:
@@ -22,15 +29,67 @@ public:
     {
         this->rows = rows;
         this->cols = cols;
-        steps.push_back(0);
+        steps.push_back(0); steps.push_back(-1); steps.push_back(1); 
+    }
+
+    std::vector<Point> expand(Point st)
+    {
+        std::vector<Point> res;
+        for(int i = 0; i < 3; i++)
+            for(int j = 0; j < 3; j++)
+                if (i !=0 || j != 0)
+                {
+                    Point tmp(st.X + this->steps[i], st.Y + this->steps[j]);
+                    if(tmp.X > -1 && tmp.Y > -1 && tmp.X < rows && tmp.Y < cols)
+                        res.push_back(tmp);
+                }
+        return res;
     }
 };
 
+Component searchComponent(Point st, cv::Mat const &map, cv::Mat const &mask, Expander &expander)
+{
+    Component com;
+    std::queue<Point> qu;
+    qu.push(st);
+    while(!qu.empty())
+    {
+        Point t = qu.front();
+        //std::cout<<t.X<<" "<<t.Y<<"\n";
+        qu.pop();
+        if(mask.data[t.X * mask.cols + t.Y] == 1) continue;
+        mask.data[t.X*map.cols + t.Y] = 1;
+        auto new_points = expander.expand(t);
+        for(auto it = new_points.begin(); it != new_points.end(); it++)
+        {
+            qu.push(*it);
+        }
+    }
+    return com;
+}
+
 void someWork(cv::Mat const &depth_map)
 {
+    Expander expander(depth_map.rows, depth_map.cols);
+    cv::Mat mask = cv::Mat::zeros(depth_map.rows, depth_map.cols, CV_16U);
+    std::vector<Component> components;
+    for(int i = 0; i < depth_map.rows; i++)
+    {
+        for(int j = 0; j < depth_map.cols; j++)
+        {
+            if (mask.data[i*depth_map.cols + j] == 0)
+                components.push_back(searchComponent(Point(i, j), depth_map, mask, expander));
+        }
+    }
+    /*auto tmp = expander.expand(Point(0, 0));
     //uint8_t* pixelPtr = (uint8_t*)depth_map.data;
     //std::cout << depth_map;
-    std::cout << (short)depth_map.data[0]; //[(depth_map.rows) * (depth_map.cols) - 1];
+    std::cout<<"!\n";
+    for(auto it = tmp.begin(); it != tmp.end(); it++)
+    {
+        std::cout<<it->X<<" "<<it->Y<<std::endl;
+    }
+    std::cout << (short)depth_map.data[0]; //[(depth_map.rows) * (depth_map.cols) - 1];*/
 }
 
 cv::Mat getDepthMap(cv::Mat const &left, cv::Mat const &right)
