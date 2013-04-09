@@ -62,7 +62,8 @@ Component searchComponent(Point st, cv::Mat const &map, cv::Mat const &mask, Exp
         auto new_points = expander.expand(t);
         for(auto it = new_points.begin(); it != new_points.end(); it++)
         {
-            qu.push(*it);
+            if (fabs(map.data[t.X*map.cols + t.Y] - map.data[it->X*map.cols + it->Y]) < 50)
+                qu.push(*it);
         }
     }
     return com;
@@ -131,5 +132,6 @@ int main(int argc, char **argv) {
     cv::imshow("left", left);
     cv::imshow("right", right);
     while (cv::waitKey() % 0x100 != 27){};
+
     return 0;
 }
