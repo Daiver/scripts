@@ -9,6 +9,11 @@ int main(int argc, char **argv) {
     //img = cv::imread("../tmp2/Image0.jpg");
     auto left_name  = "tsukuba/scene1.row3.col3.ppm";
     auto right_name = "tsukuba/scene1.row3.col5.ppm";
+    if (argc > 2)
+    {
+        left_name = argv[1];
+        right_name = argv[2];
+    }
     cv::Mat left  = cv::imread(left_name, CV_LOAD_IMAGE_GRAYSCALE);
     cv::Mat right = cv::imread(right_name, CV_LOAD_IMAGE_GRAYSCALE);
     cv::Mat res; 
