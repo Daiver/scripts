@@ -78,6 +78,17 @@ Component searchComponent(Point st, cv::Mat const &map, cv::Mat const &mask, Exp
             }
         }
     }
+    com.X1 = INT_MAX;
+    com.Y1 = INT_MAX;
+    com.X2 = 0;
+    com.Y2 = 0;
+    for(auto it = com.points.begin(); it != com.points.end(); it++)
+    {
+        if(it->X > com.X2) com.X2 = it->X;
+        if(it->X < com.X1) com.X1 = it->X;
+        if(it->Y > com.Y2) com.Y2 = it->Y;
+        if(it->Y < com.Y1) com.Y1 = it->Y;
+    }
     return com;
 }
 
@@ -102,17 +113,18 @@ void someWork(cv::Mat const &depth_map)
             }
         }
     }
-    std::cout<<"\n>>>"<<components.size()<<std::endl;
-    for(auto it = components.begin(); it != components.end(); it++)
+    std::cout<<"Num of components:>>>"<<components.size()<<std::endl;
+    /*for(auto it = components.begin(); it != components.end(); it++)
     {
-        if (it->points.size() < 1) continue;
+        if (it->points.size() < 5) continue;
         for(auto it2 = it->points.begin(); it2 != it->points.end(); it2++)
         {
             res.data[it2->X * res.cols + it2->Y] = 200;
         }
         cv::imshow("i ", normalize(res));
-        cv::waitKey();
-    }
+        cv::imshow("Out", depth_map);
+        //cv::waitKey();
+    }*/
     cv::imshow("i ", normalize(res));
 }
 
@@ -144,7 +156,7 @@ int main(int argc, char **argv) {
 
     cv::imshow("left", left);
     cv::imshow("right", right);
-    while (cv::waitKey() % 0x100 != 27){};
+    //while (cv::waitKey() % 0x100 != 27){};
 
     return 0;
 }
