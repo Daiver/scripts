@@ -57,7 +57,7 @@ public:
     }
 };
 
-Component searchComponent(Point st, cv::Mat const &map, cv::Mat const &mask, Expander &expander)
+Component searchComponent(Point st, cv::Mat const &map, cv::Mat const &mask, Expander &expander, int threshold)
 {
     Component com;
     std::queue<Point> qu;
@@ -70,7 +70,7 @@ Component searchComponent(Point st, cv::Mat const &map, cv::Mat const &mask, Exp
         auto new_points = expander.expand(t);
         for(auto it = new_points.begin(); it != new_points.end(); it++)
         {
-            if ((mask.data[it->X*map.cols + it->Y] == 0) && (abs(map.data[t.X*map.cols + t.Y] - map.data[it->X*map.cols + it->Y]) < 2))//10 for original
+            if ((mask.data[it->X*map.cols + it->Y] == 0) && (abs(map.data[t.X*map.cols + t.Y] - map.data[it->X*map.cols + it->Y]) < threshold))//10 for original
             {
                 com.points.push_back(*it);
                 mask.data[it->X*map.cols + it->Y] = 1;
@@ -92,13 +92,10 @@ Component searchComponent(Point st, cv::Mat const &map, cv::Mat const &mask, Exp
     return com;
 }
 
-void someWork(cv::Mat const &depth_map)
+std::vector<Component> associate(cv::Mat const &depth_map, int threshold)
 {
     Expander expander(depth_map.rows, depth_map.cols);
     cv::Mat mask = cv::Mat::zeros(depth_map.rows, depth_map.cols, cv::DataType<bool>::type);
-    //std::cout<<depth_map<<"\n";
-    std::cout<<">"<<depth_map.rows<<" "<<depth_map.cols<<"\n";
-    std::cout<<">"<<mask.rows<<" "<<mask.cols<<"\n";
     std::vector<Component> components;
     for(int i = 0; i < depth_map.rows; i++)
     {
@@ -107,25 +104,12 @@ void someWork(cv::Mat const &depth_map)
             if (mask.data[i*depth_map.cols + j] == 0)
             {
                 mask.data[i*depth_map.cols + j] = 1;
-                Component tmp = searchComponent(Point(i, j), depth_map, mask, expander);
+                Component tmp = searchComponent(Point(i, j), depth_map, mask, expander, threshold);
                 if (tmp.points.size() > 5) components.push_back(tmp);
             }
         }
     }
-    cv::Mat res = cv::Mat::zeros(depth_map.rows, depth_map.cols, depth_map.type());
-    std::cout<<"Num of components:>>>"<<components.size()<<std::endl;
-    for(auto it = components.begin(); it != components.end(); it++)
-    {
-        if (it->points.size() < 5) continue;
-        for(auto it2 = it->points.begin(); it2 != it->points.end(); it2++)
-        {
-            res.data[it2->X * res.cols + it2->Y] = 200;
-        }
-        cv::imshow("i ", normalize(res));
-        cv::imshow("Out", depth_map);
-        //cv::waitKey();
-    }
-    cv::imshow("i ", normalize(res));
+    return components;
 }
 
 cv::Mat getDepthMap(cv::Mat const &left, cv::Mat const &right)
@@ -149,14 +133,27 @@ int main(int argc, char **argv) {
     cv::Mat left  = cv::imread(left_name, CV_LOAD_IMAGE_GRAYSCALE);
     cv::Mat right = cv::imread(right_name, CV_LOAD_IMAGE_GRAYSCALE);
     //res[0][0] = 100;
-    cv::Mat map = getDepthMap(left, right);
-    someWork(normalize(map));
-    cv::Mat adjMap = normalize(map);
-    cv::imshow("Out", adjMap);
+    cv::Mat map = normalize(getDepthMap(left, right));
+    auto components = associate(normalize(map), 2);//10
+    cv::Mat res = cv::Mat::zeros(map.rows, map.cols, map.type());
+    std::cout<<"Num of components:>>>"<<components.size()<<std::endl;
+    for(auto it = components.begin(); it != components.end(); it++)
+    {
+        if (it->points.size() < 5) continue;
+        for(auto it2 = it->points.begin(); it2 != it->points.end(); it2++)
+        {
+            res.data[it2->X * res.cols + it2->Y] = 200;
+        }
+        cv::imshow("i ", normalize(res));
+        cv::imshow("Out", map);
+        cv::waitKey();
+    }
+    cv::imshow("i ", normalize(res));
+    cv::imshow("Out", map);
 
     cv::imshow("left", left);
     cv::imshow("right", right);
-    //while (cv::waitKey() % 0x100 != 27){};
+    while (cv::waitKey() % 0x100 != 27){};
 
     return 0;
 }
