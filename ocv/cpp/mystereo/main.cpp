@@ -100,7 +100,6 @@ void someWork(cv::Mat const &depth_map)
     std::cout<<">"<<depth_map.rows<<" "<<depth_map.cols<<"\n";
     std::cout<<">"<<mask.rows<<" "<<mask.cols<<"\n";
     std::vector<Component> components;
-    cv::Mat res = cv::Mat::zeros(depth_map.rows, depth_map.cols, depth_map.type());
     for(int i = 0; i < depth_map.rows; i++)
     {
         for(int j = 0; j < depth_map.cols; j++)
@@ -113,8 +112,9 @@ void someWork(cv::Mat const &depth_map)
             }
         }
     }
+    cv::Mat res = cv::Mat::zeros(depth_map.rows, depth_map.cols, depth_map.type());
     std::cout<<"Num of components:>>>"<<components.size()<<std::endl;
-    /*for(auto it = components.begin(); it != components.end(); it++)
+    for(auto it = components.begin(); it != components.end(); it++)
     {
         if (it->points.size() < 5) continue;
         for(auto it2 = it->points.begin(); it2 != it->points.end(); it2++)
@@ -124,7 +124,7 @@ void someWork(cv::Mat const &depth_map)
         cv::imshow("i ", normalize(res));
         cv::imshow("Out", depth_map);
         //cv::waitKey();
-    }*/
+    }
     cv::imshow("i ", normalize(res));
 }
 
