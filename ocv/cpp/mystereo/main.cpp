@@ -70,7 +70,7 @@ Component searchComponent(Point st, cv::Mat const &map, cv::Mat const &mask, Exp
         auto new_points = expander.expand(t);
         for(auto it = new_points.begin(); it != new_points.end(); it++)
         {
-            if ((mask.data[it->X*map.cols + it->Y] == 0) && (abs(map.data[t.X*map.cols + t.Y] - map.data[it->X*map.cols + it->Y]) < 10))
+            if ((mask.data[it->X*map.cols + it->Y] == 0) && (abs(map.data[t.X*map.cols + t.Y] - map.data[it->X*map.cols + it->Y]) < 2))//10 for original
             {
                 com.points.push_back(*it);
                 mask.data[it->X*map.cols + it->Y] = 1;
