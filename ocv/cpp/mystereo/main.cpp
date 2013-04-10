@@ -17,7 +17,7 @@ class Component
 {
 public:
     std::vector<Point> points;
-    int X1, X2, Y1, Y2;
+    int X1, X2, Y1, Y2, width, height;
 };
 
 cv::Mat normalize(cv::Mat const &depth_map)
@@ -89,6 +89,8 @@ Component searchComponent(Point st, cv::Mat const &map, cv::Mat const &mask, Exp
         if(it->Y > com.Y2) com.Y2 = it->Y;
         if(it->Y < com.Y1) com.Y1 = it->Y;
     }
+    com.width = com.Y2 - com.Y1;
+    com.height = com.X2 - com.X1;
     return com;
 }
 
@@ -121,8 +123,6 @@ cv::Mat getDepthMap(cv::Mat const &left, cv::Mat const &right)
 }
 
 int main(int argc, char **argv) {
-    //cv::Mat img;
-    //img = cv::imread("../tmp2/Image0.jpg");
     auto left_name  = "tsukuba/scene1.row3.col3.ppm";
     auto right_name = "tsukuba/scene1.row3.col5.ppm";
     if (argc > 2)
@@ -132,7 +132,6 @@ int main(int argc, char **argv) {
     }
     cv::Mat left  = cv::imread(left_name, CV_LOAD_IMAGE_GRAYSCALE);
     cv::Mat right = cv::imread(right_name, CV_LOAD_IMAGE_GRAYSCALE);
-    //res[0][0] = 100;
     cv::Mat map = normalize(getDepthMap(left, right));
     
     auto components = associate(normalize(map), 2);//10 2
@@ -142,20 +141,22 @@ int main(int argc, char **argv) {
     for(auto it = components.begin(); it != components.end(); it++)
     {
         if (it->points.size() < 5) continue;
+        res = cv::Mat::zeros(map.rows, map.cols, map.type());
         for(auto it2 = it->points.begin(); it2 != it->points.end(); it2++)
         {
             res.data[it2->X * res.cols + it2->Y] = 200;
         }
+        //cv::rectangle(res, cv::Point(it->Y2, it->X2), cv::Point(it->Y1, it->X1), cv::Scalar(220), -1, 8);
+        std::cout<<"w"<<it->width<<" h"<<it->height<<"\n";
         cv::imshow("i ", normalize(res));
         cv::imshow("Out", map);
         cv::waitKey();
     }
+
     cv::imshow("i ", normalize(res));
     cv::imshow("Out", map);
-
     cv::imshow("left", left);
     cv::imshow("right", right);
     while (cv::waitKey() % 0x100 != 27){};
-
     return 0;
 }
