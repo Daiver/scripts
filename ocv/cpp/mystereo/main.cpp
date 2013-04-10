@@ -134,7 +134,9 @@ int main(int argc, char **argv) {
     cv::Mat right = cv::imread(right_name, CV_LOAD_IMAGE_GRAYSCALE);
     //res[0][0] = 100;
     cv::Mat map = normalize(getDepthMap(left, right));
-    auto components = associate(normalize(map), 2);//10
+    
+    auto components = associate(normalize(map), 2);//10 2
+
     cv::Mat res = cv::Mat::zeros(map.rows, map.cols, map.type());
     std::cout<<"Num of components:>>>"<<components.size()<<std::endl;
     for(auto it = components.begin(); it != components.end(); it++)
