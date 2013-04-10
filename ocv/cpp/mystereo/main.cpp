@@ -20,12 +20,22 @@ public:
     int X1, X2, Y1, Y2;
 };
 
+cv::Mat normalize(cv::Mat const &depth_map)
+{
+    double min;
+    double max;
+    cv::minMaxIdx(depth_map, &min, &max);
+    cv::Mat adjMap;
+    cv::convertScaleAbs(depth_map, adjMap, 255 / max);
+    return adjMap;
+}
+
 class Expander
 {
 public:
     std::vector<int> steps;
     int rows, cols;
-    Expander(int row, int cols)
+    Expander(int rows, int cols)
     {
         this->rows = rows;
         this->cols = cols;
@@ -40,7 +50,7 @@ public:
                 if (i !=0 || j != 0)
                 {
                     Point tmp(st.X + this->steps[i], st.Y + this->steps[j]);
-                    if(tmp.X > -1 && tmp.Y > -1 && tmp.X < rows && tmp.Y < cols)
+                    if(tmp.X > -1 && tmp.Y > -1 && tmp.X < this->rows && tmp.Y < this->cols)
                         res.push_back(tmp);
                 }
         return res;
@@ -52,18 +62,21 @@ Component searchComponent(Point st, cv::Mat const &map, cv::Mat const &mask, Exp
     Component com;
     std::queue<Point> qu;
     qu.push(st);
+    com.points.push_back(st);
     while(!qu.empty())
     {
         Point t = qu.front();
-        //std::cout<<t.X<<" "<<t.Y<<"\n";
         qu.pop();
-        if(mask.data[t.X * mask.cols + t.Y] == 1) continue;
-        mask.data[t.X*map.cols + t.Y] = 1;
+        //if(mask.data[t.X * mask.cols + t.Y] == 1) continue;
         auto new_points = expander.expand(t);
         for(auto it = new_points.begin(); it != new_points.end(); it++)
         {
-            if (fabs(map.data[t.X*map.cols + t.Y] - map.data[it->X*map.cols + it->Y]) < 50)
+            if ((mask.data[it->X*map.cols + it->Y] == 0) && (abs(map.data[t.X*map.cols + t.Y] - map.data[it->X*map.cols + it->Y]) < 50))
+            {
+                com.points.push_back(*it);
+                mask.data[it->X*map.cols + it->Y] = 1;
                 qu.push(*it);
+            }
         }
     }
     return com;
@@ -72,16 +85,49 @@ Component searchComponent(Point st, cv::Mat const &map, cv::Mat const &mask, Exp
 void someWork(cv::Mat const &depth_map)
 {
     Expander expander(depth_map.rows, depth_map.cols);
-    cv::Mat mask = cv::Mat::zeros(depth_map.rows, depth_map.cols, CV_16U);
+    cv::Mat mask = cv::Mat::zeros(depth_map.rows, depth_map.cols, cv::DataType<bool>::type);
+    //std::cout<<depth_map<<"\n";
+    std::cout<<">"<<depth_map.rows<<" "<<depth_map.cols<<"\n";
+    std::cout<<">"<<mask.rows<<" "<<mask.cols<<"\n";
     std::vector<Component> components;
+    cv::Mat res = cv::Mat::zeros(depth_map.rows, depth_map.cols, depth_map.type());
     for(int i = 0; i < depth_map.rows; i++)
     {
         for(int j = 0; j < depth_map.cols; j++)
         {
-            if (mask.data[i*depth_map.cols + j] == 0)
-                components.push_back(searchComponent(Point(i, j), depth_map, mask, expander));
+            //res.data[200*res.cols + i*res.cols + j] = depth_map.data[i*depth_map.cols + j];
+            res.at<uchar>(i, j) = depth_map.at<uchar>(i, j);
         }
     }
+    /*for(int i = 0; i < depth_map.rows; i++)
+    {
+        for(int j = 0; j < depth_map.cols; j++)
+        {
+            if (mask.data[i*depth_map.cols + j] == 0)
+            {
+                mask.data[i*depth_map.cols + j] = 1;
+                Component tmp = searchComponent(Point(i, j), depth_map, mask, expander);
+                if (tmp.points.size() > 5) components.push_back(tmp);
+            }
+        }
+        //cv::imshow("i ", normalize(mask));
+        //cv::waitKey();
+    }
+    std::cout<<"\n>>>"<<components.size()<<std::endl;
+    for(auto it = components.begin(); it != components.end(); it++)
+    {
+        if (it->points.size() < 1) continue;
+        for(auto it2 = it->points.begin(); it2 != it->points.end(); it2++)
+        {
+            //std::cout<<it2->X<<" "<<it2->Y<<"\n";
+            res.data[it2->X * res.cols + it2->Y] = 200;
+        }
+        //cv::imshow("i ", normalize(res));
+        //cv::waitKey();
+    }*/
+    //std::cout<<mask;
+    cv::imshow("i ", normalize(res));
+    //cv::waitKey();
     /*auto tmp = expander.expand(Point(0, 0));
     //uint8_t* pixelPtr = (uint8_t*)depth_map.data;
     //std::cout << depth_map;
@@ -99,16 +145,6 @@ cv::Mat getDepthMap(cv::Mat const &left, cv::Mat const &right)
     cv::StereoBM bm(CV_STEREO_BM_NORMALIZED_RESPONSE);
     bm(left, right, res);
     return res;
-}
-
-cv::Mat normalize(cv::Mat const &depth_map)
-{
-    double min;
-    double max;
-    cv::minMaxIdx(depth_map, &min, &max);
-    cv::Mat adjMap;
-    cv::convertScaleAbs(depth_map, adjMap, 255 / max);
-    return adjMap;
 }
 
 int main(int argc, char **argv) {
