@@ -67,11 +67,10 @@ Component searchComponent(Point st, cv::Mat const &map, cv::Mat const &mask, Exp
     {
         Point t = qu.front();
         qu.pop();
-        //if(mask.data[t.X * mask.cols + t.Y] == 1) continue;
         auto new_points = expander.expand(t);
         for(auto it = new_points.begin(); it != new_points.end(); it++)
         {
-            if ((mask.data[it->X*map.cols + it->Y] == 0) && (abs(map.data[t.X*map.cols + t.Y] - map.data[it->X*map.cols + it->Y]) < 50))
+            if ((mask.data[it->X*map.cols + it->Y] == 0) && (abs(map.data[t.X*map.cols + t.Y] - map.data[it->X*map.cols + it->Y]) < 10))
             {
                 com.points.push_back(*it);
                 mask.data[it->X*map.cols + it->Y] = 1;
@@ -95,14 +94,6 @@ void someWork(cv::Mat const &depth_map)
     {
         for(int j = 0; j < depth_map.cols; j++)
         {
-            //res.data[200*res.cols + i*res.cols + j] = depth_map.data[i*depth_map.cols + j];
-            res.at<uchar>(i, j) = depth_map.at<uchar>(i, j);
-        }
-    }
-    /*for(int i = 0; i < depth_map.rows; i++)
-    {
-        for(int j = 0; j < depth_map.cols; j++)
-        {
             if (mask.data[i*depth_map.cols + j] == 0)
             {
                 mask.data[i*depth_map.cols + j] = 1;
@@ -110,8 +101,6 @@ void someWork(cv::Mat const &depth_map)
                 if (tmp.points.size() > 5) components.push_back(tmp);
             }
         }
-        //cv::imshow("i ", normalize(mask));
-        //cv::waitKey();
     }
     std::cout<<"\n>>>"<<components.size()<<std::endl;
     for(auto it = components.begin(); it != components.end(); it++)
@@ -119,24 +108,12 @@ void someWork(cv::Mat const &depth_map)
         if (it->points.size() < 1) continue;
         for(auto it2 = it->points.begin(); it2 != it->points.end(); it2++)
         {
-            //std::cout<<it2->X<<" "<<it2->Y<<"\n";
             res.data[it2->X * res.cols + it2->Y] = 200;
         }
-        //cv::imshow("i ", normalize(res));
-        //cv::waitKey();
-    }*/
-    //std::cout<<mask;
-    cv::imshow("i ", normalize(res));
-    //cv::waitKey();
-    /*auto tmp = expander.expand(Point(0, 0));
-    //uint8_t* pixelPtr = (uint8_t*)depth_map.data;
-    //std::cout << depth_map;
-    std::cout<<"!\n";
-    for(auto it = tmp.begin(); it != tmp.end(); it++)
-    {
-        std::cout<<it->X<<" "<<it->Y<<std::endl;
+        cv::imshow("i ", normalize(res));
+        cv::waitKey();
     }
-    std::cout << (short)depth_map.data[0]; //[(depth_map.rows) * (depth_map.cols) - 1];*/
+    cv::imshow("i ", normalize(res));
 }
 
 cv::Mat getDepthMap(cv::Mat const &left, cv::Mat const &right)
@@ -161,7 +138,7 @@ int main(int argc, char **argv) {
     cv::Mat right = cv::imread(right_name, CV_LOAD_IMAGE_GRAYSCALE);
     //res[0][0] = 100;
     cv::Mat map = getDepthMap(left, right);
-    someWork(map);
+    someWork(normalize(map));
     cv::Mat adjMap = normalize(map);
     cv::imshow("Out", adjMap);
 
