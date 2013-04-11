@@ -12,3 +12,5 @@
 (println @a)  ; => 2
 (Thread/sleep 10)
 (println @a)  ; => 2
+(send a inc)
+(println @a)  ; => 2
