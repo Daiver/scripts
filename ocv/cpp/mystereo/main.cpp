@@ -18,6 +18,7 @@ class Component
 public:
     std::vector<Point> points;
     int X1, X2, Y1, Y2, width, height;
+    double std, mean;
 };
 
 cv::Mat normalize(cv::Mat const &depth_map)
@@ -70,7 +71,7 @@ Component searchComponent(Point st, cv::Mat const &map, cv::Mat const &mask, Exp
         auto new_points = expander.expand(t);
         for(auto it = new_points.begin(); it != new_points.end(); it++)
         {
-            if ((mask.data[it->X*map.cols + it->Y] == 0) && (abs(map.data[t.X*map.cols + t.Y] - map.data[it->X*map.cols + it->Y]) < threshold))//10 for original
+            if ((mask.data[it->X*map.cols + it->Y] == 0) && (abs(map.data[t.X*map.cols + t.Y] - map.data[it->X*map.cols + it->Y]) < threshold)) 
             {
                 com.points.push_back(*it);
                 mask.data[it->X*map.cols + it->Y] = 1;
@@ -82,13 +83,23 @@ Component searchComponent(Point st, cv::Mat const &map, cv::Mat const &mask, Exp
     com.Y1 = INT_MAX;
     com.X2 = 0;
     com.Y2 = 0;
+    double sum = 0;
     for(auto it = com.points.begin(); it != com.points.end(); it++)
     {
         if(it->X > com.X2) com.X2 = it->X;
         if(it->X < com.X1) com.X1 = it->X;
         if(it->Y > com.Y2) com.Y2 = it->Y;
         if(it->Y < com.Y1) com.Y1 = it->Y;
+        sum += map.data[it->X*map.cols + it->Y];
     }
+    double somemean = sum/com.points.size();
+    sum = 0;
+    for(auto it = com.points.begin(); it != com.points.end(); it++)
+    {
+        sum += pow(map.data[it->X*map.cols + it->Y], 2) - pow(somemean, 2);
+    }
+    com.std = sum/(com.points.size() - 1);
+    com.mean = somemean;
     com.width = com.Y2 - com.Y1;
     com.height = com.X2 - com.X1;
     return com;
@@ -140,14 +151,14 @@ int main(int argc, char **argv) {
     std::cout<<"Num of components:>>>"<<components.size()<<std::endl;
     for(auto it = components.begin(); it != components.end(); it++)
     {
-        if (it->points.size() < 5) continue;
+        if (it->points.size() < 30) continue;
         res = cv::Mat::zeros(map.rows, map.cols, map.type());
         for(auto it2 = it->points.begin(); it2 != it->points.end(); it2++)
         {
             res.data[it2->X * res.cols + it2->Y] = 200;
         }
         //cv::rectangle(res, cv::Point(it->Y2, it->X2), cv::Point(it->Y1, it->X1), cv::Scalar(220), -1, 8);
-        std::cout<<"w"<<it->width<<" h"<<it->height<<"\n";
+        std::cout<<"w"<<it->width<<" h"<<it->height<<" std "<<it->std<<" mean "<<it->mean<<"\n";
         cv::imshow("i ", normalize(res));
         cv::imshow("Out", map);
         cv::waitKey();
