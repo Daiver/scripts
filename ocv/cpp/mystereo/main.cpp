@@ -129,9 +129,9 @@ cv::Mat getDepthMap(cv::Mat const &left, cv::Mat const &right)
 {
     cv::Mat res; 
     cv::StereoBM bm(CV_STEREO_BM_NORMALIZED_RESPONSE);
-    bm(left, right, res);
+    //bm(left, right, res);
     //std::cout<<res;
-    std::cout<<"type "<<res.type()<<"\n";
+    /*std::cout<<"type "<<res.type()<<"\n";
     cv::Mat tmp = cv::Mat::zeros(res.rows, res.cols, res.type());
     for(int i = 0; i < res.rows; i++)
     {
@@ -146,7 +146,7 @@ cv::Mat getDepthMap(cv::Mat const &left, cv::Mat const &right)
     cv::imshow("any", normalize(res));
     cv::waitKey();
     exit(0);
-    std::cout<<">depth "<<res.depth()<<"\n";
+    std::cout<<">depth "<<res.depth()<<"\n";*/
     cv::StereoVar var;
     var.levels = 3;                                 // ignored with USE_AUTO_PARAMS
     var.pyrScale = 0.5;                             // ignored with USE_AUTO_PARAMS
@@ -161,7 +161,8 @@ cv::Mat getDepthMap(cv::Mat const &left, cv::Mat const &right)
     var.cycle = var.CYCLE_V;                        // ignored with USE_AUTO_PARAMS
     var.flags = var.USE_SMART_ID | var.USE_AUTO_PARAMS | var.USE_INITIAL_DISPARITY | var.USE_MEDIAN_FILTERING ;
 
-    //var(left, right, res);
+    var(left, right, res);
+    
     return res;
 }
 
