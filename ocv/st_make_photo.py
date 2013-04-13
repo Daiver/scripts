@@ -28,6 +28,8 @@ if __name__ == "__main__":
         # handle events
         k = cv.WaitKey(10) % 0x100
         if k == 107:
-            cv.SaveImage('photos/left%s.jpg' % str(i), frame1) # "k" button
-            cv.SaveImage('photos/right%s.jpg' % str(i), frame0) # "k" button
+            nm = str(i)
+            if i < 10: nm = '0' + nm
+            cv.SaveImage('photos/left%s.jpg' % nm, frame1) # "k" button
+            cv.SaveImage('photos/right%s.jpg' % nm, frame0) # "k" button
             i+=1

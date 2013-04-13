@@ -131,20 +131,20 @@ cv::Mat getDepthMap(cv::Mat const &left, cv::Mat const &right)
     cv::StereoBM bm(CV_STEREO_BM_NORMALIZED_RESPONSE);
     bm(left, right, res);
     //std::cout<<res;
-    std::cout<<"type "<<res.type()<<"\n";
+    std::cout<<"type "<<res.type()<<" depth "<<res.depth()<<" channels "<<res.channels()<<"\n";
     cv::Mat tmp = cv::Mat::zeros(res.rows, res.cols, res.type());
     for(int i = 0; i < res.rows; i++)
     {
         for(int j = 0; j < res.cols; j++)
             {
-                    tmp.at<uchar>(i, j) = res.at<uchar>(i, j);
-                    std::cout << (int)res.at<uchar>(i, j) << " ";
+                    tmp.at<int>(i, j) = res.at<int>(i, j);
+                    std::cout << res.at<int>(i, j) << " ";
         }
         std::cout << std::endl;
     }
-    cv::imshow("some", normalize(tmp));
-    cv::imshow("any", normalize(res));
-    cv::waitKey();
+    cv::imshow("tmp", normalize(tmp));
+    cv::imshow("res", normalize(res));
+    while (1) {cv::waitKey();}
     exit(0);
     std::cout<<">depth "<<res.depth()<<"\n";
     cv::StereoVar var;
