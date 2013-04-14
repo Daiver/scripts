@@ -125,7 +125,7 @@ long strHash(std::string string)
 
 void printTable(HashTable<std::string, int> *table)
 {
-    for(auto it = table->begin(); it != table->end(); it++) printf("%d ", (*it));
+    for(auto it = table->begin(); it != table->end(); it++) printf("%s:%d ",it.Key().c_str(), (*it));
     printf("\n");
 }
 
@@ -215,6 +215,13 @@ bool testHashTableBigData3(HashTable<std::string, int> *table)
 bool testHashTableManual(HashTable<std::string, int> *table)
 {
     table->set("me", 0);
+    auto st = table->begin();
+    auto fin = table->end();
+    HashTable<std::string, int> table2(st, fin);
+    printf("show orig:\n");
+    printTable(table);
+    printf("show copy:\n");
+    printTable(&table2);
 
     return true;
 }
@@ -222,7 +229,6 @@ bool testHashTableManual(HashTable<std::string, int> *table)
 void testHashTable()
 {
     HashTable<std::string, int> table;
-    HashTable<std::string, int, strHash> table2;
     printTestRes(testHashTableManual(&table), "test HashTable manual");
     table.reset();
     printTestRes(testHashTableAddFindAndDelete(&table), "test HashTable Add");

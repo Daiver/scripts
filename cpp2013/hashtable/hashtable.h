@@ -35,7 +35,7 @@ class HashTableIterator
 {
 public:
     HashTableIterator(ListItemIterator<K, ListItem<K, V>* > *item);
-
+    K Key();
     HashTableIterator& operator++ (int);
     V& operator *();
     HashTableIterator& operator++ ();
@@ -45,6 +45,12 @@ public:
 protected:
     ListItem<K, ListItem<K, V> *> *inner_item;
 };
+
+template<class K, class V>
+K HashTableIterator<K, V>::Key()
+{
+    return this->inner_item->key;
+}
 
 template<class K, class V>
 HashTableIterator<K, V>::HashTableIterator(ListItemIterator<K, ListItem<K, V>* > *item)
@@ -87,22 +93,6 @@ bool HashTableIterator<K, V>::operator!=(const HashTableIterator<K, V>& o) const
     return !(*this == o); 
 }
 
-
-/*template<class K, class V>
-class HashTableIterator : public ListItemIterator<K, V>
-{
-public:
-
-    V& operator *()
-    {
-        auto tmp = this->inner_item->value->value;
-        return tmp;
-    }
-
-    HashTableIterator(ListItemIterator<K, V>& it):ListItemIterator<K, V>(it){}
-};*/
-
-//template <class K, class V, long H(K)>
 template <class K, class V, typename HashFunc<K>::type H = DefaultHash<K>::func>
 class HashTableAbs
 {
@@ -112,7 +102,6 @@ public:
     //ListItemIterator<K, ListItem<K, V> *> begin();
     //ListItemIterator<K, ListItem<K, V> *> end();
     HashTableAbs();
-    HashTableAbs(K *keys, V* values, long count);
     void set(const K& key, const V& value);
     V* get(const K& key);
     V getOrDef(const K& key, const V& def);
@@ -132,15 +121,6 @@ private:
     bool operator!=(const HashTableAbs<K, V, H>& o) const {}
 };
 
-
-template <class K, class V, typename HashFunc<K>::type H>
-HashTableAbs<K, V, H>::HashTableAbs(K *keys, V* values, long count)
-{
-    for(long i = 0; i < count; i++)
-    {
-        this->set(keys[i], values[i]);
-    }
-}
 
 //template <class K, class V, long H(K)>
 template <class K, class V, typename HashFunc<K>::type H>
@@ -275,9 +255,59 @@ void HashTableAbs<K, V, H>::clear()
 
 //template <class K, class V, long H(K)>
 template <class K, class V, typename HashFunc<K>::type H = DefaultHash<K>::func>
-class HashTable:public HashTableAbs<K, V, H> {};
+class HashTable:public HashTableAbs<K, V, H> 
+{
+public:
+    HashTable(HashTableIterator<K, V> &it, HashTableIterator<K, V> &end);
+    HashTable(K *keys, V* values, long count);
+    HashTable() {}
+};
+
+template <class K, class V, typename HashFunc<K>::type H>
+HashTable<K, V, H>::HashTable(HashTableIterator<K, V> &it, HashTableIterator<K, V> &end)
+{
+    for(; it != end; it++)
+    {
+        this->set(it.Key(), (*it));
+    }
+}
+
+template <class K, class V, typename HashFunc<K>::type H>
+HashTable<K, V, H>::HashTable(K *keys, V* values, long count)
+{
+    for(long i = 0; i < count; i++)
+    {
+        this->set(keys[i], values[i]);
+    }
+}
+
+
 
 template <class V> 
-class HashTable<std::string, V, DefaultHash<std::string>::func>:public HashTableAbs<std::string, V, DefaultHash<std::string>::func> {};
+class HashTable<std::string, V, DefaultHash<std::string>::func>:public HashTableAbs<std::string, V, DefaultHash<std::string>::func> 
+{
+public:
+    HashTable(HashTableIterator<std::string, V> &it, HashTableIterator<std::string, V> &end);
+    HashTable(std::string *keys, V* values, long count);
+    HashTable() {}
+};
+
+template <class V>
+HashTable<std::string, V, DefaultHash<std::string>::func >::HashTable(HashTableIterator<std::string, V> &it, HashTableIterator<std::string, V> &end)
+{
+    for(; it != end; it++)
+    {
+        this->set(it.Key(), (*it));
+    }
+}
+
+template <class V>
+HashTable<std::string, V, DefaultHash<std::string>::func >::HashTable(std::string *keys, V* values, long count)
+{
+    for(long i = 0; i < count; i++)
+    {
+        this->set(keys[i], values[i]);
+    }
+}
 
 #endif
