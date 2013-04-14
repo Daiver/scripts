@@ -178,6 +178,8 @@ int main(int argc, char **argv) {
     cv::Mat right = cv::imread(right_name, CV_LOAD_IMAGE_GRAYSCALE);
     cv::Mat map = normalize(getDepthMap(left, right));
     
+    cv::imshow("left", left);
+    cv::imshow("right", right);
     auto components = associate(normalize(map), 2);//10 2
 
     cv::Mat res = cv::Mat::zeros(map.rows, map.cols, map.type());
@@ -199,8 +201,6 @@ int main(int argc, char **argv) {
 
     cv::imshow("i ", normalize(res));
     cv::imshow("Out", map);
-    cv::imshow("left", left);
-    cv::imshow("right", right);
     while (cv::waitKey() % 0x100 != 27){};
     return 0;
 }
