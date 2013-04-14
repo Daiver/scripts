@@ -29,7 +29,19 @@ if __name__ == "__main__":
         k = cv.WaitKey(10) % 0x100
         if k == 107:
             nm = str(i)
-            if i < 10: nm = '0' + nm
+            #if i < 10: nm = '0' + nm
             cv.SaveImage('photos/left%s.jpg' % nm, frame1) # "k" button
             cv.SaveImage('photos/right%s.jpg' % nm, frame0) # "k" button
             i+=1
+    print 'saving stereo_calib.xml'
+    with open('photos/stereo_calib.xml', 'w') as f:
+        f.write('''<?xml version="1.0"?>
+        <opencv_storage>
+        <imagelist>
+        ''')
+        for j in xrange(i):
+            f.write('"left%s.jpg"\n' % str(j))
+            f.write('"right%s.jpg"\n' % str(j))
+        f.write('''</imagelist>
+        </opencv_storage>''')
+    print 'END'
