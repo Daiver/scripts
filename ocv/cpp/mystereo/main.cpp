@@ -71,7 +71,8 @@ Component searchComponent(Point st, cv::Mat const &map, cv::Mat const &mask, Exp
         auto new_points = expander.expand(t);
         for(auto it = new_points.begin(); it != new_points.end(); it++)
         {
-            if ((mask.data[it->X*map.cols + it->Y] == 0) && (abs(map.data[t.X*map.cols + t.Y] - map.data[it->X*map.cols + it->Y]) < threshold)) 
+            //if ((mask.data[it->X*map.cols + it->Y] == 0) && (abs(map.data[t.X*map.cols + t.Y] - map.data[it->X*map.cols + it->Y]) < threshold)) 
+            if ((mask.data[it->X*map.cols + it->Y] == 0) && (abs(map.at<uchar>(t.X, t.Y) - map.at<uchar>(it->X, it->Y)) < threshold)) 
             {
                 com.points.push_back(*it);
                 mask.data[it->X*map.cols + it->Y] = 1;
@@ -129,14 +130,14 @@ cv::Mat getDepthMapVar(cv::Mat const &left, cv::Mat const &right)
 {
     cv::Mat res;
     cv::StereoVar var;
-    var.levels = 3;                                 // ignored with USE_AUTO_PARAMS
+    var.levels = 3;//useless?                                 // ignored with USE_AUTO_PARAMS
     var.pyrScale = 0.5;                             // ignored with USE_AUTO_PARAMS
     var.nIt = 25;
     var.minDisp = ((left.cols/8) + 15) & -16;
     var.maxDisp = 0;
     var.poly_n = 3;
     var.poly_sigma = 0.0;
-    var.fi = 35.0f;
+    var.fi = 15.0f;//nice
     var.lambda = 0.03f;
     var.penalization = var.PENALIZATION_TICHONOV;   // ignored with USE_AUTO_PARAMS
     var.cycle = var.CYCLE_V;                        // ignored with USE_AUTO_PARAMS
@@ -164,11 +165,13 @@ int main(int argc, char **argv) {
     }
     cv::Mat left  = cv::imread(left_name, CV_LOAD_IMAGE_GRAYSCALE);
     cv::Mat right = cv::imread(right_name, CV_LOAD_IMAGE_GRAYSCALE);
-    cv::Mat map = normalize(getDepthMapVar(left, right));
+    //cv::Mat map = (getDepthMapBM(left, right));
+    cv::Mat map = (getDepthMapVar(left, right));
     
     cv::imshow("left", left);
     cv::imshow("right", right);
     auto components = associate(normalize(map), 2);//10 2
+    map = normalize(map);
 
     cv::Mat res = cv::Mat::zeros(map.rows, map.cols, map.type());
     std::cout<<"Num of components:>>>"<<components.size()<<std::endl;
@@ -178,7 +181,8 @@ int main(int argc, char **argv) {
         res = cv::Mat::zeros(map.rows, map.cols, map.type());
         for(auto it2 = it->points.begin(); it2 != it->points.end(); it2++)
         {
-            res.data[it2->X * res.cols + it2->Y] = 200;
+            //res.data[it2->X * res.cols + it2->Y] = 200;
+            res.at<uchar>(it2->X, it2->Y) = 200;
         }
         //cv::rectangle(res, cv::Point(it->Y2, it->X2), cv::Point(it->Y1, it->X1), cv::Scalar(220), -1, 8);
         std::cout<<"w"<<it->width<<" h"<<it->height<<" std "<<it->std<<" mean "<<it->mean<<" s/m "<<it->std/it->mean<<"\n";
