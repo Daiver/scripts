@@ -184,10 +184,10 @@ int main(int argc, char **argv) {
         for(auto it2 = it->points.begin(); it2 != it->points.end(); it2++)
         {
             //res.data[it2->X * res.cols + it2->Y] = 200;
-            res.at<uchar>(it2->X, it2->Y) = 200;
+            res.at<uchar>(it2->X, it2->Y) = 200; //short
         }
         //cv::rectangle(res, cv::Point(it->Y2, it->X2), cv::Point(it->Y1, it->X1), cv::Scalar(220), -1, 8);
-        std::cout<<"w"<<it->width<<" h"<<it->height<<" cX "<<it->centerX<<" cY "<<it->centerY<<" std "<<it->std<<" mean "<<it->mean<<" s/m "<<it->std/it->mean<<"\n";
+        std::cout<<"s "<<it->points.size()<<" w"<<it->width<<" h"<<it->height<<" cX "<<it->centerX<<" cY "<<it->centerY<<" std "<<it->std<<" mean "<<it->mean<<" s/m "<<it->std/it->mean<<"\n";
         cv::imshow("i ", normalize(res));
         cv::imshow("Out", map);
         cv::waitKey();
