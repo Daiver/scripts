@@ -17,7 +17,7 @@ class Component
 {
 public:
     std::vector<Point> points;
-    int X1, X2, Y1, Y2, width, height;
+    int X1, X2, Y1, Y2, width, height, centerX, centerY;
     double std, mean;
 };
 
@@ -103,6 +103,8 @@ Component searchComponent(Point st, cv::Mat const &map, cv::Mat const &mask, Exp
     com.mean = somemean;
     com.width = com.Y2 - com.Y1;
     com.height = com.X2 - com.X1;
+    com.centerX = com.X1 + com.height/2;
+    com.centerY = com.Y1 + com.width/2;
     return com;
 }
 
@@ -185,7 +187,7 @@ int main(int argc, char **argv) {
             res.at<uchar>(it2->X, it2->Y) = 200;
         }
         //cv::rectangle(res, cv::Point(it->Y2, it->X2), cv::Point(it->Y1, it->X1), cv::Scalar(220), -1, 8);
-        std::cout<<"w"<<it->width<<" h"<<it->height<<" std "<<it->std<<" mean "<<it->mean<<" s/m "<<it->std/it->mean<<"\n";
+        std::cout<<"w"<<it->width<<" h"<<it->height<<" cX "<<it->centerX<<" cY "<<it->centerY<<" std "<<it->std<<" mean "<<it->mean<<" s/m "<<it->std/it->mean<<"\n";
         cv::imshow("i ", normalize(res));
         cv::imshow("Out", map);
         cv::waitKey();
