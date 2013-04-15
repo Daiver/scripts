@@ -217,6 +217,7 @@ bool testHashTableManual(HashTable<std::string, int> *table)
     table->set("me", 0);
     auto st = table->begin();
     auto fin = table->end();
+    //printf("after create\n");
     HashTable<std::string, int> table2(st, fin);
     printf("show orig:\n");
     printTable(table);
@@ -228,6 +229,7 @@ bool testHashTableManual(HashTable<std::string, int> *table)
 
 void testHashTable()
 {
+    //printf("before test\n");
     HashTable<std::string, int> table;
     printTestRes(testHashTableManual(&table), "test HashTable manual");
     table.reset();

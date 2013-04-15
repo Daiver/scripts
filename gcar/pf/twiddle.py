@@ -30,7 +30,7 @@ def twiddle(estimate, p, tol = 0.2): #Make this tolerance bigger if you are timi
 
 
 if __name__ == '__main__':
-    p = [0, 0, 0]
+    p = [0, 0]
     def est(p):
        f = lambda p:p[0] * 2 + p[1] * 3 + p[2] * 1
        res = f(p)

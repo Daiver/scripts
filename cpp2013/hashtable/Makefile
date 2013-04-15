@@ -1,7 +1,7 @@
 CXX = g++
 #CXX = clang++
 Options = -O3 -std=c++11
-LIBS = -lpthread
+LIBS = 
 
 main: main.cc hashtable.h test.o
 	$(CXX) -o main main.cc test.o $(LIBS) $(Options)
