@@ -129,14 +129,14 @@ cv::Mat getDepthMapVar(cv::Mat const &left, cv::Mat const &right)
 {
     cv::Mat res;
     cv::StereoVar var;
-    var.levels = 1;                                 // ignored with USE_AUTO_PARAMS
+    var.levels = 3;                                 // ignored with USE_AUTO_PARAMS
     var.pyrScale = 0.5;                             // ignored with USE_AUTO_PARAMS
     var.nIt = 25;
     var.minDisp = ((left.cols/8) + 15) & -16;
     var.maxDisp = 0;
     var.poly_n = 3;
     var.poly_sigma = 0.0;
-    var.fi = 15.0f;
+    var.fi = 35.0f;
     var.lambda = 0.03f;
     var.penalization = var.PENALIZATION_TICHONOV;   // ignored with USE_AUTO_PARAMS
     var.cycle = var.CYCLE_V;                        // ignored with USE_AUTO_PARAMS
