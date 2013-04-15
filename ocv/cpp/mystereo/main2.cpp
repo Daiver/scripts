@@ -137,8 +137,8 @@ cv::Mat getDepthMap(cv::Mat const &left, cv::Mat const &right)
     {
         for(int j = 0; j < res.cols; j++)
             {
-                    tmp.at<int>(i, j) = res.at<int>(i, j);
-                    //std::cout << res.at<int>(i, j) << " ";
+                    tmp.at<short>(i, j) = res.at<short>(i, j);
+                    //std::cout << res.at<short>(i, j) << " ";
         }
         //std::cout << std::endl;
     }
