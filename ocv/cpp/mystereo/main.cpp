@@ -125,28 +125,9 @@ std::vector<Component> associate(cv::Mat const &depth_map, int threshold)
     return components;
 }
 
-cv::Mat getDepthMap(cv::Mat const &left, cv::Mat const &right)
+cv::Mat getDepthMapVar(cv::Mat const &left, cv::Mat const &right)
 {
-    cv::Mat res; 
-    cv::StereoBM bm(CV_STEREO_BM_NORMALIZED_RESPONSE);
-    //bm(left, right, res);
-    //std::cout<<res;
-    /*std::cout<<"type "<<res.type()<<"\n";
-    cv::Mat tmp = cv::Mat::zeros(res.rows, res.cols, res.type());
-    for(int i = 0; i < res.rows; i++)
-    {
-        for(int j = 0; j < res.cols; j++)
-            {
-                    tmp.at<uchar>(i, j) = res.at<uchar>(i, j);
-                    std::cout << (int)res.at<uchar>(i, j) << " ";
-        }
-        std::cout << std::endl;
-    }
-    cv::imshow("some", normalize(tmp));
-    cv::imshow("any", normalize(res));
-    cv::waitKey();
-    exit(0);
-    std::cout<<">depth "<<res.depth()<<"\n";*/
+    cv::Mat res;
     cv::StereoVar var;
     var.levels = 3;                                 // ignored with USE_AUTO_PARAMS
     var.pyrScale = 0.5;                             // ignored with USE_AUTO_PARAMS
@@ -162,7 +143,14 @@ cv::Mat getDepthMap(cv::Mat const &left, cv::Mat const &right)
     var.flags = var.USE_SMART_ID | var.USE_AUTO_PARAMS | var.USE_INITIAL_DISPARITY | var.USE_MEDIAN_FILTERING ;
 
     var(left, right, res);
-    
+    return res;
+}
+
+cv::Mat getDepthMapBM(cv::Mat const &left, cv::Mat const &right)
+{
+    cv::Mat res; 
+    cv::StereoBM bm(CV_STEREO_BM_NORMALIZED_RESPONSE);
+    bm(left, right, res);
     return res;
 }
 
@@ -176,7 +164,7 @@ int main(int argc, char **argv) {
     }
     cv::Mat left  = cv::imread(left_name, CV_LOAD_IMAGE_GRAYSCALE);
     cv::Mat right = cv::imread(right_name, CV_LOAD_IMAGE_GRAYSCALE);
-    cv::Mat map = normalize(getDepthMap(left, right));
+    cv::Mat map = normalize(getDepthMapVar(left, right));
     
     cv::imshow("left", left);
     cv::imshow("right", right);
