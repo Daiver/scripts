@@ -130,7 +130,7 @@ cv::Mat getDepthMapVar(cv::Mat const &left, cv::Mat const &right)
 {
     cv::Mat res;
     cv::StereoVar var;
-    var.levels = 3;//useless?                                 // ignored with USE_AUTO_PARAMS
+    var.levels = 3 // ignored with USE_AUTO_PARAMS (!)
     var.pyrScale = 0.5;                             // ignored with USE_AUTO_PARAMS
     var.nIt = 25;
     var.minDisp = ((left.cols/8) + 15) & -16;
