@@ -157,6 +157,29 @@ cv::Mat getDepthMapBM(cv::Mat const &left, cv::Mat const &right)
     return res;
 }
 
+void showComponents(std::vector<Component> &components, cv::Mat map)
+{
+    cv::Mat res = cv::Mat::zeros(map.rows, map.cols, map.type());
+    std::cout<<"Num of components:>>>"<<components.size()<<std::endl;
+    for(auto it = components.begin(); it != components.end(); it++)
+    {
+        if (it->points.size() < 30) continue;
+        res = cv::Mat::zeros(map.rows, map.cols, map.type());
+        for(auto it2 = it->points.begin(); it2 != it->points.end(); it2++)
+        {
+            res.at<uchar>(it2->X, it2->Y) = 200; //short
+        }
+        std::cout<<"s "<<it->points.size()<<" w"<<it->width<<" h"<<it->height<<" cX "<<it->centerX<<" cY "<<it->centerY<<" std "<<it->std<<" mean "<<it->mean<<" s/m "<<it->std/it->mean<<"\n";
+        cv::imshow("i ", normalize(res));
+        cv::imshow("Out", map);
+        cv::waitKey();
+    }
+
+    cv::imshow("i ", normalize(res));
+    cv::imshow("Out", map);
+
+}
+
 int main(int argc, char **argv) {
     auto left_name  = "tsukuba/scene1.row3.col3.ppm";
     auto right_name = "tsukuba/scene1.row3.col5.ppm";
@@ -174,27 +197,7 @@ int main(int argc, char **argv) {
     cv::imshow("right", right);
     auto components = associate(normalize(map), 2);//10 2
     map = normalize(map);
-
-    cv::Mat res = cv::Mat::zeros(map.rows, map.cols, map.type());
-    std::cout<<"Num of components:>>>"<<components.size()<<std::endl;
-    for(auto it = components.begin(); it != components.end(); it++)
-    {
-        if (it->points.size() < 30) continue;
-        res = cv::Mat::zeros(map.rows, map.cols, map.type());
-        for(auto it2 = it->points.begin(); it2 != it->points.end(); it2++)
-        {
-            //res.data[it2->X * res.cols + it2->Y] = 200;
-            res.at<uchar>(it2->X, it2->Y) = 200; //short
-        }
-        //cv::rectangle(res, cv::Point(it->Y2, it->X2), cv::Point(it->Y1, it->X1), cv::Scalar(220), -1, 8);
-        std::cout<<"s "<<it->points.size()<<" w"<<it->width<<" h"<<it->height<<" cX "<<it->centerX<<" cY "<<it->centerY<<" std "<<it->std<<" mean "<<it->mean<<" s/m "<<it->std/it->mean<<"\n";
-        cv::imshow("i ", normalize(res));
-        cv::imshow("Out", map);
-        cv::waitKey();
-    }
-
-    cv::imshow("i ", normalize(res));
-    cv::imshow("Out", map);
+    showComponents(components, map);
     while (cv::waitKey() % 0x100 != 27){};
     return 0;
 }
