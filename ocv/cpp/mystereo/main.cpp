@@ -193,7 +193,13 @@ void work(cv::Mat &left, cv::Mat &right)
 
 }
 
-int main(int argc, char **argv) {
+void videoWork(int argc, char**argv)
+{
+    if(argc < 3)
+    {
+        std::cout<<"Wrong num of args"<<std::endl;
+        return;
+    }
     std::cout<<argv[1]<<std::endl;
     cv::VideoCapture Lcap(argv[1]);
     cv::VideoCapture Rcap(argv[2]);
@@ -201,7 +207,7 @@ int main(int argc, char **argv) {
     {
         std::cout  << "Could not open reference " << argv[1] << std::endl;
         std::cout  << "Could not open reference " << argv[2] << std::endl;
-        return -1;
+        return ;
     }
     cv::Mat frame1;
     cv::Mat frame2;
@@ -217,7 +223,12 @@ int main(int argc, char **argv) {
         work(frame1, frame2);
         cv::waitKey(1);
     }
-    /*auto left_name  = "tsukuba/scene1.row3.col3.ppm";
+    while (cv::waitKey() % 0x100 != 27){};
+}
+
+void photoWork(int argc, char** argv)
+{
+    auto left_name  = "tsukuba/scene1.row3.col3.ppm";
     auto right_name = "tsukuba/scene1.row3.col5.ppm";
     if (argc > 2)
     {
@@ -226,7 +237,21 @@ int main(int argc, char **argv) {
     }
     cv::Mat left  = cv::imread(left_name, CV_LOAD_IMAGE_GRAYSCALE);
     cv::Mat right = cv::imread(right_name, CV_LOAD_IMAGE_GRAYSCALE);
-    work(left, right);*/
+    work(left, right);
     while (cv::waitKey() % 0x100 != 27){};
+
+}
+
+int main(int argc, char **argv) {
+    if(argc > 1 && (strcmp(argv[1], "-v") == 0))
+    {
+        std::cout<<"Video"<<std::endl;
+        videoWork(argc-1, argv+1);
+    }
+    else
+    {
+        std::cout<<"Photo"<<std::endl;
+        photoWork(argc, argv);
+    }
     return 0;
 }
