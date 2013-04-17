@@ -180,6 +180,19 @@ void showComponents(std::vector<Component> &components, cv::Mat map)
 
 }
 
+void work(cv::Mat &left, cv::Mat &right)
+{
+    cv::Mat map = (getDepthMapBM(left, right));
+    //cv::Mat map = (getDepthMapVar(left, right));
+    
+    cv::imshow("left", left);
+    cv::imshow("right", right);
+    auto components = associate(normalize(map), 2);//10 2
+    map = normalize(map);
+    showComponents(components, map);
+
+}
+
 int main(int argc, char **argv) {
     auto left_name  = "tsukuba/scene1.row3.col3.ppm";
     auto right_name = "tsukuba/scene1.row3.col5.ppm";
@@ -190,14 +203,7 @@ int main(int argc, char **argv) {
     }
     cv::Mat left  = cv::imread(left_name, CV_LOAD_IMAGE_GRAYSCALE);
     cv::Mat right = cv::imread(right_name, CV_LOAD_IMAGE_GRAYSCALE);
-    //cv::Mat map = (getDepthMapBM(left, right));
-    cv::Mat map = (getDepthMapVar(left, right));
-    
-    cv::imshow("left", left);
-    cv::imshow("right", right);
-    auto components = associate(normalize(map), 2);//10 2
-    map = normalize(map);
-    showComponents(components, map);
+    work(left, right);
     while (cv::waitKey() % 0x100 != 27){};
     return 0;
 }
