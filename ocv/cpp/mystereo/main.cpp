@@ -171,7 +171,6 @@ void showComponents(std::vector<Component> &components, cv::Mat map)
         }
         std::cout<<"s "<<it->points.size()<<" w"<<it->width<<" h"<<it->height<<" cX "<<it->centerX<<" cY "<<it->centerY<<" std "<<it->std<<" mean "<<it->mean<<" s/m "<<it->std/it->mean<<"\n";
         cv::imshow("i ", normalize(res));
-        cv::imshow("Out", map);
         cv::waitKey();
     }
 
@@ -189,12 +188,36 @@ void work(cv::Mat &left, cv::Mat &right)
     cv::imshow("right", right);
     auto components = associate(normalize(map), 2);//10 2
     map = normalize(map);
-    showComponents(components, map);
+    cv::imshow("Out", map);
+    //showComponents(components, map);
 
 }
 
 int main(int argc, char **argv) {
-    auto left_name  = "tsukuba/scene1.row3.col3.ppm";
+    std::cout<<argv[1]<<std::endl;
+    cv::VideoCapture Lcap(argv[1]);
+    cv::VideoCapture Rcap(argv[2]);
+    if (!Lcap.isOpened() || !Rcap.isOpened())
+    {
+        std::cout  << "Could not open reference " << argv[1] << std::endl;
+        std::cout  << "Could not open reference " << argv[2] << std::endl;
+        return -1;
+    }
+    cv::Mat frame1;
+    cv::Mat frame2;
+    while(1)
+    {
+        Lcap >> frame1;
+        Rcap >> frame2;
+        if (frame1.empty()) break;
+        cv::imshow("1", frame1);    
+        cv::imshow("2", frame2);    
+        cv::cvtColor(frame1, frame1, CV_RGB2GRAY);
+        cv::cvtColor(frame2, frame2, CV_RGB2GRAY);
+        work(frame1, frame2);
+        cv::waitKey(1);
+    }
+    /*auto left_name  = "tsukuba/scene1.row3.col3.ppm";
     auto right_name = "tsukuba/scene1.row3.col5.ppm";
     if (argc > 2)
     {
@@ -203,7 +226,7 @@ int main(int argc, char **argv) {
     }
     cv::Mat left  = cv::imread(left_name, CV_LOAD_IMAGE_GRAYSCALE);
     cv::Mat right = cv::imread(right_name, CV_LOAD_IMAGE_GRAYSCALE);
-    work(left, right);
+    work(left, right);*/
     while (cv::waitKey() % 0x100 != 27){};
     return 0;
 }
