@@ -179,16 +179,26 @@ void showComponents(std::vector<Component> &components, cv::Mat map)
 
 }
 
-void work(cv::Mat &left, cv::Mat &right)
+void work(cv::Mat &left_c, cv::Mat &right_c)
 {
+    cv::Mat left, right;
+    cv::cvtColor(left_c, left, CV_RGB2GRAY);
+    cv::cvtColor(right_c, right, CV_RGB2GRAY);
     cv::Mat map = (getDepthMapBM(left, right));
     //cv::Mat map = (getDepthMapVar(left, right));
     
-    cv::imshow("left", left);
-    cv::imshow("right", right);
     auto components = associate(normalize(map), 2);//10 2
+    cv::Mat res;
+    left_c.copyTo(res);
+    for(auto it : components)
+    {
+        cv::rectangle(res, cv::Point(it.Y1, it.X1), cv::Point(it.Y2, it.X2), cv::Scalar(255, 0, 0));
+    }
+    cv::imshow("left", left_c);
+    cv::imshow("right", right_c);
     map = normalize(map);
     cv::imshow("Out", map);
+    cv::imshow("res", res);
     //showComponents(components, map);
 
 }
@@ -216,14 +226,10 @@ void videoWork(int argc, char**argv)
         Lcap >> frame1;
         Rcap >> frame2;
         if (frame1.empty()) break;
-        cv::imshow("1", frame1);    
-        cv::imshow("2", frame2);    
-        cv::cvtColor(frame1, frame1, CV_RGB2GRAY);
-        cv::cvtColor(frame2, frame2, CV_RGB2GRAY);
         work(frame1, frame2);
         cv::waitKey(1);
     }
-    while (cv::waitKey() % 0x100 != 27){};
+    //while (cv::waitKey() % 0x100 != 27){};
 }
 
 void photoWork(int argc, char** argv)
@@ -235,8 +241,8 @@ void photoWork(int argc, char** argv)
         left_name = argv[1];
         right_name = argv[2];
     }
-    cv::Mat left  = cv::imread(left_name, CV_LOAD_IMAGE_GRAYSCALE);
-    cv::Mat right = cv::imread(right_name, CV_LOAD_IMAGE_GRAYSCALE);
+    cv::Mat left  = cv::imread(left_name);
+    cv::Mat right = cv::imread(right_name);
     work(left, right);
     while (cv::waitKey() % 0x100 != 27){};
 
