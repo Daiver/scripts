@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
-        <opencv_storage>
-        <imagelist>
-        "left0.jpg"
+<opencv_storage>
+<imagelist>
+"left0.jpg"
 "right0.jpg"
 "left1.jpg"
 "right1.jpg"
@@ -19,9 +19,5 @@
 "right7.jpg"
 "left8.jpg"
 "right8.jpg"
-"left9.jpg"
-"right9.jpg"
-"left10.jpg"
-"right10.jpg"
 </imagelist>
-        </opencv_storage>
+</opencv_storage>

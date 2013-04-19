@@ -7,8 +7,8 @@ if __name__ == "__main__":
     #DEVICE = int(sys.argv[1]) if len(sys.argv) > 1 else 0 #/dev/video0
     cv.NamedWindow('Camera0')
     cv.NamedWindow('Camera1')
-    capture0 = cv.CreateCameraCapture(0)
-    capture1 = cv.CreateCameraCapture(1)
+    capture0 = cv.CreateCameraCapture(1)
+    capture1 = cv.CreateCameraCapture(2)
     k = ''
     i = 0
     while k != 27 :

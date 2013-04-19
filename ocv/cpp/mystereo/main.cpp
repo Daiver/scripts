@@ -5,6 +5,34 @@
 #include <opencv2/contrib/contrib.hpp>
 #include <vector>
 #include <queue>
+#include <fstream>
+#include <stdio.h>
+
+void saveToPCD(cv::Mat &map, const char* fname)
+{
+    std::ofstream out(fname);
+    out<<"# .PCD v.7 - Point Cloud Data file format\n";
+    out<<"VERSION .7\n";
+    out<<"FIELDS x y z\n";
+    out<<"SIZE 2 2 2\n";
+    out<<"TYPE I I I\n";
+    out<<"COUNT 1 1 1\n";
+    char buf[512];
+    sprintf(buf, "WIDTH %d\nHEIGHT %d\n", map.cols, map.rows);
+    out<<buf;
+    out<<"VIEWPOINT 0 0 0 1 0 0 0\n";
+    sprintf(buf, "POINTS %d\nDATA ascii\n", map.cols*map.rows);
+    out<<buf;
+    for(int i = 0; i < map.rows; i++)
+    {
+        for(int j = 0; j < map.cols; j++)
+        {
+            sprintf(buf, "%d %d %d\n", i, j, map.at<short>(i, j));
+            out<<buf;
+        }
+    }
+    out.close();
+}
 
 class Point
 {
@@ -179,28 +207,85 @@ void showComponents(std::vector<Component> &components, cv::Mat map)
 
 }
 
-void work(cv::Mat &left_c, cv::Mat &right_c)
+std::vector<Component> componentsFilter(std::vector<Component> &components)
 {
+    std::vector<Component> res;
+    for(auto com : components)
+    {
+        if(
+            (com.points.size() > 40) &&
+            (com.height > 10) &&
+            (com.width > 10)
+        )
+        {
+            res.push_back(com);
+        }
+    }
+    return res;
+}
+
+double similarity(Component& com1, Component& com2)
+{
+    double res = 0;
+    res += abs(com1.centerY/com2.centerY) + abs(com1.centerX / com2.centerX);
+    res += abs(com1.height / com2.height) + abs(com1.width / com2.width);
+    res += abs(com1.points.size() / com2.points.size());
+    return res;
+}
+
+static void saveXYZ(const char* filename, const cv::Mat& mat)
+{
+    const double max_z = 1.0e4;
+    FILE* fp = fopen(filename, "wt");
+    for(int y = 0; y < mat.rows; y++)
+    {
+        for(int x = 0; x < mat.cols; x++)
+        {
+            cv::Vec3f point = mat.at<cv::Vec3f>(y, x);
+            if(fabs(point[2] - max_z) < FLT_EPSILON || fabs(point[2]) > max_z) continue;
+            fprintf(fp, "%f %f %f\n", point[0], point[1], point[2]);
+        }
+    }
+    fclose(fp);
+}
+
+
+std::vector<Component> work(cv::Mat &left_c, cv::Mat &right_c)
+{
+    std::vector<Component> components;
     cv::Mat left, right;
     cv::cvtColor(left_c, left, CV_RGB2GRAY);
     cv::cvtColor(right_c, right, CV_RGB2GRAY);
-    cv::Mat map = (getDepthMapBM(left, right));
-    //cv::Mat map = (getDepthMapVar(left, right));
+    //cv::Mat map = (getDepthMapBM(left, right));
+    cv::Mat map = (getDepthMapVar(left, right));
+    //char buf[512];
+    //static int j = 0;
+    //j++;
+    //sprintf(buf, "dumps/%i.pcd", j);
+    /*cv::Mat xyz;
+    cv::Mat Q = cv::Mat::eye(4, 4, CV_32S);
+    reprojectImageTo3D(map, xyz, Q, true);
+    saveXYZ(buf, xyz);*/
+    //saveToPCD(map, buf);
     
-    auto components = associate(normalize(map), 2);//10 2
+    /*components = associate(normalize(map), 2);//10 2
+    components = componentsFilter(components);
     cv::Mat res;
     left_c.copyTo(res);
+    int i = 0;
     for(auto it : components)
     {
-        cv::rectangle(res, cv::Point(it.Y1, it.X1), cv::Point(it.Y2, it.X2), cv::Scalar(255, 0, 0));
+        cv::rectangle(res, cv::Point(it.Y1, it.X1), cv::Point(it.Y2, it.X2), cv::Scalar(40 * (i), 40*((i+1)%5), 0));
+        i++;
     }
+    std::cout<<components.size()<<std::endl;*/
     cv::imshow("left", left_c);
     cv::imshow("right", right_c);
     map = normalize(map);
     cv::imshow("Out", map);
-    cv::imshow("res", res);
+    //cv::imshow("res", res);
+    return components;
     //showComponents(components, map);
-
 }
 
 void videoWork(int argc, char**argv)
@@ -210,7 +295,6 @@ void videoWork(int argc, char**argv)
         std::cout<<"Wrong num of args"<<std::endl;
         return;
     }
-    std::cout<<argv[1]<<std::endl;
     cv::VideoCapture Lcap(argv[1]);
     cv::VideoCapture Rcap(argv[2]);
     if (!Lcap.isOpened() || !Rcap.isOpened())
@@ -229,7 +313,7 @@ void videoWork(int argc, char**argv)
         work(frame1, frame2);
         cv::waitKey(1);
     }
-    //while (cv::waitKey() % 0x100 != 27){};
+    while (cv::waitKey() % 0x100 != 27){};
 }
 
 void photoWork(int argc, char** argv)
