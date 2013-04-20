@@ -281,6 +281,7 @@ std::vector<Component> work(cv::Mat &left_c, cv::Mat &right_c)
     std::cout<<components.size()<<std::endl;*/
     cv::imshow("left", left_c);
     cv::imshow("right", right_c);
+    cv::waitKey();
     map = normalize(map);
     cv::imshow("Out", map);
     //cv::imshow("res", res);
