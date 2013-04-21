@@ -228,10 +228,17 @@ std::vector<Component> componentsFilter(std::vector<Component> &components)
 
 double similarity(Component& com1, Component& com2)
 {
+    if (abs(com1.centerY - com2.centerY) > com1.width/2 || abs(com1.centerX - com2.centerX) > com1.height/2)
+    {
+        return 100.0;
+    }
+
     double res = 0;
-    res += abs(com1.centerY/com2.centerY) + abs(com1.centerX / com2.centerX);
     res += abs(com1.height / com2.height) + abs(com1.width / com2.width);
     res += abs(com1.points.size() / com2.points.size());
+    res += abs(com1.std - com2.std);
+    res += abs(com1.mean - com2.mean);
+    res /= 4;
     return res;
 }
 
@@ -258,8 +265,8 @@ std::vector<Component> work(cv::Mat &left_c, cv::Mat &right_c)
     cv::Mat left, right;
     cv::cvtColor(left_c, left, CV_RGB2GRAY);
     cv::cvtColor(right_c, right, CV_RGB2GRAY);
-    //cv::Mat map = (getDepthMapBM(left, right));
-    cv::Mat map = (getDepthMapVar(left, right));
+    cv::Mat map = (getDepthMapBM(left, right));
+    //cv::Mat map = (getDepthMapVar(left, right));
     //char buf[512];
     //static int j = 0;
     //j++;
@@ -270,7 +277,7 @@ std::vector<Component> work(cv::Mat &left_c, cv::Mat &right_c)
     saveXYZ(buf, xyz);*/
     //saveToPCD(map, buf);
     
-    /*components = associate(normalize(map), 2);//10 2
+    components = associate(normalize(map), 2);//10 2
     components = componentsFilter(components);
     cv::Mat res;
     left_c.copyTo(res);
@@ -281,7 +288,7 @@ std::vector<Component> work(cv::Mat &left_c, cv::Mat &right_c)
         i++;
     }
     cv::imshow("res", res);
-    std::cout<<components.size()<<std::endl;*/
+    std::cout<<components.size()<<std::endl;
     cv::imshow("left", left_c);
     cv::imshow("right", right_c);
     //cv::waitKey();
@@ -308,13 +315,31 @@ void videoWork(int argc, char**argv)
     }
     cv::Mat frame1;
     cv::Mat frame2;
+    std::vector<Component> old;
     while(1)
     {
         Lcap >> frame1;
         Rcap >> frame2;
         if (frame1.empty()) break;
-        work(frame1, frame2);
+        auto com = work(frame1, frame2);
+        cv::Mat res;
+        frame1.copyTo(res);
+        if(old.size() > 0)
+        {
+            for(auto com1 : old)
+                for(auto com2 : com)
+                {
+                    double sim = similarity(com1, com2);
+                    if(sim <= 12)
+                    {
+                        std::cout<<sim<<"\n";
+                        cv::rectangle(res, cv::Point(com2.Y1, com2.X1), cv::Point(com2.Y2, com2.X2), cv::Scalar(255, 255, 255));
+                        cv::imshow("and so on", res);
+                    }
+                }
+        }
         cv::waitKey(1);
+        old = com;
     }
     while (cv::waitKey() % 0x100 != 27){};
 }
