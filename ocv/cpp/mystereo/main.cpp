@@ -315,6 +315,7 @@ void videoWork(int argc, char**argv)
     }
     cv::Mat frame1;
     cv::Mat frame2;
+    cv::Mat oldL;
     std::vector<Component> old;
     while(1)
     {
@@ -327,19 +328,28 @@ void videoWork(int argc, char**argv)
         if(old.size() > 0)
         {
             for(auto com1 : old)
-                for(auto com2 : com)
+            {
+                int min_i = -1;
+                double min_sim = 10000;
+                for(int i = 0; i < com.size(); i++)
                 {
-                    double sim = similarity(com1, com2);
-                    if(sim <= 12)
-                    {
-                        std::cout<<sim<<"\n";
-                        cv::rectangle(res, cv::Point(com2.Y1, com2.X1), cv::Point(com2.Y2, com2.X2), cv::Scalar(255, 255, 255));
-                        cv::imshow("and so on", res);
-                    }
+                    double sim = similarity(com1, com[i]);
+                    if(sim < min_sim) {min_sim = sim; min_i = i;}
+                }                    
+                if(min_sim < 100)
+                {
+                    std::cout<<min_sim<<"\n";
+                    cv::rectangle(res, cv::Point(com[min_i].Y1, com[min_i].X1), cv::Point(com[min_i].Y2, com[min_i].X2), cv::Scalar(255, 255, 255));
+                    cv::rectangle(oldL, cv::Point(com1.Y1, com1.X1), cv::Point(com1.Y2, com1.X2), cv::Scalar(255, 255, 255));
+                    cv::imshow("and so on", res);
+                    cv::imshow("and on", oldL);
+                    cv::waitKey();
                 }
+            }
         }
         cv::waitKey(1);
         old = com;
+        oldL = frame1;
     }
     while (cv::waitKey() % 0x100 != 27){};
 }
