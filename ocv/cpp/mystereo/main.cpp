@@ -165,10 +165,12 @@ cv::Mat getDepthMapVar(cv::Mat const &left, cv::Mat const &right)
     var.nIt = 25;
     var.minDisp = ((left.cols/8) + 15) & -16;
     var.maxDisp = 0;
-    var.poly_n = 3;
-    var.poly_sigma = 0.0;
+    //var.poly_n = 3;
+    var.poly_n = 9;
+    //var.poly_sigma = 0.0;
+    var.poly_sigma = 1.7;
     var.fi = 15.0f;//nice
-    var.lambda = 0.03f;
+    var.lambda = 0.04f;
     var.penalization = var.PENALIZATION_TICHONOV;   // ignored with USE_AUTO_PARAMS
     var.cycle = var.CYCLE_V;                        // ignored with USE_AUTO_PARAMS
     var.flags = var.USE_SMART_ID | var.USE_AUTO_PARAMS | var.USE_INITIAL_DISPARITY | var.USE_MEDIAN_FILTERING ;
@@ -278,13 +280,13 @@ std::vector<Component> work(cv::Mat &left_c, cv::Mat &right_c)
         cv::rectangle(res, cv::Point(it.Y1, it.X1), cv::Point(it.Y2, it.X2), cv::Scalar(40 * (i), 40*((i+1)%5), 0));
         i++;
     }
+    cv::imshow("res", res);
     std::cout<<components.size()<<std::endl;*/
     cv::imshow("left", left_c);
     cv::imshow("right", right_c);
-    cv::waitKey();
+    //cv::waitKey();
     map = normalize(map);
     cv::imshow("Out", map);
-    //cv::imshow("res", res);
     return components;
     //showComponents(components, map);
 }
