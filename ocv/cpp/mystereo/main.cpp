@@ -156,6 +156,51 @@ std::vector<Component> associate(cv::Mat const &depth_map, int threshold)
     return components;
 }
 
+void bruteDepthMap(cv::Mat const &left_c, cv::Mat const &right_c)
+{
+    static int frame_num = 0;
+    frame_num += 1;
+    cv::Mat left, right;
+    cv::cvtColor(left_c, left, CV_RGB2GRAY);
+    cv::cvtColor(right_c, right, CV_RGB2GRAY);
+    for(int nIt = 25; nIt < 200; nIt += 20)
+    {
+        for(int poly_n = 3; poly_n < 10; poly_n += 2)
+        {
+            for(int poly_sigma_c = 0; poly_sigma_c < 20; poly_sigma_c += 2)
+            {
+                for(int fi_c = 5; fi_c < 50; fi_c += 5)
+                {
+                    cv::StereoVar var;
+                    var.nIt = nIt;
+                    
+                    var.minDisp = ((left.cols/8) + 15) & -16;
+                    var.maxDisp = 0;
+
+                    var.poly_n = poly_n;
+                    var.poly_sigma = 0.1 * poly_sigma_c;
+                    //var.fi = 15.0f;//nice
+                    var.fi = fi_c*1.0;
+                    var.lambda = 0.04f;
+
+                    var.penalization = var.PENALIZATION_TICHONOV;   // ignored with USE_AUTO_PARAMS
+                    var.cycle = var.CYCLE_V;                        // ignored with USE_AUTO_PARAMS
+                    var.flags = var.USE_SMART_ID | var.USE_AUTO_PARAMS | var.USE_INITIAL_DISPARITY | var.USE_MEDIAN_FILTERING ;
+                    var.levels = 3; // ignored with USE_AUTO_PARAMS (!)
+                    var.pyrScale = 0.5;                             // ignored with USE_AUTO_PARAMS
+                    cv::Mat res;
+                    var(left, right, res);
+                    char buf[512];
+                    sprintf(buf, "dumps/fn%d_nIt%d_polyn_%d_polyn_sigma%f_fi%d.jpg", frame_num, nIt, poly_n, poly_sigma_c * 0.1, fi_c);
+                    cv::imwrite(buf, res);
+                }
+            }
+        }
+    }
+    std::cout<<frame_num<<"\n";
+}
+
+
 cv::Mat getDepthMapVar(cv::Mat const &left, cv::Mat const &right)
 {
     cv::Mat res;
@@ -183,6 +228,7 @@ cv::Mat getDepthMapBM(cv::Mat const &left, cv::Mat const &right)
 {
     cv::Mat res; 
     cv::StereoBM bm(CV_STEREO_BM_NORMALIZED_RESPONSE);
+    //cv::StereoBM bm(CV_STEREO_BM_NARROW);
     bm(left, right, res);
     return res;
 }
@@ -322,6 +368,8 @@ void videoWork(int argc, char**argv)
         Lcap >> frame1;
         Rcap >> frame2;
         if (frame1.empty()) break;
+        bruteDepthMap(frame1, frame2);
+        continue;
         auto com = work(frame1, frame2);
         cv::Mat res;
         frame1.copyTo(res);
@@ -343,7 +391,7 @@ void videoWork(int argc, char**argv)
                     cv::rectangle(oldL, cv::Point(com1.Y1, com1.X1), cv::Point(com1.Y2, com1.X2), cv::Scalar(255, 255, 255));
                     cv::imshow("and so on", res);
                     cv::imshow("and on", oldL);
-                    cv::waitKey();
+                    //cv::waitKey();
                 }
             }
         }
@@ -351,7 +399,7 @@ void videoWork(int argc, char**argv)
         old = com;
         oldL = frame1;
     }
-    while (cv::waitKey() % 0x100 != 27){};
+    //while (cv::waitKey() % 0x100 != 27){};
 }
 
 void photoWork(int argc, char** argv)
