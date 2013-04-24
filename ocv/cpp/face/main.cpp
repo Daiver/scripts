@@ -32,9 +32,6 @@ int main(int argc, const char *argv[]) {
         haar_cascade.detectMultiScale(gray, faces);
         for(int i = 0; i < faces.size(); i++) {
             Rect face_i = faces[i];
-            Mat face = gray(face_i);
-            Mat face_resized;
-            cv::resize(face, face_resized, Size(gray.cols, gray.rows), 1.0, 1.0, INTER_CUBIC);
             rectangle(original, face_i, CV_RGB(0, 255,0), 1);
             int pos_x = std::max(face_i.tl().x - 10, 0);
             int pos_y = std::max(face_i.tl().y - 10, 0);

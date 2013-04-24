@@ -6,12 +6,16 @@ LIBRARIES       := `pkg-config --libs  opencv` #-lopencv_imgproc -lopencv_calib3
 
 .PHONY: all clean
 
-all: main main2
+all: main main2 brute
 
-main: main2
+main: main2 
 	$(CC) $(CFLAGS) -o main main.cpp $(LIBRARIES)
 	
 main2: 
 	$(CC) $(CFLAGS) -o main2 main2.cpp $(LIBRARIES)
+
+brute: 
+	$(CC) $(CFLAGS) -o brute brute.cpp $(LIBRARIES)
+
 clean:
 	rm -f *.o main
