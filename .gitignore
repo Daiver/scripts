@@ -3,4 +3,5 @@
 vk/vk_config.py
 vk/musicchache/*
 ocv/cpp/OpenCV/*
+ocv/cpp/mystereo/dumps/*
 *.class
