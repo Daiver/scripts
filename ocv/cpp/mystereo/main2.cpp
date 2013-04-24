@@ -138,9 +138,9 @@ cv::Mat getDepthMap(cv::Mat const &left, cv::Mat const &right)
         for(int j = 0; j < res.cols; j++)
             {
                     tmp.at<short>(i, j) = res.at<short>(i, j);
-                    std::cout << res.at<short>(i, j) << " ";
+                    //std::cout << res.at<short>(i, j) << " ";
         }
-        std::cout << std::endl;
+        //std::cout << std::endl;
     }
     cv::imshow("tmp", normalize(tmp));
     cv::imshow("res", normalize(res));
@@ -162,7 +162,7 @@ int main(int argc, char **argv) {
     cv::Mat right = cv::imread(right_name, CV_LOAD_IMAGE_GRAYSCALE);
     cv::Mat map = (getDepthMap(left, right));
     
-    auto components = associate((map), 2);//10 2
+    auto components = associate((map), 10);//10 2
 
     cv::Mat res = cv::Mat::zeros(map.rows, map.cols, map.type());
     std::cout<<"Num of components:>>>"<<components.size()<<std::endl;
