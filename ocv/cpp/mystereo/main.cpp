@@ -368,8 +368,6 @@ void videoWork(int argc, char**argv)
         Lcap >> frame1;
         Rcap >> frame2;
         if (frame1.empty()) break;
-        //bruteDepthMap(frame1, frame2);
-        //continue;
         auto com = work(frame1, frame2);
         cv::Mat res;
         frame1.copyTo(res);
