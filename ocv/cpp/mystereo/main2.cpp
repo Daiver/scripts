@@ -6,6 +6,9 @@
 #include <vector>
 #include <queue>
 
+//#define AT_TYPE short
+#define AT_TYPE char
+
 class Point
 {
 public:
@@ -71,7 +74,7 @@ Component searchComponent(Point st, cv::Mat const &map, cv::Mat const &mask, Exp
         auto new_points = expander.expand(t);
         for(auto it = new_points.begin(); it != new_points.end(); it++)
         {
-            if ((mask.data[it->X*map.cols + it->Y] == 0) && (abs(map.at<short>(t.X, t.Y) - map.at<short>(it->X, it->Y)) < threshold)) 
+            if ((mask.data[it->X*map.cols + it->Y] == 0) && (abs(map.at<AT_TYPE>(t.X, t.Y) - map.at<AT_TYPE>(it->X, it->Y)) < threshold)) 
             {
                 com.points.push_back(*it);
                 mask.data[it->X*map.cols + it->Y] = 1;
@@ -154,6 +157,14 @@ cv::Mat getDepthMapVar(cv::Mat const &left, cv::Mat const &right)
     var.flags = var.USE_SMART_ID | var.USE_AUTO_PARAMS | var.USE_INITIAL_DISPARITY | var.USE_MEDIAN_FILTERING ;
 
     var(left, right, res);
+    /*for(int i = 0; i < left.rows; i++)
+    {
+        for(int j = 0; j < left.cols; j++)
+        {
+            std::cout<<(short)res.at<char>(i, j)<<" ";
+        }
+    }
+    std::cout<<res;*/
     return res;
 }
 
@@ -167,9 +178,10 @@ int main(int argc, char **argv) {
     }
     cv::Mat left  = cv::imread(left_name, CV_LOAD_IMAGE_GRAYSCALE);
     cv::Mat right = cv::imread(right_name, CV_LOAD_IMAGE_GRAYSCALE);
-    cv::Mat map = (getDepthMap(left, right));
-    //cv::Mat map = (getDepthMapVar(left, right));
-    auto components = associate((map), 50);//10 2
+    //cv::Mat map = (getDepthMap(left, right));
+    cv::Mat map = (getDepthMapVar(left, right));
+    //exit(0);
+    auto components = associate((map), 1);//10 2
 
     cv::Mat res = cv::Mat::zeros(map.rows, map.cols, map.type());
     std::cout<<"Num of components:>>>"<<components.size()<<std::endl;
@@ -181,7 +193,7 @@ int main(int argc, char **argv) {
         for(auto it2 = it->points.begin(); it2 != it->points.end(); it2++)
         {
             //res.data[it2->X * res.cols + it2->Y] = 200;
-            res.at<short>(it2->X, it2->Y) = 200;
+            res.at<AT_TYPE>(it2->X, it2->Y) = 200;
         }
         //cv::rectangle(res, cv::Point(it->Y2, it->X2), cv::Point(it->Y1, it->X1), cv::Scalar(220), -1, 8);
         std::cout<<"w"<<it->width<<" h"<<it->height<<" std "<<it->std<<" mean "<<it->mean<<" s/m "<<it->std/it->mean<<"\n";
