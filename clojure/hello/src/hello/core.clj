@@ -4,6 +4,7 @@
     [& args]
     (clojure-version)
     (println (count args))
+    (println (args 1))
     (println 
         (filter #(> % 10)
             (map
