@@ -178,8 +178,8 @@ int main(int argc, char **argv) {
     }
     cv::Mat left  = cv::imread(left_name, CV_LOAD_IMAGE_GRAYSCALE);
     cv::Mat right = cv::imread(right_name, CV_LOAD_IMAGE_GRAYSCALE);
-    //cv::Mat map = (getDepthMap(left, right));
-    cv::Mat map = (getDepthMapVar(left, right));
+    cv::Mat map = (getDepthMap(left, right));
+    //cv::Mat map = (getDepthMapVar(left, right));
     //exit(0);
     auto components = associate((map), 1);//10 2
 

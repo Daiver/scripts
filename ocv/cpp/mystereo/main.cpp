@@ -224,6 +224,31 @@ cv::Mat getDepthMapVar(cv::Mat const &left, cv::Mat const &right)
     return res;
 }
 
+cv::Mat getDepthMapSGBM(cv::Mat const &left, cv::Mat const &right)
+{
+    cv::Mat res;
+    //cv::StereoSGBM sgbm(0, ((left.cols/8) + 15) & -16, 11, 0, 20);
+    cv::StereoSGBM sgbm;
+    sgbm.preFilterCap = 63;
+    int SADWindowSize = 11;
+    sgbm.SADWindowSize = SADWindowSize > 0 ? SADWindowSize : 3;
+
+    int cn = left.channels();
+
+    sgbm.P1 = 8*cn*sgbm.SADWindowSize*sgbm.SADWindowSize;
+    sgbm.P2 = 32*cn*sgbm.SADWindowSize*sgbm.SADWindowSize;
+    sgbm.minDisparity = 0;
+    sgbm.numberOfDisparities = ((left.cols/8) + 15) & -16;
+    sgbm.uniquenessRatio = 10;
+    sgbm.speckleWindowSize = 100;
+    sgbm.speckleRange = 36;
+    sgbm.disp12MaxDiff = 1;
+    sgbm.fullDP = false;
+
+    sgbm(left, right, res);
+    return res;
+}
+
 cv::Mat getDepthMapBM(cv::Mat const &left, cv::Mat const &right)
 {
     cv::Mat res; 
@@ -311,8 +336,10 @@ std::vector<Component> work(cv::Mat &left_c, cv::Mat &right_c)
     cv::Mat left, right;
     cv::cvtColor(left_c, left, CV_RGB2GRAY);
     cv::cvtColor(right_c, right, CV_RGB2GRAY);
-    cv::Mat map = (getDepthMapBM(left, right));
+    //cv::Mat map = (getDepthMapBM(left, right));
     //cv::Mat map = (getDepthMapVar(left, right));
+    cv::Mat map = (getDepthMapSGBM(left, right));
+
     //char buf[512];
     //static int j = 0;
     //j++;
