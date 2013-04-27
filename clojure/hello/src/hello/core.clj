@@ -1,24 +1,23 @@
 (ns hello.core)
-(defn extract
-    [str]
-    (let  [f_i (.indexOf str "(")]
-        (let 
-            [
-                s_i (.indexOf (.substring str (+ f_i 1) ) "(")
-                l_i (.indexOf str ")")
-            ]
-            s_i
-            l_i
-        )
+
+(defn find_brackets
+    [l s]
+    (if (> (count s) 0)
+        (concat l [(first s)] (find_brackets l (next s)))
+        ""
     )
 )
+
 
 (defn -main
     ""
     [& args]
     (println "version" (clojure-version))
     (def arg (first args))
-    (println (extract arg))
+    (println 
+        (find_brackets [] (first args))
+    )
+    ;(println (extract arg))
     ;(println (#(* 10 %1) 10))
     (comment
         (println "args count" (count args))
