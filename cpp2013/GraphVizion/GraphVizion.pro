@@ -21,6 +21,7 @@ SOURCES += main.cpp\
     graphcanvas.cpp
 
 HEADERS  += mainwindow.h \
-    graphcanvas.h
+    graphcanvas.h \
+    typedefs.h
 
 FORMS    += mainwindow.ui

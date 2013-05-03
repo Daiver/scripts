@@ -1,14 +1,7 @@
 #include "graphcanvas.h"
 
 #include <iostream>
-#include <list>
-#include <algorithm>
-#include <boost/graph/adjacency_list.hpp>
-#include <boost/graph/topological_sort.hpp>
-#include <boost/graph/edge_list.hpp>
-#include <boost/graph/adjacency_matrix.hpp>
-#include <boost/config.hpp>
-#include <iterator>
+
 #include <utility>
 
 void GraphCanvas::paintEvent(QPaintEvent *e)
@@ -20,5 +13,14 @@ void GraphCanvas::paintEvent(QPaintEvent *e)
 
 GraphCanvas::GraphCanvas()
 {
-
+    Graph g(10);
+    boost::add_vertex(g);
+    boost::add_vertex(g);
+    boost::add_edge(0, 1, g);
+    typedef boost::graph_traits<Graph>::vertex_iterator vertex_iter;
+    std::pair<vertex_iter, vertex_iter> vp;
+    for (vp = boost::vertices(g); vp.first != vp.second; ++vp.first)
+    {
+        auto x = vp.first;
+    }
 }

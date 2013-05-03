@@ -10,6 +10,9 @@
 #include <QImage>
 #include <QRgb>
 
+#include "typedefs.h"
+
+
 class GraphCanvas : public QLabel
 {
 public:
