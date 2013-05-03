@@ -16,3 +16,10 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
+
+void MainWindow::on_pushButton_clicked()
+{
+    GraphCanvas *canvas = dynamic_cast<GraphCanvas*>(this->ui->scrollArea->widget());
+    canvas->VG.deleteByIndex(0);
+    canvas->repaint();
+}

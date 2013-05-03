@@ -9,15 +9,18 @@
 #include <QString>
 #include <QImage>
 #include <QRgb>
+#include <vector>
 
 #include "typedefs.h"
-
+#include "visualvertex.h"
+#include "visualgraph.h"
 
 class GraphCanvas : public QLabel
 {
 public:
     GraphCanvas();
-protected:
+    VisualGraph VG;
+protected:    
     virtual void paintEvent(QPaintEvent* e);
 };
 

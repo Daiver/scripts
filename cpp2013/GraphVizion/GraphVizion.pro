@@ -18,10 +18,14 @@ LIBS +=  -lboost_system -lboost_filesystem
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    graphcanvas.cpp
+    graphcanvas.cpp \
+    visualvertex.cpp \
+    visualgraph.cpp
 
 HEADERS  += mainwindow.h \
     graphcanvas.h \
-    typedefs.h
+    typedefs.h \
+    visualvertex.h \
+    visualgraph.h
 
 FORMS    += mainwindow.ui
