@@ -14,14 +14,20 @@
 #include "typedefs.h"
 #include "visualvertex.h"
 #include "visualgraph.h"
+#include "visualtool.h"
 
 class GraphCanvas : public QLabel
 {
 public:
     GraphCanvas();
     VisualGraph VG;
-protected:    
+    void setAddTool();
+protected:
+    VisualTool* tool;
     virtual void paintEvent(QPaintEvent* e);
+    virtual void mouseReleaseEvent(QMouseEvent *e);
+    virtual void mouseMoveEvent(QMouseEvent* e);
+    virtual void mousePressEvent(QMouseEvent* e);
 };
 
 #endif // GRAPHCANVAS_H

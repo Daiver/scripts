@@ -23,3 +23,9 @@ void MainWindow::on_pushButton_clicked()
     canvas->VG.deleteByIndex(0);
     canvas->repaint();
 }
+
+void MainWindow::on_pushButton_2_clicked()
+{
+    GraphCanvas *canvas = dynamic_cast<GraphCanvas*>(this->ui->scrollArea->widget());
+    canvas->setAddTool();
+}

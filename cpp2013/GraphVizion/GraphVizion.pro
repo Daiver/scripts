@@ -20,12 +20,16 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     graphcanvas.cpp \
     visualvertex.cpp \
-    visualgraph.cpp
+    visualgraph.cpp \
+    visualtool.cpp \
+    visualaddtool.cpp
 
 HEADERS  += mainwindow.h \
     graphcanvas.h \
     typedefs.h \
     visualvertex.h \
-    visualgraph.h
+    visualgraph.h \
+    visualtool.h \
+    visualaddtool.h
 
 FORMS    += mainwindow.ui

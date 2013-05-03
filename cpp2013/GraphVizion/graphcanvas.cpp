@@ -1,6 +1,7 @@
 #include "graphcanvas.h"
 #include <iostream>
 #include <utility>
+#include "visualaddtool.h"
 
 void GraphCanvas::paintEvent(QPaintEvent *e)
 {
@@ -26,10 +27,42 @@ void GraphCanvas::paintEvent(QPaintEvent *e)
 
 }
 
+
 GraphCanvas::GraphCanvas()
-{    
+{
+    this->tool = nullptr;
     this->VG.addVertex(VisualVertex(graphvizion_td::Position(10, 10)));
     this->VG.addVertex(VisualVertex(graphvizion_td::Position(20, 20)));
     this->VG.addVertex(VisualVertex(graphvizion_td::Position(200, 30)));
     boost::add_edge(0, 2, this->VG.graph);
+}
+
+void GraphCanvas::setAddTool()
+{
+    if(nullptr != this->tool)
+        delete this->tool;
+    this->tool = new VisualAddTool();
+}
+
+
+void GraphCanvas::mousePressEvent(QMouseEvent *e)
+{
+    if(nullptr != this->tool)
+        this->tool->mousePressEvent(e, &this->VG);
+    this->repaint();
+}
+
+
+void GraphCanvas::mouseMoveEvent(QMouseEvent *e)
+{
+    if(nullptr != this->tool)
+        this->tool->mouseMoveEvent(e, &this->VG);
+    this->repaint();
+}
+
+void GraphCanvas::mouseReleaseEvent(QMouseEvent *e)
+{
+    if(nullptr != this->tool)
+        this->tool->mouseReleaseEvent(e, &this->VG);
+    this->repaint();
 }
