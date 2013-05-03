@@ -20,8 +20,9 @@
 
 (defn -main
     [& args]
-    (println (take 500 (lazy-seq-fibo)))
-    (println (take 900 (lazy-seq-fibo)))
+    (def v1 (take 500 (lazy-seq-fibo)))
+    (def v2 (take 900 (lazy-seq-fibo)))
+    (def v3 (take 1500 (lazy-seq-fibo)))
     ;(println (foo 8))
     ;(println args)
 
