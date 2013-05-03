@@ -2,9 +2,10 @@
 
 VisualVertex::VisualVertex()
 {
+    this->size = 10;
 }
 
-VisualVertex::VisualVertex(graphvizion_td::Position pos)
+VisualVertex::VisualVertex(graphvizion_td::Position pos):VisualVertex()
 {
     this->pos = pos;
 }
@@ -22,4 +23,9 @@ const graphvizion_td::Position &VisualVertex::getPos()
 const std::string &VisualVertex::getLabel()
 {
     return this->label;
+}
+
+int VisualVertex::getSize()
+{
+    return this->size;
 }

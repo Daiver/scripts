@@ -13,9 +13,11 @@ public:
     VisualVertex(graphvizion_td::Position pos, std::string label);
     const graphvizion_td::Position& getPos();
     const std::string& getLabel();
+    int getSize();
 protected:
     std::string label;
     graphvizion_td::Position pos;
+    int size;
 };
 
 #endif // VISUALVERTEX_H
