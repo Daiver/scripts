@@ -1,18 +1,18 @@
-#include "visualaddtool.h"
+#include "visualvertexaddtool.h"
 
-VisualAddTool::VisualAddTool()
+VisualVertexAddTool::VisualVertexAddTool()
 {
 }
 
-void VisualAddTool::mouseReleaseEvent(QMouseEvent *e, VisualGraph *g)
+void VisualVertexAddTool::mouseReleaseEvent(QMouseEvent *e, VisualGraph *g)
 {
 }
 
-void VisualAddTool::mouseMoveEvent(QMouseEvent *e, VisualGraph *g)
+void VisualVertexAddTool::mouseMoveEvent(QMouseEvent *e, VisualGraph *g)
 {
 }
 
-void VisualAddTool::mousePressEvent(QMouseEvent *e, VisualGraph *g)
+void VisualVertexAddTool::mousePressEvent(QMouseEvent *e, VisualGraph *g)
 {
     g->addVertex(VisualVertex(graphvizion_td::Position(e->x(), e->y())));
 }

@@ -21,7 +21,9 @@ class GraphCanvas : public QLabel
 public:
     GraphCanvas();
     VisualGraph VG;
-    void setAddTool();
+    void setVertexAddTool();
+    void setVertexMoveTool();
+    void setVertexDeleteTool();
 protected:
     VisualTool* tool;
     virtual void paintEvent(QPaintEvent* e);

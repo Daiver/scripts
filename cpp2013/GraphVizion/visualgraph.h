@@ -12,8 +12,9 @@ public:
     VisualGraph();
     void addVertex(VisualVertex vertex);
     VisualVertex& getByIndex(int i);
-    const VisualVertex& getByIterator(std::pair<graphvizion_td::vertex_iter, graphvizion_td::vertex_iter> vp);
+    VisualVertex &getByIterator(std::pair<graphvizion_td::vertex_iter, graphvizion_td::vertex_iter> vp);
     bool deleteByIndex(int i);
+
 
     graphvizion_td::Graph graph;
     std::vector<VisualVertex> vertexes;

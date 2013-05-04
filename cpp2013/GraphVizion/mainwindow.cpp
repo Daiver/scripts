@@ -27,5 +27,17 @@ void MainWindow::on_pushButton_clicked()
 void MainWindow::on_pushButton_2_clicked()
 {
     GraphCanvas *canvas = dynamic_cast<GraphCanvas*>(this->ui->scrollArea->widget());
-    canvas->setAddTool();
+    canvas->setVertexAddTool();
+}
+
+void MainWindow::on_pushButton_3_clicked()
+{
+    GraphCanvas *canvas = dynamic_cast<GraphCanvas*>(this->ui->scrollArea->widget());
+    canvas->setVertexMoveTool();
+}
+
+void MainWindow::on_pushButton_4_clicked()
+{
+    GraphCanvas *canvas = dynamic_cast<GraphCanvas*>(this->ui->scrollArea->widget());
+    canvas->setVertexDeleteTool();
 }

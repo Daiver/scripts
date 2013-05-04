@@ -1,7 +1,9 @@
 #include "graphcanvas.h"
 #include <iostream>
 #include <utility>
-#include "visualaddtool.h"
+#include "visualvertexaddtool.h"
+#include "visualvertexmovetool.h"
+#include "visualvertexdeletetool.h"
 
 void GraphCanvas::paintEvent(QPaintEvent *e)
 {
@@ -37,11 +39,25 @@ GraphCanvas::GraphCanvas()
     boost::add_edge(0, 2, this->VG.graph);
 }
 
-void GraphCanvas::setAddTool()
+void GraphCanvas::setVertexAddTool()
 {
     if(nullptr != this->tool)
         delete this->tool;
-    this->tool = new VisualAddTool();
+    this->tool = new VisualVertexAddTool();
+}
+
+void GraphCanvas::setVertexMoveTool()
+{
+    if(nullptr != this->tool)
+        delete this->tool;
+    this->tool = new VisualVertexMoveTool();
+}
+
+void GraphCanvas::setVertexDeleteTool()
+{
+    if(nullptr != this->tool)
+        delete this->tool;
+    this->tool = new VisualVertexDeleteTool();
 }
 
 

@@ -17,7 +17,7 @@ VisualVertex &VisualGraph::getByIndex(int i)
     return this->vertexes[i];
 }
 
-const VisualVertex &VisualGraph::getByIterator(std::pair<graphvizion_td::vertex_iter, graphvizion_td::vertex_iter> vp)
+VisualVertex &VisualGraph::getByIterator(std::pair<graphvizion_td::vertex_iter, graphvizion_td::vertex_iter> vp)
 {
     return this->getByIndex(this->index[*vp.first]);
 }
