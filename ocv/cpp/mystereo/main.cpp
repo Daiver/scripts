@@ -240,7 +240,7 @@ cv::Mat getDepthMapSGBM(cv::Mat const &left, cv::Mat const &right)
     sgbm.minDisparity = 0;
     sgbm.numberOfDisparities = ((left.cols/8) + 15) & -16;
     sgbm.uniquenessRatio = 10;
-    sgbm.speckleWindowSize = 100;
+    sgbm.speckleWindowSize = 50;
     sgbm.speckleRange = 36;
     sgbm.disp12MaxDiff = 1;
     sgbm.fullDP = false;
