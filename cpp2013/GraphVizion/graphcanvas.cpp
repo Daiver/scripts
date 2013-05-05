@@ -1,3 +1,6 @@
+#include <QDebug>
+#include <QString>
+
 #include "graphcanvas.h"
 #include <iostream>
 #include <utility>

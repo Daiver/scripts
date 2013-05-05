@@ -27,5 +27,7 @@
 (defn -main
     [& args]
     (println (make_tokens "1 23(456) 45"))
-    (println (make_tree (make_tokens "1 23 45 (8 ((qwe r) t (123 (no hope) (no changes) )) 7) (1) 32 3")))
+    ;(println (make_tree (make_tokens "1 23 45 (8 ((qwe r) t (123 (no hope) (no changes) )) 7) (1) 32 3")))
+    (def s "+ (* 2 3) 5")
+    (println (make_tree (make_tokens s)))
 )
