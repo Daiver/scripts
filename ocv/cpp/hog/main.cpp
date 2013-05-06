@@ -8,14 +8,23 @@
 #include <queue>
 #include <fstream>
 #include <stdio.h>
-
+#include <vector>
+#include "peopledetect.h"
 
 int main(int argc, char** argv)
 {
     cv::Mat img;
     cv::HOGDescriptor hog;
-    //auto tmp = cv::HOGDescriptor::getDefaultPeopleDetector
-    hog.setSVMDetector(cv::HOGDescriptor::getDefaultPeopleDetector());
-    printf("HI \n");
+    hog.setSVMDetector(getThisPeopleDetector());
+    img = cv::imread(argv[1]);
+    std::vector<cv::Rect> found, found_filtered;
+    hog.detectMultiScale(img, found, 4, cv::Size(8,8), cv::Size(32,32), 1.05, 23);
+    for(auto r : found)
+    {
+        std::cout<<r<<"\n";
+        cv::rectangle(img, r, cv::Scalar(255, 0, 0));
+    }
+    cv::imshow("", img);
+    cv::waitKey();
     return 0;
 }
