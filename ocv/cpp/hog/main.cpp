@@ -22,7 +22,7 @@ int main(int argc, char** argv)
     for(auto r : found)
     {
         std::cout<<r<<"\n";
-        cv::rectangle(img, r, cv::Scalar(255, 0, 0));
+        cv::rectangle(img, r, cv::Scalar(0, 255, 0));
     }
     cv::imshow("", img);
     cv::waitKey();
