@@ -12,6 +12,10 @@
 
 int main(int argc, char** argv)
 {
+    cv::Mat img;
+    cv::HOGDescriptor hog;
+    //auto tmp = cv::HOGDescriptor::getDefaultPeopleDetector
+    hog.setSVMDetector(cv::HOGDescriptor::getDefaultPeopleDetector());
     printf("HI \n");
     return 0;
 }

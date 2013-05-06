@@ -2,7 +2,6 @@
 #include "visualvertex.h"
 #include "visualgraph.h"
 #include "math.h"
-#include <iostream>
 
 VisualVertexMoveTool::VisualVertexMoveTool()
 {

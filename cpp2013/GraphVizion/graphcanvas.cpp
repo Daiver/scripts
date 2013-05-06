@@ -2,7 +2,6 @@
 #include <QString>
 
 #include "graphcanvas.h"
-#include <iostream>
 #include <utility>
 #include "visualvertexaddtool.h"
 #include "visualvertexmovetool.h"

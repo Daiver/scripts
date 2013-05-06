@@ -1,5 +1,4 @@
 #include "visualvertex.h"
-#include <iostream>
 
 VisualVertex::VisualVertex()
 {
@@ -24,7 +23,6 @@ const graphvizion_td::Position &VisualVertex::getPos()
 void VisualVertex::setPos(graphvizion_td::Position pos)
 {
     this->pos = pos;
-    //std::cout<<this->pos.first<<" "<<this->pos.second<<pos.first<<" "<<pos.second<<"\n";
 }
 
 const std::string &VisualVertex::getLabel()
