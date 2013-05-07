@@ -6,10 +6,10 @@
 
 (defn execute
     [arg]
-    (println (= (type arg) (type '(""))))
+    ;(println (= (type arg) (type '(""))) ())
     (if (= (type arg) (type '( "" ) ))
+        (apply (resolve (symbol (first arg))) (map execute (rest arg))) 
         arg
-        (apply (resolve (symbol (first arg))) '(map execute (rest arg))) 
     )
 )
 
@@ -39,5 +39,5 @@
     ;(println (make_tree (make_tokens "1 23 45 (8 ((qwe r) t (123 (no hope) (no changes) )) 7) (1) 32 3")))
     (def s "+ (* 20 3) 5")
     (println (make_tree (make_tokens s)))
-    (println (execute '("+" 1 2 3)))
+    (println (execute '("+" 1  ("*" 3 5))))
 )
