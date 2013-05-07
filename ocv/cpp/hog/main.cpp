@@ -24,7 +24,19 @@ int main(int argc, char** argv)
         std::cout<<r<<"\n";
         cv::rectangle(img, r, cv::Scalar(0, 255, 0));
     }
+
+    std::cout << "size " << img.cols<< " "<< img.rows<<"\n";
+    //cv::Mat newImg = img(cv::Rect(95, 104, 77, 153 ));
+    cv::Mat newImg = img(cv::Rect(95, 104, 77, 153 ));
+    std::vector<float> tmp;
+    hog.compute(newImg, tmp, cv::Size(32,32), cv::Size(0,0));
+    /*for(auto f:tmp)
+    {
+        std::cout << f << " ";
+    }*/
+    std::cout <<"hog size "<< tmp.size()<< "\n";
     cv::imshow("", img);
+    cv::imshow("1", newImg);
     cv::waitKey();
     return 0;
 }
