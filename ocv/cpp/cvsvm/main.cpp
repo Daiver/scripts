@@ -2,6 +2,7 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/ml/ml.hpp>
 #include <iostream>
+#include <vector>
 
 using namespace cv;
 
@@ -16,9 +17,9 @@ int main()
     Mat labelsMat(4, 1, CV_32FC1, labels);
 
     float trainingData[4][2] = { {501, 10}, {255, 10}, {501, 255}, {10, 501} };
-
-    Mat trainingDataMat(4, 2, CV_32FC1, trainingData);
-    std::cout << trainingDataMat.at<float>(2, 1) << "\n";
+    std::vector<std::vector<float> > vec;
+    Mat trainingDataMat(4, 2, CV_32FC1, vec);
+    //std::cout << trainingDataMat.at<float>(2, 1) << "\n"; //255
 
     // Set up SVM's parameters
     CvSVMParams params;
