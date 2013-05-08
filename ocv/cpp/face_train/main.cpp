@@ -1,17 +1,43 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/ml/ml.hpp>
+#include <opencv2/calib3d/calib3d.hpp>
+#include <opencv2/contrib/contrib.hpp>
+
 #include <iostream>
 #include <vector>
 //using namespace cv;
 
-float *getHOG(const cv::Mat &image)
+float *getHOG(const cv::Mat &image, int* count)
 {
-    return 0;
+    cv::HOGDescriptor hog;
+    std::vector<float> res;
+    std::cout<<"Before compute\n";
+    hog.compute(image, res, cv::Size(8,8), cv::Size(0,0));
+    std::cout<<"Before size\n";
+    *count = res.size();
+    return &res[0];
+}
+
+float **getTraininigData(int* setlen, int* veclen)
+{
+    char *names[2] = {
+        "../faces/s1/1.pgm",
+        "../faces/s1/2.pgm",
+    };
+    for(int i = 0; i < 2; i++)
+    {
+        std::cout<<names[i]<<"\n";
+        cv::Mat img = cv::imread(names[i], 0);
+        getHOG(img, veclen);
+        std::cout<<"vl "<<*veclen<<"\n";
+    }
 }
 
 int main()
 {
+    int setlen, veclen;
+    getTraininigData(&setlen, &veclen);
     // Data for visual representation
     int width = 512, height = 512;
     cv::Mat image = cv::Mat::zeros(height, width, CV_8UC3);

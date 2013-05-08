@@ -16,7 +16,7 @@ int main(int argc, char** argv)
     cv::Mat img;
     cv::HOGDescriptor hog;
     hog.setSVMDetector(getThisPeopleDetector());
-    img = cv::imread(argv[1]);
+    img = cv::imread(argv[1], 0);
     std::vector<cv::Rect> found, found_filtered;
     hog.detectMultiScale(img, found, 4, cv::Size(8,8), cv::Size(32,32), 1.05, 23);
     for(auto r : found)

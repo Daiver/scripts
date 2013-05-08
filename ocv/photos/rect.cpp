@@ -429,12 +429,12 @@ int main(int argc, char** argv)
     cv::Mat rmap[2][2];
     cv::initUndistortRectifyMap(cameraMatrix[0], distCoeffs[0], R1, P1, imageSize, CV_16SC2, rmap[0][0], rmap[0][1]);
     cv::initUndistortRectifyMap(cameraMatrix[1], distCoeffs[1], R2, P2, imageSize, CV_16SC2, rmap[1][0], rmap[1][1]);
-    cv::Mat img = cv::imread("left3.jpg", 0), rimg, cimg;
+    cv::Mat img = cv::imread("left1.jpg", 0), rimg, cimg;
     cv::remap(img, rimg, rmap[0][0], rmap[0][1], CV_INTER_LINEAR);
     cv::cvtColor(rimg, cimg, CV_GRAY2BGR);
     cv::imshow("l", cimg);
     cv::imwrite("l.jpg", cimg);
-    img = cv::imread("right3.jpg", 0);
+    img = cv::imread("right1.jpg", 0);
     cv::remap(img, rimg, rmap[0][0], rmap[0][1], CV_INTER_LINEAR);
     cv::cvtColor(rimg, cimg, CV_GRAY2BGR);
     cv::imshow("r", cimg);

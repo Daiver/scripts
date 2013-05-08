@@ -18,7 +18,45 @@ cv::Mat normalize(cv::Mat const &depth_map)
     return adjMap;
 }
 
-void bruteDepthMap(cv::Mat const &left_c, cv::Mat const &right_c)
+void bruteDepthMapBM(cv::Mat const &left_c, cv::Mat const &right_c)
+{
+    cv::StereoBM bm;
+    static int frame_num = 0;
+    frame_num += 1;
+    cv::Mat left, right;
+    cv::cvtColor(left_c, left, CV_RGB2GRAY);
+    cv::cvtColor(right_c, right, CV_RGB2GRAY);
+    for(int sadSize = 5; sadSize < 20; sadSize += 2)
+    {
+        for(int uniquenessRatio = 5; uniquenessRatio < 25; uniquenessRatio += 5)
+        {
+            for (int speckleWindowSize = 50; speckleWindowSize < 200; speckleWindowSize += 25)
+            {
+                bm.state->preFilterCap = 31;
+                //bm.state->SADWindowSize = 9;
+                bm.state->SADWindowSize = sadSize;
+                bm.state->minDisparity = 0;
+                bm.state->numberOfDisparities =  ((left.cols/8) + 15) & -16;
+                bm.state->textureThreshold = 10;
+                //bm.state->uniquenessRatio = 15;
+                bm.state->uniquenessRatio = uniquenessRatio;
+                //bm.state->speckleWindowSize = 100;
+                bm.state->speckleWindowSize = speckleWindowSize;
+                bm.state->speckleRange = 32;
+                bm.state->disp12MaxDiff = 1;
+                cv::Mat res;
+                bm(left, right, res); 
+                char buf[512];
+                sprintf(buf, "dumps/num%d_sadsize%d_uniq%d_speckle%d.jpg", frame_num, sadSize, uniquenessRatio, speckleWindowSize);
+                cv::imwrite(buf, res);
+                cv::imshow("", normalize(res));
+                cv::waitKey(1);
+            }
+        }
+    }
+}
+
+void bruteDepthMapVar(cv::Mat const &left_c, cv::Mat const &right_c)
 {
     static int frame_num = 0;
     frame_num += 1;
@@ -119,7 +157,8 @@ void videoWork(int argc, char**argv)
         Lcap >> frame1;
         Rcap >> frame2;
         if (frame1.empty()) break;
-        bruteDepthMap(frame1, frame2);
+        bruteDepthMapBM(frame1, frame2);
+        //bruteDepthMapVar(frame1, frame2);
     }
 }
 
@@ -134,7 +173,8 @@ void photoWork(int argc, char** argv)
     }
     cv::Mat left  = cv::imread(left_name);
     cv::Mat right = cv::imread(right_name);
-    bruteDepthMap(left, right);
+    bruteDepthMapBM(left, right);
+   // bruteDepthMapVar(left, right);
 }
 
 int main(int argc, char **argv)
