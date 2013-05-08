@@ -166,15 +166,17 @@ void photoWork(int argc, char** argv)
 {
     auto left_name  = "tsukuba/scene1.row3.col3.ppm";
     auto right_name = "tsukuba/scene1.row3.col5.ppm";
-    if (argc > 2)
+    if (argc > 3)
     {
-        left_name = argv[1];
-        right_name = argv[2];
+        left_name = argv[2];
+        right_name = argv[3];
     }
     cv::Mat left  = cv::imread(left_name);
     cv::Mat right = cv::imread(right_name);
-    bruteDepthMapBM(left, right);
-   // bruteDepthMapVar(left, right);
+    if(strcmp(argv[1], "--var") == 0)
+        bruteDepthMapVar(left, right);
+    if(strcmp(argv[1], "--bm") == 0)
+        bruteDepthMapBM(left, right);
 }
 
 int main(int argc, char **argv)
