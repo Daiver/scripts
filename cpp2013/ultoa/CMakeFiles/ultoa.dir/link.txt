@@ -1,0 +1,1 @@
+/usr/bin/c++       CMakeFiles/ultoa.dir/main.cpp.o  -o ultoa -rdynamic 

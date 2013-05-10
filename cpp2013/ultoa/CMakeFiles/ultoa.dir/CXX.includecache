@@ -1,0 +1,24 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/kirill/coding/MyPy/scripts/cpp2013/ultoa/main.cpp
+stdio.h
+-
+stdlib.h
+-
+string.h
+-
+algorithm
+-
+errno.h
+-
+errno.h
+-
+limits.h
+-
+
