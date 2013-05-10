@@ -110,7 +110,8 @@ int main (int argc, char** argv)
         return print_help();
 
   // Algorithm parameters:
-  std::string svm_filename = "../../people/data/trainedLinearSVMForPeopleDetectionWithHOG.yaml";
+  //std::string svm_filename = "../../people/data/trainedLinearSVMForPeopleDetectionWithHOG.yaml";
+  std::string svm_filename = "svm.data";
   float min_confidence = -1.5;
   float min_height = 1.3;
   float max_height = 2.3;
