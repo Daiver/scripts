@@ -4,7 +4,7 @@ SET(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 SET(CMAKE_DEPENDS_CHECK_CXX
-  "/home/kirill/coding/MyPy/scripts/cppexp/pcl/people_detect/main.cpp" "/home/kirill/coding/MyPy/scripts/cppexp/pcl/people_detect/CMakeFiles/ground_based_rgbd_people_detector.dir/main.cpp.o"
+  "/home/kirill/coding/MyPy/scripts/cppexp/pcl/color_seg_grow_segmentation/main.cpp" "/home/kirill/coding/MyPy/scripts/cppexp/pcl/color_seg_grow_segmentation/CMakeFiles/region_growing_rgb_segmentation.dir/main.cpp.o"
   )
 SET(CMAKE_CXX_COMPILER_ID "GNU")
 
@@ -25,7 +25,6 @@ SET(CMAKE_C_TARGET_INCLUDE_PATH
   "/usr/include/vtk-5.8"
   "/usr/local/include/pcl-1.7"
   "/usr/include/eigen3"
-  "/usr/include/pcl-1.6"
   "/usr/include/openni"
   "/usr/include/qhull"
   )
