@@ -1,0 +1,1 @@
+/home/kirill/coding/MyPy/scripts/cppexp/pcl/people_detect/CMakeFiles/ground_based_rgbd_people_detector.dir
