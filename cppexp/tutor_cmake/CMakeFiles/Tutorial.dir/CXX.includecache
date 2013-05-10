@@ -1,0 +1,20 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/kirill/coding/MyPy/scripts/cppexp/tutor_cmake/TutorialConfig.h
+
+/home/kirill/coding/MyPy/scripts/cppexp/tutor_cmake/tutorial.cxx
+stdio.h
+-
+stdlib.h
+-
+math.h
+-
+TutorialConfig.h
+/home/kirill/coding/MyPy/scripts/cppexp/tutor_cmake/TutorialConfig.h
+
