@@ -47,10 +47,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/kirill/Загрузки/OpenCVReprojectImageToPointCloud
+CMAKE_SOURCE_DIR = /home/kirill/coding/MyPy/scripts/ocv/OpenCVReprojectImageToPointCloud
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/kirill/Загрузки/OpenCVReprojectImageToPointCloud
+CMAKE_BINARY_DIR = /home/kirill/coding/MyPy/scripts/ocv/OpenCVReprojectImageToPointCloud
 
 #=============================================================================
 # Target rules for target CMakeFiles/OpenCVReprojectImageToPointCloud.dir
@@ -59,7 +59,7 @@ CMAKE_BINARY_DIR = /home/kirill/Загрузки/OpenCVReprojectImageToPointClou
 CMakeFiles/OpenCVReprojectImageToPointCloud.dir/all:
 	$(MAKE) -f CMakeFiles/OpenCVReprojectImageToPointCloud.dir/build.make CMakeFiles/OpenCVReprojectImageToPointCloud.dir/depend
 	$(MAKE) -f CMakeFiles/OpenCVReprojectImageToPointCloud.dir/build.make CMakeFiles/OpenCVReprojectImageToPointCloud.dir/build
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/kirill/Загрузки/OpenCVReprojectImageToPointCloud/CMakeFiles  1
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/kirill/coding/MyPy/scripts/ocv/OpenCVReprojectImageToPointCloud/CMakeFiles  1
 	@echo "Built target OpenCVReprojectImageToPointCloud"
 .PHONY : CMakeFiles/OpenCVReprojectImageToPointCloud.dir/all
 
@@ -69,9 +69,9 @@ all: CMakeFiles/OpenCVReprojectImageToPointCloud.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/OpenCVReprojectImageToPointCloud.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/kirill/Загрузки/OpenCVReprojectImageToPointCloud/CMakeFiles 1
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/kirill/coding/MyPy/scripts/ocv/OpenCVReprojectImageToPointCloud/CMakeFiles 1
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/OpenCVReprojectImageToPointCloud.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/kirill/Загрузки/OpenCVReprojectImageToPointCloud/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/kirill/coding/MyPy/scripts/ocv/OpenCVReprojectImageToPointCloud/CMakeFiles 0
 .PHONY : CMakeFiles/OpenCVReprojectImageToPointCloud.dir/rule
 
 # Convenience name for target.

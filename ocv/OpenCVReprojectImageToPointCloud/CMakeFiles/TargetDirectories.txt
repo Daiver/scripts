@@ -1,1 +1,1 @@
-/home/kirill/Загрузки/OpenCVReprojectImageToPointCloud/CMakeFiles/OpenCVReprojectImageToPointCloud.dir
+/home/kirill/coding/MyPy/scripts/ocv/OpenCVReprojectImageToPointCloud/CMakeFiles/OpenCVReprojectImageToPointCloud.dir

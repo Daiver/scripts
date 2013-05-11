@@ -1,34 +1,3 @@
-/**
-*       @file opencv_reproject_image_pcl.cpp
-*       @brief Reproject an image to Point Cloud using OpenCV and PCL.
-*       @author Martin Peris (http://www.martinperis.com)
-*       @date 06/01/2012
-*/
-
-/*
-        opencv_reproject_image_pcl.cpp - Reproject an image to Point Cloud
-        using OpenCV and PCL. The program receives from command line an 
-        rgb-image (left image of stereo rig) a disparity-image (obtained with 
-        some stereo matching algorithm) and the matrix Q (Generated at calibration 
-        stage). It displays the 3D reconstruction of the scene using PCL.
-        Copyright (c) 2012 Martin Peris (http://www.martinperis.com).
-        All right reserved.
-        
-        This application is free software; you can redistribute it and/or
-        modify it under the terms of the GNU Lesser General Public
-        License as published by the Free Software Foundation; either
-        version 2.1 of the License, or (at your option) any later version.
-        
-        This application is distributed in the hope that it will be useful,
-        but WITHOUT ANY WARRANTY; without even the implied warranty of
-        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-        Lesser General Public License for more details.
-        
-        You should have received a copy of the GNU Lesser General Public
-        License along with this application; if not, write to the Free Software
-        Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-*/
-
 #include <cv.h>
 #include <highgui.h>
 #include <iostream>
@@ -38,7 +7,6 @@
 #include <pcl/visualization/pcl_visualizer.h>
 #include <boost/thread/thread.hpp>
 
-//Kids, using this kind of #define is quite dirty, don't do it at home!!
 #define CUSTOM_REPROJECT
 /*** To understand the CUSTOM_REPROJECT code, please read Chapter 12 of the book
   Learning OpenCV: Computer Vision with the OpenCV Library. (Page 435) 

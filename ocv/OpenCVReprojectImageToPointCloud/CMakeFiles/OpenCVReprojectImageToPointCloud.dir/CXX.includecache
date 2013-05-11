@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/home/kirill/Загрузки/OpenCVReprojectImageToPointCloud/opencv_reproject_image_pcl.cpp
+/home/kirill/coding/MyPy/scripts/ocv/OpenCVReprojectImageToPointCloud/opencv_reproject_image_pcl.cpp
 cv.h
 -
 highgui.h

@@ -4,7 +4,7 @@ SET(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 SET(CMAKE_DEPENDS_CHECK_CXX
-  "/home/kirill/Загрузки/OpenCVReprojectImageToPointCloud/opencv_reproject_image_pcl.cpp" "/home/kirill/Загрузки/OpenCVReprojectImageToPointCloud/CMakeFiles/OpenCVReprojectImageToPointCloud.dir/opencv_reproject_image_pcl.cpp.o"
+  "/home/kirill/coding/MyPy/scripts/ocv/OpenCVReprojectImageToPointCloud/opencv_reproject_image_pcl.cpp" "/home/kirill/coding/MyPy/scripts/ocv/OpenCVReprojectImageToPointCloud/CMakeFiles/OpenCVReprojectImageToPointCloud.dir/opencv_reproject_image_pcl.cpp.o"
   )
 SET(CMAKE_CXX_COMPILER_ID "GNU")
 

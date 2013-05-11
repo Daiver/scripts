@@ -35,10 +35,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/kirill/Загрузки/OpenCVReprojectImageToPointCloud
+CMAKE_SOURCE_DIR = /home/kirill/coding/MyPy/scripts/ocv/OpenCVReprojectImageToPointCloud
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/kirill/Загрузки/OpenCVReprojectImageToPointCloud
+CMAKE_BINARY_DIR = /home/kirill/coding/MyPy/scripts/ocv/OpenCVReprojectImageToPointCloud
 
 # Include any dependencies generated for this target.
 include CMakeFiles/OpenCVReprojectImageToPointCloud.dir/depend.make
@@ -51,17 +51,17 @@ include CMakeFiles/OpenCVReprojectImageToPointCloud.dir/flags.make
 
 CMakeFiles/OpenCVReprojectImageToPointCloud.dir/opencv_reproject_image_pcl.cpp.o: CMakeFiles/OpenCVReprojectImageToPointCloud.dir/flags.make
 CMakeFiles/OpenCVReprojectImageToPointCloud.dir/opencv_reproject_image_pcl.cpp.o: opencv_reproject_image_pcl.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/kirill/Загрузки/OpenCVReprojectImageToPointCloud/CMakeFiles $(CMAKE_PROGRESS_1)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/kirill/coding/MyPy/scripts/ocv/OpenCVReprojectImageToPointCloud/CMakeFiles $(CMAKE_PROGRESS_1)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/OpenCVReprojectImageToPointCloud.dir/opencv_reproject_image_pcl.cpp.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/OpenCVReprojectImageToPointCloud.dir/opencv_reproject_image_pcl.cpp.o -c /home/kirill/Загрузки/OpenCVReprojectImageToPointCloud/opencv_reproject_image_pcl.cpp
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/OpenCVReprojectImageToPointCloud.dir/opencv_reproject_image_pcl.cpp.o -c /home/kirill/coding/MyPy/scripts/ocv/OpenCVReprojectImageToPointCloud/opencv_reproject_image_pcl.cpp
 
 CMakeFiles/OpenCVReprojectImageToPointCloud.dir/opencv_reproject_image_pcl.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/OpenCVReprojectImageToPointCloud.dir/opencv_reproject_image_pcl.cpp.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/kirill/Загрузки/OpenCVReprojectImageToPointCloud/opencv_reproject_image_pcl.cpp > CMakeFiles/OpenCVReprojectImageToPointCloud.dir/opencv_reproject_image_pcl.cpp.i
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/kirill/coding/MyPy/scripts/ocv/OpenCVReprojectImageToPointCloud/opencv_reproject_image_pcl.cpp > CMakeFiles/OpenCVReprojectImageToPointCloud.dir/opencv_reproject_image_pcl.cpp.i
 
 CMakeFiles/OpenCVReprojectImageToPointCloud.dir/opencv_reproject_image_pcl.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/OpenCVReprojectImageToPointCloud.dir/opencv_reproject_image_pcl.cpp.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/kirill/Загрузки/OpenCVReprojectImageToPointCloud/opencv_reproject_image_pcl.cpp -o CMakeFiles/OpenCVReprojectImageToPointCloud.dir/opencv_reproject_image_pcl.cpp.s
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/kirill/coding/MyPy/scripts/ocv/OpenCVReprojectImageToPointCloud/opencv_reproject_image_pcl.cpp -o CMakeFiles/OpenCVReprojectImageToPointCloud.dir/opencv_reproject_image_pcl.cpp.s
 
 CMakeFiles/OpenCVReprojectImageToPointCloud.dir/opencv_reproject_image_pcl.cpp.o.requires:
 .PHONY : CMakeFiles/OpenCVReprojectImageToPointCloud.dir/opencv_reproject_image_pcl.cpp.o.requires
@@ -153,6 +153,6 @@ CMakeFiles/OpenCVReprojectImageToPointCloud.dir/clean:
 .PHONY : CMakeFiles/OpenCVReprojectImageToPointCloud.dir/clean
 
 CMakeFiles/OpenCVReprojectImageToPointCloud.dir/depend:
-	cd /home/kirill/Загрузки/OpenCVReprojectImageToPointCloud && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/kirill/Загрузки/OpenCVReprojectImageToPointCloud /home/kirill/Загрузки/OpenCVReprojectImageToPointCloud /home/kirill/Загрузки/OpenCVReprojectImageToPointCloud /home/kirill/Загрузки/OpenCVReprojectImageToPointCloud /home/kirill/Загрузки/OpenCVReprojectImageToPointCloud/CMakeFiles/OpenCVReprojectImageToPointCloud.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/kirill/coding/MyPy/scripts/ocv/OpenCVReprojectImageToPointCloud && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/kirill/coding/MyPy/scripts/ocv/OpenCVReprojectImageToPointCloud /home/kirill/coding/MyPy/scripts/ocv/OpenCVReprojectImageToPointCloud /home/kirill/coding/MyPy/scripts/ocv/OpenCVReprojectImageToPointCloud /home/kirill/coding/MyPy/scripts/ocv/OpenCVReprojectImageToPointCloud /home/kirill/coding/MyPy/scripts/ocv/OpenCVReprojectImageToPointCloud/CMakeFiles/OpenCVReprojectImageToPointCloud.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/OpenCVReprojectImageToPointCloud.dir/depend
 
