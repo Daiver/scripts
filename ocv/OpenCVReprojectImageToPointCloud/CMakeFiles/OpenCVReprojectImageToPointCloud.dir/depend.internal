@@ -484,27 +484,44 @@ CMakeFiles/OpenCVReprojectImageToPointCloud.dir/opencv_reproject_image_pcl.cpp.o
  /usr/local/include/pcl-1.7/pcl/PointIndices.h
  /usr/local/include/pcl-1.7/pcl/PolygonMesh.h
  /usr/local/include/pcl-1.7/pcl/Vertices.h
+ /usr/local/include/pcl-1.7/pcl/cloud_iterator.h
  /usr/local/include/pcl-1.7/pcl/common/angles.h
+ /usr/local/include/pcl-1.7/pcl/common/centroid.h
  /usr/local/include/pcl-1.7/pcl/common/common.h
  /usr/local/include/pcl-1.7/pcl/common/common_headers.h
  /usr/local/include/pcl-1.7/pcl/common/concatenate.h
  /usr/local/include/pcl-1.7/pcl/common/eigen.h
  /usr/local/include/pcl-1.7/pcl/common/file_io.h
  /usr/local/include/pcl-1.7/pcl/common/impl/angles.hpp
+ /usr/local/include/pcl-1.7/pcl/common/impl/centroid.hpp
  /usr/local/include/pcl-1.7/pcl/common/impl/common.hpp
  /usr/local/include/pcl-1.7/pcl/common/impl/eigen.hpp
  /usr/local/include/pcl-1.7/pcl/common/impl/file_io.hpp
  /usr/local/include/pcl-1.7/pcl/common/impl/io.hpp
  /usr/local/include/pcl-1.7/pcl/common/impl/norms.hpp
+ /usr/local/include/pcl-1.7/pcl/common/impl/projection_matrix.hpp
  /usr/local/include/pcl-1.7/pcl/common/io.h
  /usr/local/include/pcl-1.7/pcl/common/norms.h
  /usr/local/include/pcl-1.7/pcl/common/point_tests.h
+ /usr/local/include/pcl-1.7/pcl/common/projection_matrix.h
  /usr/local/include/pcl-1.7/pcl/common/time.h
  /usr/local/include/pcl-1.7/pcl/console/print.h
  /usr/local/include/pcl-1.7/pcl/correspondence.h
  /usr/local/include/pcl-1.7/pcl/exceptions.h
+ /usr/local/include/pcl-1.7/pcl/features/feature.h
+ /usr/local/include/pcl-1.7/pcl/features/impl/feature.hpp
+ /usr/local/include/pcl-1.7/pcl/features/impl/normal_3d.hpp
+ /usr/local/include/pcl-1.7/pcl/features/normal_3d.h
+ /usr/local/include/pcl-1.7/pcl/filters/boost.h
+ /usr/local/include/pcl-1.7/pcl/filters/filter.h
+ /usr/local/include/pcl-1.7/pcl/filters/filter_indices.h
+ /usr/local/include/pcl-1.7/pcl/filters/impl/filter.hpp
+ /usr/local/include/pcl-1.7/pcl/filters/impl/filter_indices.hpp
+ /usr/local/include/pcl-1.7/pcl/filters/impl/passthrough.hpp
+ /usr/local/include/pcl-1.7/pcl/filters/passthrough.h
  /usr/local/include/pcl-1.7/pcl/for_each_type.h
  /usr/local/include/pcl-1.7/pcl/geometry/planar_polygon.h
+ /usr/local/include/pcl-1.7/pcl/impl/cloud_iterator.hpp
  /usr/local/include/pcl-1.7/pcl/impl/pcl_base.hpp
  /usr/local/include/pcl-1.7/pcl/impl/point_types.hpp
  /usr/local/include/pcl-1.7/pcl/io/boost.h
@@ -512,17 +529,41 @@ CMakeFiles/OpenCVReprojectImageToPointCloud.dir/opencv_reproject_image_pcl.cpp.o
  /usr/local/include/pcl-1.7/pcl/io/impl/pcd_io.hpp
  /usr/local/include/pcl-1.7/pcl/io/lzf.h
  /usr/local/include/pcl-1.7/pcl/io/pcd_io.h
+ /usr/local/include/pcl-1.7/pcl/kdtree/flann.h
+ /usr/local/include/pcl-1.7/pcl/kdtree/impl/kdtree_flann.hpp
+ /usr/local/include/pcl-1.7/pcl/kdtree/kdtree.h
+ /usr/local/include/pcl-1.7/pcl/kdtree/kdtree_flann.h
+ /usr/local/include/pcl-1.7/pcl/octree/impl/octree_pointcloud.hpp
+ /usr/local/include/pcl-1.7/pcl/octree/impl/octree_search.hpp
+ /usr/local/include/pcl-1.7/pcl/octree/octree_base.h
+ /usr/local/include/pcl-1.7/pcl/octree/octree_container.h
+ /usr/local/include/pcl-1.7/pcl/octree/octree_iterator.h
+ /usr/local/include/pcl-1.7/pcl/octree/octree_key.h
+ /usr/local/include/pcl-1.7/pcl/octree/octree_nodes.h
+ /usr/local/include/pcl-1.7/pcl/octree/octree_pointcloud.h
+ /usr/local/include/pcl-1.7/pcl/octree/octree_search.h
  /usr/local/include/pcl-1.7/pcl/pcl_base.h
  /usr/local/include/pcl-1.7/pcl/pcl_config.h
  /usr/local/include/pcl-1.7/pcl/pcl_exports.h
  /usr/local/include/pcl-1.7/pcl/pcl_macros.h
  /usr/local/include/pcl-1.7/pcl/point_cloud.h
+ /usr/local/include/pcl-1.7/pcl/point_representation.h
  /usr/local/include/pcl-1.7/pcl/point_traits.h
  /usr/local/include/pcl-1.7/pcl/point_types.h
  /usr/local/include/pcl-1.7/pcl/ros/conversions.h
  /usr/local/include/pcl-1.7/pcl/ros/register_point_struct.h
+ /usr/local/include/pcl-1.7/pcl/search/impl/organized.hpp
+ /usr/local/include/pcl-1.7/pcl/search/impl/search.hpp
+ /usr/local/include/pcl-1.7/pcl/search/kdtree.h
+ /usr/local/include/pcl-1.7/pcl/search/octree.h
+ /usr/local/include/pcl-1.7/pcl/search/organized.h
+ /usr/local/include/pcl-1.7/pcl/search/pcl_search.h
+ /usr/local/include/pcl-1.7/pcl/search/search.h
+ /usr/local/include/pcl-1.7/pcl/segmentation/impl/region_growing.hpp
+ /usr/local/include/pcl-1.7/pcl/segmentation/region_growing.h
  /usr/local/include/pcl-1.7/pcl/visualization/area_picking_event.h
  /usr/local/include/pcl-1.7/pcl/visualization/boost.h
+ /usr/local/include/pcl-1.7/pcl/visualization/cloud_viewer.h
  /usr/local/include/pcl-1.7/pcl/visualization/common/actor_map.h
  /usr/local/include/pcl-1.7/pcl/visualization/common/common.h
  /usr/local/include/pcl-1.7/pcl/visualization/common/impl/common.hpp

@@ -6,6 +6,14 @@
 #include <pcl/io/pcd_io.h>
 #include <pcl/visualization/pcl_visualizer.h>
 #include <boost/thread/thread.hpp>
+#include <pcl/point_types.h>
+#include <pcl/search/search.h>
+#include <pcl/search/kdtree.h>
+#include <pcl/features/normal_3d.h>
+#include <pcl/visualization/cloud_viewer.h>
+#include <pcl/filters/passthrough.h>
+#include <pcl/segmentation/region_growing.h>
+
 
 #define CUSTOM_REPROJECT
 /*** To understand the CUSTOM_REPROJECT code, please read Chapter 12 of the book
@@ -17,6 +25,51 @@
   the previous #define CUSTOM_REPROJECT and recompile.
     
 ***/
+
+pcl::PointCloud<pcl::PointXYZRGB>::Ptr getColored(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud)
+{
+  pcl::search::Search<pcl::PointXYZRGB>::Ptr tree = boost::shared_ptr<pcl::search::Search<pcl::PointXYZRGB> > (new pcl::search::KdTree<pcl::PointXYZRGB>);
+  pcl::PointCloud <pcl::Normal>::Ptr normals (new pcl::PointCloud <pcl::Normal>);
+  pcl::NormalEstimation<pcl::PointXYZRGB, pcl::Normal> normal_estimator;
+  normal_estimator.setSearchMethod (tree);
+  normal_estimator.setInputCloud (cloud);
+  normal_estimator.setKSearch (50);
+  normal_estimator.compute (*normals);
+
+  pcl::IndicesPtr indices (new std::vector <int>);
+  pcl::PassThrough<pcl::PointXYZRGB> pass;
+  pass.setInputCloud (cloud);
+  pass.setFilterFieldName ("z");
+  pass.setFilterLimits (0.0, 1.0);
+  pass.filter (*indices);
+
+  pcl::RegionGrowing<pcl::PointXYZRGB, pcl::Normal> reg;
+  reg.setMinClusterSize (100);
+  reg.setMaxClusterSize (10000);
+  reg.setSearchMethod (tree);
+  reg.setNumberOfNeighbours (30);
+  reg.setInputCloud (cloud);
+  //reg.setIndices (indices);
+  reg.setInputNormals (normals);
+  reg.setSmoothnessThreshold (7.0 / 180.0 * M_PI);
+  reg.setCurvatureThreshold (1.0);
+
+  std::vector <pcl::PointIndices> clusters;
+  reg.extract (clusters);
+
+  std::cout << "Number of clusters is equal to " << clusters.size () << std::endl;
+  std::cout << "First cluster has " << clusters[0].indices.size () << " points." << endl;
+  std::cout << "These are the indices of the points of the initial" <<
+    std::endl << "cloud that belong to the first cluster:" << std::endl;
+  int counter = 0;
+  while (counter < 5 || counter > clusters[0].indices.size ())
+  {
+    std::cout << clusters[0].indices[counter] << std::endl;
+    counter++;
+  }
+
+  return reg.getColoredCloud();
+}
 
 
 //This function creates a PCL visualizer, sets the point cloud to view and returns a pointer
@@ -177,7 +230,7 @@ int main( int argc, char** argv )
   }
   point_cloud_ptr->width = (int) point_cloud_ptr->points.size();
   point_cloud_ptr->height = 1;
-  
+  point_cloud_ptr = getColored(point_cloud_ptr);
   //Create visualizer
   boost::shared_ptr<pcl::visualization::PCLVisualizer> viewer;
   viewer = createVisualizer( point_cloud_ptr );

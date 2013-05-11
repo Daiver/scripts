@@ -9,16 +9,8 @@
 #include <pcl/filters/passthrough.h>
 #include <pcl/segmentation/region_growing.h>
 
-int
-main (int argc, char** argv)
+pcl::PointCloud<pcl::PointXYZ>::Ptr getColored(pcl::PointCloud<pcl::PointXYZ>::Ptr cloud)
 {
-  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud (new pcl::PointCloud<pcl::PointXYZ>);
-  if ( pcl::io::loadPCDFile <pcl::PointXYZ> ("region_growing_tutorial.pcd", *cloud) == -1)
-  {
-    std::cout << "Cloud reading failed." << std::endl;
-    return (-1);
-  }
-
   pcl::search::Search<pcl::PointXYZ>::Ptr tree = boost::shared_ptr<pcl::search::Search<pcl::PointXYZ> > (new pcl::search::KdTree<pcl::PointXYZ>);
   pcl::PointCloud <pcl::Normal>::Ptr normals (new pcl::PointCloud <pcl::Normal>);
   pcl::NormalEstimation<pcl::PointXYZ, pcl::Normal> normal_estimator;
@@ -59,7 +51,20 @@ main (int argc, char** argv)
     counter++;
   }
 
-  pcl::PointCloud <pcl::PointXYZRGB>::Ptr colored_cloud = reg.getColoredCloud ();
+  return reg.getColoredCloud();
+}
+
+int
+main (int argc, char** argv)
+{
+  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud (new pcl::PointCloud<pcl::PointXYZ>);
+  if ( pcl::io::loadPCDFile <pcl::PointXYZ> ("region_growing_tutorial.pcd", *cloud) == -1)
+  {
+    std::cout << "Cloud reading failed." << std::endl;
+    return (-1);
+  }
+
+  pcl::PointCloud <pcl::PointXYZRGB>::Ptr colored_cloud = getColored(cloud);///= reg.getColoredCloud ();
   pcl::visualization::CloudViewer viewer ("Cluster viewer");
   viewer.showCloud(colored_cloud);
   while (!viewer.wasStopped ()) {  }
