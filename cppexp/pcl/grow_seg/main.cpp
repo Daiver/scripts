@@ -62,9 +62,7 @@ main (int argc, char** argv)
   pcl::PointCloud <pcl::PointXYZRGB>::Ptr colored_cloud = reg.getColoredCloud ();
   pcl::visualization::CloudViewer viewer ("Cluster viewer");
   viewer.showCloud(colored_cloud);
-  while (!viewer.wasStopped ())
-  {
-  }
+  while (!viewer.wasStopped ()) {  }
 
   return (0);
 }
