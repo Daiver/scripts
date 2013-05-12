@@ -336,8 +336,8 @@ std::vector<Component> work(cv::Mat &left_c, cv::Mat &right_c)
     cv::Mat left, right;
     cv::cvtColor(left_c, left, CV_RGB2GRAY);
     cv::cvtColor(right_c, right, CV_RGB2GRAY);
-    //cv::Mat map = (getDepthMapBM(left, right));
-    cv::Mat map = (getDepthMapVar(left, right));
+    cv::Mat map = (getDepthMapBM(left, right));
+    //cv::Mat map = (getDepthMapVar(left, right));
     cv::imwrite("dis.pgm", map);
     //cv::Mat map = (getDepthMapSGBM(left, right));
 
