@@ -12,32 +12,73 @@ float *getHOG(const cv::Mat &image, int* count)
 {
     cv::HOGDescriptor hog;
     std::vector<float> res;
-    std::cout<<"Before compute\n";
-    hog.compute(image, res, cv::Size(8,8), cv::Size(0,0));
-    std::cout<<"Before size\n";
+    cv::Mat img2;
+    cv::resize(image, img2, cv::Size(64, 128));
+    hog.compute(img2, res, cv::Size(8,8), cv::Size(0,0));
     *count = res.size();
     return &res[0];
 }
 
+const int dataSetLength = 10;
 float **getTraininigData(int* setlen, int* veclen)
 {
-    char *names[2] = {
+    char *names[dataSetLength] = {
         "../faces/s1/1.pgm",
         "../faces/s1/2.pgm",
+        "../faces/s1/3.pgm",
+        "../faces/s1/4.pgm",
+        "../faces/s1/5.pgm",
+        "../faces/cars/1.jpg",
+        "../faces/cars/2.jpg",
+        "../faces/cars/3.jpg",
+        "../faces/cars/4.jpg",
+        "../faces/cars/5.jpg",
     };
-    for(int i = 0; i < 2; i++)
+
+    float **res = new float* [dataSetLength];
+    for(int i = 0; i < dataSetLength; i++)
     {
         std::cout<<names[i]<<"\n";
         cv::Mat img = cv::imread(names[i], 0);
-        getHOG(img, veclen);
+        res[i] = getHOG(img, veclen);
         std::cout<<"vl "<<*veclen<<"\n";
     }
+    *setlen = dataSetLength;
+}
+
+void test()
+{
+    int setlen, veclen;
+    float **trainingData = getTraininigData(&setlen, &veclen);
+    float *labels = new float[dataSetLength];
+    for(int i = 0; i < dataSetLength; i++)
+    {
+        labels[i] = (i < dataSetLength/2)? 1.0 : -1.0;
+    }
+    cv::Mat labelsMat(setlen, 1, CV_32FC1, labels);
+    cv::Mat trainingDataMat(setlen, veclen, CV_32FC1, trainingData);
+    cv::SVMParams params;
+    params.svm_type    = cv::SVM::C_SVC;
+    params.kernel_type = cv::SVM::LINEAR;
+    params.term_crit   = cv::TermCriteria(CV_TERMCRIT_ITER, 100, 1e-6);
+
+    std::cout<<"before train\n";
+    cv::SVM SVM;
+    SVM.train(trainingDataMat, labelsMat, cv::Mat(), cv::Mat(), params);
+    std::cout<<"before read\n";
+    cv::Mat img = cv::imread("../faces/s1/1.pgm", 0);
+    std::cout<<"before HOG\n";
+    auto desc = getHOG(img, &veclen);
+    std::cout<<"before sample mat\n";
+    cv::Mat sampleMat(1, veclen, CV_32FC1, desc);
+    float response = SVM.predict(sampleMat);
+    std::cout<<"resp"<< response<<"\n";
 }
 
 int main()
 {
-    int setlen, veclen;
-    getTraininigData(&setlen, &veclen);
+    //getTraininigData(&setlen, &veclen);
+    test();
     // Data for visual representation
     int width = 512, height = 512;
     cv::Mat image = cv::Mat::zeros(height, width, CV_8UC3);
