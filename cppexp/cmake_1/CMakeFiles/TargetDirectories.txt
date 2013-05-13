@@ -1,0 +1,2 @@
+/home/kirill/coding/MyPy/scripts/cppexp/cmake_1/CMakeFiles/Test.dir
+/home/kirill/coding/MyPy/scripts/cppexp/cmake_1/CMakeFiles/main.dir

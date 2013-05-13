@@ -18,7 +18,7 @@
 
 #include <time.h>
 
-//#define CUSTOM_REPROJECT
+#define CUSTOM_REPROJECT
 /*** To understand the CUSTOM_REPROJECT code, please read Chapter 12 of the book
   Learning OpenCV: Computer Vision with the OpenCV Library. (Page 435) 
   I am using it because cv::reprojectImageTo3D is not giving me the expected

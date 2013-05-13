@@ -16,7 +16,13 @@ float *getHOG(const cv::Mat &image, int* count)
     cv::resize(image, img2, cv::Size(64, 128));
     hog.compute(img2, res, cv::Size(8,8), cv::Size(0,0));
     *count = res.size();
-    return &res[0];
+    float* result = new float[*count];
+    for(int i = 0; i < res.size(); i++)
+    {
+        result[i] = res[i];
+        std::cout<<result[i]<<"\n";
+    }
+    return result;
 }
 
 const int dataSetLength = 10;
@@ -57,13 +63,16 @@ void test()
     }
     cv::Mat labelsMat(setlen, 1, CV_32FC1, labels);
     cv::Mat trainingDataMat(setlen, veclen, CV_32FC1, trainingData);
+
     cv::SVMParams params;
     params.svm_type    = cv::SVM::C_SVC;
     params.kernel_type = cv::SVM::LINEAR;
     params.term_crit   = cv::TermCriteria(CV_TERMCRIT_ITER, 100, 1e-6);
+    std::cout<<labelsMat<<"\n";
+    std::cout<<trainingDataMat<<"\n";
 
-    std::cout<<"before train\n";
     cv::SVM SVM;
+    std::cout<<"before train\n";
     SVM.train(trainingDataMat, labelsMat, cv::Mat(), cv::Mat(), params);
     std::cout<<"before read\n";
     cv::Mat img = cv::imread("../faces/s1/1.pgm", 0);
