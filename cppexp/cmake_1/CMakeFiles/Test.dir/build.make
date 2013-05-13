@@ -53,15 +53,15 @@ CMakeFiles/Test.dir/test.cpp.o: CMakeFiles/Test.dir/flags.make
 CMakeFiles/Test.dir/test.cpp.o: test.cpp
 	$(CMAKE_COMMAND) -E cmake_progress_report /home/kirill/coding/MyPy/scripts/cppexp/cmake_1/CMakeFiles $(CMAKE_PROGRESS_1)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/Test.dir/test.cpp.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/Test.dir/test.cpp.o -c /home/kirill/coding/MyPy/scripts/cppexp/cmake_1/test.cpp
+	/usr/bin/clang++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/Test.dir/test.cpp.o -c /home/kirill/coding/MyPy/scripts/cppexp/cmake_1/test.cpp
 
 CMakeFiles/Test.dir/test.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Test.dir/test.cpp.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/kirill/coding/MyPy/scripts/cppexp/cmake_1/test.cpp > CMakeFiles/Test.dir/test.cpp.i
+	/usr/bin/clang++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/kirill/coding/MyPy/scripts/cppexp/cmake_1/test.cpp > CMakeFiles/Test.dir/test.cpp.i
 
 CMakeFiles/Test.dir/test.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Test.dir/test.cpp.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/kirill/coding/MyPy/scripts/cppexp/cmake_1/test.cpp -o CMakeFiles/Test.dir/test.cpp.s
+	/usr/bin/clang++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/kirill/coding/MyPy/scripts/cppexp/cmake_1/test.cpp -o CMakeFiles/Test.dir/test.cpp.s
 
 CMakeFiles/Test.dir/test.cpp.o.requires:
 .PHONY : CMakeFiles/Test.dir/test.cpp.o.requires

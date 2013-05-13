@@ -1,1 +1,1 @@
-/usr/bin/c++       CMakeFiles/main.dir/main.cpp.o  -o main -rdynamic libTest.a 
+/usr/bin/clang++   -Wall -std=c++11    CMakeFiles/main.dir/main.cpp.o  -o main -rdynamic libTest.a 
