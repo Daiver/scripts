@@ -16,8 +16,9 @@
 #include <opencv2/calib3d/calib3d.hpp>
 #include <opencv2/contrib/contrib.hpp>
 
+#include <time.h>
 
-#define CUSTOM_REPROJECT
+//#define CUSTOM_REPROJECT
 /*** To understand the CUSTOM_REPROJECT code, please read Chapter 12 of the book
   Learning OpenCV: Computer Vision with the OpenCV Library. (Page 435) 
   I am using it because cv::reprojectImageTo3D is not giving me the expected
@@ -293,8 +294,13 @@ int main( int argc, char** argv )
   point_cloud_ptr->width = (int) point_cloud_ptr->points.size();
   point_cloud_ptr->height = 1;
 
+  clock_t begin, end;
+  double time_spent;
+  begin = clock();
   point_cloud_ptr = getColored(point_cloud_ptr);
-  
+  end = clock();
+  std::cout <<"time elapsed"<< (double)(end - begin) / CLOCKS_PER_SEC <<std::endl;
+
   //Create visualizer
   boost::shared_ptr<pcl::visualization::PCLVisualizer> viewer;
   viewer = createVisualizer( point_cloud_ptr );
