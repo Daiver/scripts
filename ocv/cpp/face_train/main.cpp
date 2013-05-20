@@ -14,13 +14,12 @@ float *getHOG(const cv::Mat &image, int* count)
     std::vector<float> res;
     cv::Mat img2;
     cv::resize(image, img2, cv::Size(64, 128));
-    hog.compute(img2, res, cv::Size(8,8), cv::Size(0,0));
+    hog.compute(img2, res, cv::Size(8, 8), cv::Size(0, 0));
     *count = res.size();
     float* result = new float[*count];
     for(int i = 0; i < res.size(); i++)
     {
         result[i] = res[i];
-        std::cout<<result[i]<<"\n";
     }
     return result;
 }
@@ -47,9 +46,9 @@ float **getTraininigData(int* setlen, int* veclen)
         std::cout<<names[i]<<"\n";
         cv::Mat img = cv::imread(names[i], 0);
         res[i] = getHOG(img, veclen);
-        std::cout<<"vl "<<*veclen<<"\n";
     }
     *setlen = dataSetLength;
+    return res;
 }
 
 void test()
@@ -59,7 +58,7 @@ void test()
     float *labels = new float[dataSetLength];
     for(int i = 0; i < dataSetLength; i++)
     {
-        labels[i] = (i < dataSetLength/2)? 1.0 : -1.0;
+        labels[i] = (i < dataSetLength/2)? 0.0 : 1.0;
     }
     cv::Mat labelsMat(setlen, 1, CV_32FC1, labels);
     cv::Mat trainingDataMat(setlen, veclen, CV_32FC1, trainingData);
@@ -69,19 +68,15 @@ void test()
     params.kernel_type = cv::SVM::LINEAR;
     params.term_crit   = cv::TermCriteria(CV_TERMCRIT_ITER, 100, 1e-6);
     std::cout<<labelsMat<<"\n";
-    std::cout<<trainingDataMat<<"\n";
 
     cv::SVM SVM;
-    std::cout<<"before train\n";
     SVM.train(trainingDataMat, labelsMat, cv::Mat(), cv::Mat(), params);
-    std::cout<<"before read\n";
-    cv::Mat img = cv::imread("../faces/s1/1.pgm", 0);
-    std::cout<<"before HOG\n";
+    cv::Mat img = cv::imread("../faces/s1/2.pgm", 0);
+    //cv::Mat img = cv::imread("../faces/s1/5.pgm", 0);
     auto desc = getHOG(img, &veclen);
-    std::cout<<"before sample mat\n";
     cv::Mat sampleMat(1, veclen, CV_32FC1, desc);
     float response = SVM.predict(sampleMat);
-    std::cout<<"resp"<< response<<"\n";
+    std::cout<<"resp "<< response<<"\n";
 }
 
 int main()
@@ -89,7 +84,7 @@ int main()
     //getTraininigData(&setlen, &veclen);
     test();
     // Data for visual representation
-    int width = 512, height = 512;
+    /*int width = 512, height = 512;
     cv::Mat image = cv::Mat::zeros(height, width, CV_8UC3);
 
     // Set up training data
@@ -148,5 +143,5 @@ int main()
 
     cv::imshow("SVM Simple Example", image); // show it to the user
     cv::waitKey(0);
-
+    */
 }
