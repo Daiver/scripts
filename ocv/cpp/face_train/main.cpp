@@ -4,6 +4,8 @@
 #include <opencv2/calib3d/calib3d.hpp>
 #include <opencv2/contrib/contrib.hpp>
 
+#include <string.h>
+#include <stdio.h>
 #include <iostream>
 #include <vector>
 //using namespace cv;
@@ -24,21 +26,27 @@ float *getHOG(const cv::Mat &image, int* count)
     return result;
 }
 
-const int dataSetLength = 10;
+const int dataSetLength = 60;
 float **getTraininigData(int* setlen, int* veclen)
 {
-    char *names[dataSetLength] = {
-        "../faces/s1/1.pgm",
-        "../faces/s1/2.pgm",
-        "../faces/s1/3.pgm",
-        "../faces/s1/4.pgm",
-        "../faces/s1/5.pgm",
-        "../faces/cars/1.jpg",
-        "../faces/cars/2.jpg",
-        "../faces/cars/3.jpg",
-        "../faces/cars/4.jpg",
-        "../faces/cars/5.jpg",
-    };
+    char *names[dataSetLength];
+    int couter = 0;
+    for(int i = 1; i < 11; i++)
+    {
+        for(int j = 1; j < 4; j++)
+        {
+            char *buf = new char[128];
+            sprintf(buf, "../faces/s%d/%d.pgm", j, i);
+            names[couter++] = buf;
+        }
+    }
+
+    for(int i = 1; i < 31; i++)
+    {
+        char *buf = new char[128];
+        sprintf(buf, "../faces/other/%d.jpg", i);
+        names[couter++] = buf;
+    }
 
     float **res = new float* [dataSetLength];
     for(int i = 0; i < dataSetLength; i++)
@@ -58,25 +66,35 @@ void test()
     float *labels = new float[dataSetLength];
     for(int i = 0; i < dataSetLength; i++)
     {
-        labels[i] = (i < dataSetLength/2)? 0.0 : 1.0;
+        labels[i] = (i < dataSetLength/2)? 1 : 0.0;
     }
     cv::Mat labelsMat(setlen, 1, CV_32FC1, labels);
     cv::Mat trainingDataMat(setlen, veclen, CV_32FC1, trainingData);
 
     cv::SVMParams params;
     params.svm_type    = cv::SVM::C_SVC;
-    params.kernel_type = cv::SVM::LINEAR;
+    //params.svm_type    = cv::SVM::ONE_CLASS;
+    //params.nu = 0.9;
+    params.kernel_type = cv::SVM::RBF;
+    params.gamma = 0.7;
+    //params.kernel_type = cv::SVM::LINEAR;
     params.term_crit   = cv::TermCriteria(CV_TERMCRIT_ITER, 100, 1e-6);
     std::cout<<labelsMat<<"\n";
 
     cv::SVM SVM;
     SVM.train(trainingDataMat, labelsMat, cv::Mat(), cv::Mat(), params);
-    cv::Mat img = cv::imread("../faces/s1/2.pgm", 0);
-    //cv::Mat img = cv::imread("../faces/s1/5.pgm", 0);
+
+    cv::Mat img = cv::imread("../faces/other/10.jpg", 0);
     auto desc = getHOG(img, &veclen);
     cv::Mat sampleMat(1, veclen, CV_32FC1, desc);
     float response = SVM.predict(sampleMat);
     std::cout<<"resp "<< response<<"\n";
+
+    img = cv::imread("../faces/s2/5.pgm");
+    desc = getHOG(img, &veclen);
+    sampleMat = cv::Mat(1, veclen, CV_32FC1, desc);
+    response = SVM.predict(sampleMat);
+    std::cout<<"resp "<<response<<std::endl;
 }
 
 int main()
