@@ -76,12 +76,13 @@ void test()
     //params.svm_type    = cv::SVM::ONE_CLASS;
     //params.nu = 0.9;
     params.kernel_type = cv::SVM::RBF;
-    params.gamma = 0.7;
+    params.gamma = 2.7;
     //params.kernel_type = cv::SVM::LINEAR;
     params.term_crit   = cv::TermCriteria(CV_TERMCRIT_ITER, 100, 1e-6);
     std::cout<<labelsMat<<"\n";
 
     cv::SVM SVM;
+    //SVM.train_auto(trainingDataMat, labelsMat, cv::Mat(), cv::Mat(), params);
     SVM.train(trainingDataMat, labelsMat, cv::Mat(), cv::Mat(), params);
 
     cv::Mat img = cv::imread("../faces/other/10.jpg", 0);
