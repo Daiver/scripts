@@ -27,9 +27,11 @@ if __name__ == '__main__':
             img = np.zeros((10, 10))
             print 'cannot read file'
 
+        img = cv2.resize(img, (250, 250))
+
         text_image = np.zeros((50, 200))
-        cv2.putText(text_image, "mark %d i %d" % (mark, i), (30, 30), 2, 0.7, (255, 0, 0))
-        cv2.imshow("text", text_image)
+        cv2.putText(img, "%d mark %d" % (i, mark), (30, 30), 2, 0.7, (0, 0, 255))
+        #cv2.imshow("text", text_image)
         cv2.imshow("", img)
         key = cv2.waitKey() % 0x100
         if key == 83: #right
