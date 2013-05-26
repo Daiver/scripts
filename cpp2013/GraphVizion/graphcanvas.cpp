@@ -32,7 +32,7 @@ void GraphCanvas::paintEvent(QPaintEvent *e)
         auto v = this->VG.getByIterator(vp); //getByIndex(index[*vp.first]);
         p.drawEllipse(v.getPos().first - v.getSize()/2, v.getPos().second - v.getSize()/2, v.getSize(), v.getSize());
         auto text = v.getLabel();
-        p.drawText(QPoint(v.getPos().first + v.getSize(), v.getPos().second + v.getSize()) , QString(text.c_str()));
+        p.drawText(QPoint(v.getPos().first + v.getSize(), v.getPos().second + v.getSize()) , text);
     }
 }
 
@@ -68,6 +68,11 @@ void GraphCanvas::setEdgeAddTool()
     if(nullptr != this->tool)
         delete this->tool;
     this->tool = new VisualEdgeAddTool();
+}
+
+void GraphCanvas::setVertexMarkTool()
+{
+    this->VG.markVertex(0);
 }
 
 

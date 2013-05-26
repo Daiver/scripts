@@ -3,20 +3,21 @@
 
 #include "typedefs.h"
 #include <utility>
-#include <string>
+#include <QString>
 
 class VisualVertex
 {
 public:
     VisualVertex();
     VisualVertex(graphvizion_td::Position pos);
-    VisualVertex(graphvizion_td::Position pos, std::string label);
+    VisualVertex(graphvizion_td::Position pos, QString label);
     const graphvizion_td::Position& getPos();
     void setPos(graphvizion_td::Position pos);
-    const std::string& getLabel();
+    void setLabel(QString text);
+    const QString& getLabel();
     int getSize();
 protected:
-    std::string label;
+    QString label;
     graphvizion_td::Position pos;
     int size;
 };

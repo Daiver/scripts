@@ -25,6 +25,8 @@ public:
     void setVertexMoveTool();
     void setVertexDeleteTool();
     void setEdgeAddTool();
+    void setVertexMarkTool();
+
 protected:
     VisualTool* tool;
     virtual void paintEvent(QPaintEvent* e);

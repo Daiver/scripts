@@ -10,7 +10,7 @@ VisualVertex::VisualVertex(graphvizion_td::Position pos):VisualVertex()
     this->pos = pos;
 }
 
-VisualVertex::VisualVertex(graphvizion_td::Position pos, std::string label):VisualVertex(pos)
+VisualVertex::VisualVertex(graphvizion_td::Position pos, QString label):VisualVertex(pos)
 {
     this->label = label;
 }
@@ -25,7 +25,12 @@ void VisualVertex::setPos(graphvizion_td::Position pos)
     this->pos = pos;
 }
 
-const std::string &VisualVertex::getLabel()
+void VisualVertex::setLabel(QString text)
+{
+    this->label = text;
+}
+
+const QString &VisualVertex::getLabel()
 {
     return this->label;
 }

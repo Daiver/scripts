@@ -47,3 +47,9 @@ void MainWindow::on_pushButton_5_clicked()
     GraphCanvas *canvas = dynamic_cast<GraphCanvas*>(this->ui->scrollArea->widget());
     canvas->setEdgeAddTool();
 }
+
+void MainWindow::on_pushButton_6_clicked()
+{
+    GraphCanvas *canvas = dynamic_cast<GraphCanvas*>(this->ui->scrollArea->widget());
+    canvas->setVertexMarkTool();
+}

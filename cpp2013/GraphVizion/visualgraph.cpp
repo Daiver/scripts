@@ -1,5 +1,6 @@
 #include "visualgraph.h"
 #include <queue>
+#include <QString>
 
 VisualGraph::VisualGraph()
 {
@@ -65,11 +66,31 @@ int VisualGraph::getVertexIndexByCoo(graphvizion_td::Position pos)
 
 void VisualGraph::markVertex(int startindex)
 {
-    boost::graph_traits<graphvizion_td::Graph>::edge_iterator iter;
-    boost::graph_traits<graphvizion_td::Graph>::adjacency_iterator ei, ei_end;
+
     graphvizion_td::IndexMap index = boost::get(boost::vertex_index, this->graph);
+    boost::graph_traits<graphvizion_td::Graph>::adjacency_iterator ei, ei_end;
     //std::pair<graphvizion_td::vertex_iter, graphvizion_td::vertex_iter> vp;
-    //for (vp = boost::vertices(this->VG.graph); vp.first != vp.second; ++vp.first)
+    std::queue< std::pair<decltype(*ei), int> > queue;
+    //vp = boost::vertices(this->graph);
+
+    queue.push(std::pair<decltype(*ei), int>(index[startindex], 0));
+    std::vector<bool> isWalked(this->vertexes.size());
+    while(!queue.empty())
+    {
+        auto pair = queue.front();
+        auto desc = pair.first;
+        int num = pair.second;
+        queue.pop();
+        this->vertexes[(int)desc].setLabel(QString("%1").arg(num));
+        num++;
+        boost::tie(ei, ei_end) = boost::adjacent_vertices(desc, this->graph);
+        for(; ei != ei_end; ei++)
+        {
+            queue.push(std::pair<decltype(*ei), int>(*ei, num));
+        }
+    }
+    //boost::tie(ei, ei_end) = boost::adjacent_vertices(*ei, this->graph);
+    //for (vp = boost::vertices(this->graph); vp.first != vp.second; ++vp.first)
     //{
 
     //}
