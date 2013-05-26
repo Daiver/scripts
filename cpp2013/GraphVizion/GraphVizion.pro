@@ -22,9 +22,10 @@ SOURCES += main.cpp\
     visualvertex.cpp \
     visualgraph.cpp \
     visualtool.cpp \
-    visualaddtool.cpp \
     visualvertexmovetool.cpp \
-    visualvertexdeletetool.cpp
+    visualvertexdeletetool.cpp \
+    visualvertexaddtool.cpp \
+    visualedgeaddtool.cpp
 
 HEADERS  += mainwindow.h \
     graphcanvas.h \
@@ -34,6 +35,7 @@ HEADERS  += mainwindow.h \
     visualtool.h \
     visualvertexmovetool.h \
     visualvertexaddtool.h \
-    visualvertexdeletetool.h
+    visualvertexdeletetool.h \
+    visualedgeaddtool.h
 
 FORMS    += mainwindow.ui

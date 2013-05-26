@@ -15,6 +15,10 @@ public:
     VisualVertex &getByIterator(std::pair<graphvizion_td::vertex_iter, graphvizion_td::vertex_iter> vp);
     bool deleteByIndex(int i);
 
+    void addEdge(int first, int second);
+
+    VisualVertex* getVertexByCoo(graphvizion_td::Position pos);
+    int getVertexIndexByCoo(graphvizion_td::Position pos);
 
     graphvizion_td::Graph graph;
     std::vector<VisualVertex> vertexes;

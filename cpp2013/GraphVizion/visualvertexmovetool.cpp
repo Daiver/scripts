@@ -24,14 +24,10 @@ void VisualVertexMoveTool::mouseMoveEvent(QMouseEvent *e, VisualGraph *g)
 
 void VisualVertexMoveTool::mousePressEvent(QMouseEvent *e, VisualGraph *g)
 {
-    std::pair<graphvizion_td::vertex_iter, graphvizion_td::vertex_iter> vp;
-    for (vp = boost::vertices(g->graph); vp.first != vp.second; ++vp.first)
+    auto vertex = g->getVertexByCoo(graphvizion_td::Position(e->x(), e->y()));
+    if (vertex != nullptr)
     {
-        VisualVertex v = g->getByIterator(vp); //getByIndex(index[*vp.first]);
-        if(sqrt(pow(e->x() - v.getPos().first, 2.0 ) + pow(e->y() - v.getPos().second, 2.0)) <= v.getSize())
-        {
-            this->isPressed = true;
-            this->vertex = &g->getByIterator(vp);
-        }
+        this->isPressed = true;
+        this->vertex = vertex;
     }
 }

@@ -1,3 +1,9 @@
 Debug: HI
 Debug: del 3
 Debug: del 3
+Warning: QMetaObject::connectSlotsByName: No matching signal for on_pushButton_clicked()
+Debug: del 3
+Warning: QMetaObject::connectSlotsByName: No matching signal for on_pushButton_clicked()
+Warning: QMetaObject::connectSlotsByName: No matching signal for on_pushButton_clicked()
+Warning: QMetaObject::connectSlotsByName: No matching signal for on_pushButton_clicked()
+Warning: QMetaObject::connectSlotsByName: No matching signal for on_pushButton_clicked()
