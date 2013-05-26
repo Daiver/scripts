@@ -41,3 +41,9 @@ void MainWindow::on_pushButton_4_clicked()
     GraphCanvas *canvas = dynamic_cast<GraphCanvas*>(this->ui->scrollArea->widget());
     canvas->setVertexDeleteTool();
 }
+
+void MainWindow::on_pushButton_5_clicked()
+{
+    GraphCanvas *canvas = dynamic_cast<GraphCanvas*>(this->ui->scrollArea->widget());
+    canvas->setEdgeAddTool();
+}

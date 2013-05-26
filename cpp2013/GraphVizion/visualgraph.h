@@ -6,8 +6,11 @@
 
 #include <vector>
 
+class GraphCanvas;//TODO
+
 class VisualGraph
 {
+friend class GraphCanvas;
 public:
     VisualGraph();
     void addVertex(VisualVertex vertex);
@@ -20,6 +23,7 @@ public:
     VisualVertex* getVertexByCoo(graphvizion_td::Position pos);
     int getVertexIndexByCoo(graphvizion_td::Position pos);
 
+protected:
     graphvizion_td::Graph graph;
     std::vector<VisualVertex> vertexes;
     graphvizion_td::IndexMap index;

@@ -31,3 +31,7 @@ void VisualVertexMoveTool::mousePressEvent(QMouseEvent *e, VisualGraph *g)
         this->vertex = vertex;
     }
 }
+
+void VisualVertexMoveTool::paintEvent(QPaintEvent *e, QPainter *painter, VisualGraph *g)
+{
+}

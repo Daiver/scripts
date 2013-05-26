@@ -10,6 +10,7 @@ public:
     virtual void mouseReleaseEvent(QMouseEvent *e, VisualGraph *g) = 0;
     virtual void mouseMoveEvent(QMouseEvent* e, VisualGraph *g) = 0;
     virtual void mousePressEvent(QMouseEvent* e, VisualGraph *g) = 0;
+    virtual void paintEvent(QPaintEvent *e, QPainter* painter, VisualGraph *g) = 0;
 };
 
 #endif // VISUALTOOL_H

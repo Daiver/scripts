@@ -6,10 +6,15 @@
 #include "visualvertexaddtool.h"
 #include "visualvertexmovetool.h"
 #include "visualvertexdeletetool.h"
+#include "visualedgeaddtool.h"
 
 void GraphCanvas::paintEvent(QPaintEvent *e)
 {
     QPainter p(this);
+    if (nullptr != this->tool)
+    {
+        this->tool->paintEvent(e, &p, &this->VG);
+    }
     graphvizion_td::IndexMap index = boost::get(boost::vertex_index, this->VG.graph);
     p.setBrush(Qt::black);
     boost::graph_traits<graphvizion_td::Graph>::edge_iterator ei, ei_end;
@@ -27,18 +32,12 @@ void GraphCanvas::paintEvent(QPaintEvent *e)
         auto v = this->VG.getByIterator(vp); //getByIndex(index[*vp.first]);
         p.drawEllipse(v.getPos().first - v.getSize()/2, v.getPos().second - v.getSize()/2, v.getSize(), v.getSize());
     }
-
-
 }
 
 
 GraphCanvas::GraphCanvas()
 {
     this->tool = nullptr;
-    this->VG.addVertex(VisualVertex(graphvizion_td::Position(10, 10)));
-    this->VG.addVertex(VisualVertex(graphvizion_td::Position(20, 20)));
-    this->VG.addVertex(VisualVertex(graphvizion_td::Position(200, 30)));
-    boost::add_edge(0, 2, this->VG.graph);
 }
 
 void GraphCanvas::setVertexAddTool()
@@ -60,6 +59,13 @@ void GraphCanvas::setVertexDeleteTool()
     if(nullptr != this->tool)
         delete this->tool;
     this->tool = new VisualVertexDeleteTool();
+}
+
+void GraphCanvas::setEdgeAddTool()
+{
+    if(nullptr != this->tool)
+        delete this->tool;
+    this->tool = new VisualEdgeAddTool();
 }
 
 

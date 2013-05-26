@@ -28,3 +28,7 @@ void VisualVertexDeleteTool::mousePressEvent(QMouseEvent *e, VisualGraph *g)
         }
     }*/
 }
+
+void VisualVertexDeleteTool::paintEvent(QPaintEvent *e, QPainter *painter, VisualGraph *g)
+{
+}
