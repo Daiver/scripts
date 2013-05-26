@@ -23,6 +23,8 @@ public:
     VisualVertex* getVertexByCoo(graphvizion_td::Position pos);
     int getVertexIndexByCoo(graphvizion_td::Position pos);
 
+    void markVertex(int startindex);
+
 protected:
     graphvizion_td::Graph graph;
     std::vector<VisualVertex> vertexes;
