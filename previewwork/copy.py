@@ -11,7 +11,7 @@ if __name__ == '__main__':
     for string in open(input_file):
         st, end = map(int, string.split('_'))
         for i in xrange(st, end + 1):
-            shutil.copy2(os.path.join(source_dir, '%05d.jpg' % i), os.path.join(out_dir, '%05d.jpg' % i))
-            #shutil.copy2(os.path.join(source_dir, '%05d-left.jpg' % st), os.path.join(out_dir, '%05d-left.jpg'))
-            #shutil.copy2(os.path.join(source_dir, '%05d-right.jpg' % st), os.path.join(out_dir, '%05d-right.jpg'))
+            #shutil.copy2(os.path.join(source_dir, '%05d.jpg' % i), os.path.join(out_dir, '%05d.jpg' % i))
+            shutil.copy2(os.path.join(source_dir, '%05d-left.jpg' % st), os.path.join(out_dir, '%05d-left.jpg'))
+            shutil.copy2(os.path.join(source_dir, '%05d-right.jpg' % st), os.path.join(out_dir, '%05d-right.jpg'))
              
