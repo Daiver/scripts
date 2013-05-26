@@ -7,6 +7,7 @@
 #include "visualvertexmovetool.h"
 #include "visualvertexdeletetool.h"
 #include "visualedgeaddtool.h"
+#include "visualvertexmarktool.h"
 
 void GraphCanvas::paintEvent(QPaintEvent *e)
 {
@@ -72,7 +73,9 @@ void GraphCanvas::setEdgeAddTool()
 
 void GraphCanvas::setVertexMarkTool()
 {
-    this->VG.markVertex(0);
+    if(nullptr != this->tool)
+        delete this->tool;
+    this->tool = new VisualVertexMarkTool();
 }
 
 

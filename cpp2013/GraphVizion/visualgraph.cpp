@@ -34,6 +34,7 @@ bool VisualGraph::deleteByIndex(int i)
 void VisualGraph::addEdge(int first, int second)
 {
     boost::add_edge(first, second, this->graph);
+    boost::add_edge(second, first, this->graph);
 }
 
 VisualVertex *VisualGraph::getVertexByCoo(graphvizion_td::Position pos)
@@ -81,6 +82,8 @@ void VisualGraph::markVertex(int startindex)
         auto desc = pair.first;
         int num = pair.second;
         queue.pop();
+        if(isWalked[desc]) continue;
+        isWalked[desc] = true;
         this->vertexes[(int)desc].setLabel(QString("%1").arg(num));
         num++;
         boost::tie(ei, ei_end) = boost::adjacent_vertices(desc, this->graph);
@@ -89,31 +92,4 @@ void VisualGraph::markVertex(int startindex)
             queue.push(std::pair<decltype(*ei), int>(*ei, num));
         }
     }
-    //boost::tie(ei, ei_end) = boost::adjacent_vertices(*ei, this->graph);
-    //for (vp = boost::vertices(this->graph); vp.first != vp.second; ++vp.first)
-    //{
-
-    //}
-
-    /*
-     * graph_traits < adjacency_list <> >::vertex_iterator i, end;
-  graph_traits < adjacency_list <> >::adjacency_iterator ai, a_end;
-  property_map < adjacency_list <>, vertex_index_t >::type
-    index_map = get(vertex_index, g);
-
-  for (tie(i, end) = vertices(g); i != end; ++i) {
-    std::cout << name[get(index_map, *i)];
-    tie(ai, a_end) = adjacent_vertices(*i, g);
-    if (ai == a_end)
-      std::cout << " has no children";
-    else
-      std::cout << " is the parent of ";
-    for (; ai != a_end; ++ai) {
-      std::cout << name[get(index_map, *ai)];
-      if (boost::next(ai) != a_end)
-        std::cout << ", ";
-    }
-    std::cout << std::endl;
-  }
-    */
 }
