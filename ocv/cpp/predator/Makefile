@@ -99,6 +99,19 @@ depend:
 .PHONY : depend
 
 #=============================================================================
+# Target rules for targets named lk
+
+# Build rule for target.
+lk: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 lk
+.PHONY : lk
+
+# fast build rule for target.
+lk/fast:
+	$(MAKE) -f CMakeFiles/lk.dir/build.make CMakeFiles/lk.dir/build
+.PHONY : lk/fast
+
+#=============================================================================
 # Target rules for targets named main
 
 # Build rule for target.
@@ -110,6 +123,30 @@ main: cmake_check_build_system
 main/fast:
 	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/build
 .PHONY : main/fast
+
+lktrack.o: lktrack.cpp.o
+.PHONY : lktrack.o
+
+# target to build an object file
+lktrack.cpp.o:
+	$(MAKE) -f CMakeFiles/lk.dir/build.make CMakeFiles/lk.dir/lktrack.cpp.o
+.PHONY : lktrack.cpp.o
+
+lktrack.i: lktrack.cpp.i
+.PHONY : lktrack.i
+
+# target to preprocess a source file
+lktrack.cpp.i:
+	$(MAKE) -f CMakeFiles/lk.dir/build.make CMakeFiles/lk.dir/lktrack.cpp.i
+.PHONY : lktrack.cpp.i
+
+lktrack.s: lktrack.cpp.s
+.PHONY : lktrack.s
+
+# target to generate assembly for a file
+lktrack.cpp.s:
+	$(MAKE) -f CMakeFiles/lk.dir/build.make CMakeFiles/lk.dir/lktrack.cpp.s
+.PHONY : lktrack.cpp.s
 
 main.o: main.cpp.o
 .PHONY : main.o
@@ -142,8 +179,12 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... edit_cache"
+	@echo "... lk"
 	@echo "... main"
 	@echo "... rebuild_cache"
+	@echo "... lktrack.o"
+	@echo "... lktrack.i"
+	@echo "... lktrack.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

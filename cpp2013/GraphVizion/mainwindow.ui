@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>514</width>
-    <height>372</height>
+    <height>341</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,7 +20,7 @@
       <x>0</x>
       <y>30</y>
       <width>511</width>
-      <height>161</height>
+      <height>231</height>
      </rect>
     </property>
     <property name="widgetResizable">
@@ -32,20 +32,10 @@
        <x>0</x>
        <y>0</y>
        <width>507</width>
-       <height>157</height>
+       <height>227</height>
       </rect>
      </property>
     </widget>
-   </widget>
-   <widget class="QTextEdit" name="textEdit">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>200</y>
-      <width>511</width>
-      <height>131</height>
-     </rect>
-    </property>
    </widget>
    <widget class="QPushButton" name="pushButton_2">
     <property name="geometry">
@@ -110,6 +100,32 @@
     </property>
     <property name="text">
      <string>Mark</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>260</y>
+      <width>80</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>write</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_7">
+    <property name="geometry">
+     <rect>
+      <x>90</x>
+      <y>260</y>
+      <width>80</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>read</string>
     </property>
    </widget>
   </widget>

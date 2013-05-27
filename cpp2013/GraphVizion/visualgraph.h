@@ -13,6 +13,8 @@ class VisualGraph
 friend class GraphCanvas;
 public:
     VisualGraph();
+    VisualGraph(const QString& path);
+
     void addVertex(VisualVertex vertex);
     VisualVertex& getByIndex(int i);
     VisualVertex &getByIterator(std::pair<graphvizion_td::vertex_iter, graphvizion_td::vertex_iter> vp);
@@ -24,6 +26,7 @@ public:
     int getVertexIndexByCoo(graphvizion_td::Position pos);
 
     void markVertex(int startindex);
+    void saveIntoFile(QString path);
 
 protected:
     graphvizion_td::Graph graph;

@@ -1,48 +1,75 @@
-Debug: HI
-Debug: del 3
-Debug: del 3
-Warning: QMetaObject::connectSlotsByName: No matching signal for on_pushButton_clicked()
-Debug: del 3
-Warning: QMetaObject::connectSlotsByName: No matching signal for on_pushButton_clicked()
-Warning: QMetaObject::connectSlotsByName: No matching signal for on_pushButton_clicked()
-Warning: QMetaObject::connectSlotsByName: No matching signal for on_pushButton_clicked()
-Warning: QMetaObject::connectSlotsByName: No matching signal for on_pushButton_clicked()
-Warning: QMetaObject::connectSlotsByName: No matching signal for on_pushButton_clicked()
-Warning: QMetaObject::connectSlotsByName: No matching signal for on_pushButton_clicked()
-Warning: QMetaObject::connectSlotsByName: No matching signal for on_pushButton_clicked()
-Warning: QMetaObject::connectSlotsByName: No matching signal for on_pushButton_clicked()
-Warning: QMetaObject::connectSlotsByName: No matching signal for on_pushButton_clicked()
-Warning: QMetaObject::connectSlotsByName: No matching signal for on_pushButton_clicked()
-Warning: QMetaObject::connectSlotsByName: No matching signal for on_pushButton_clicked()
-Warning: QMetaObject::connectSlotsByName: No matching signal for on_pushButton_clicked()
-Warning: QMetaObject::connectSlotsByName: No matching signal for on_pushButton_clicked()
-Warning: QMetaObject::connectSlotsByName: No matching signal for on_pushButton_clicked()
-Warning: QMetaObject::connectSlotsByName: No matching signal for on_pushButton_clicked()
-Warning: QMetaObject::connectSlotsByName: No matching signal for on_pushButton_clicked()
-Warning: QMetaObject::connectSlotsByName: No matching signal for on_pushButton_clicked()
-Warning: QMetaObject::connectSlotsByName: No matching signal for on_pushButton_clicked()
-Warning: QMetaObject::connectSlotsByName: No matching signal for on_pushButton_clicked()
-Warning: QMetaObject::connectSlotsByName: No matching signal for on_pushButton_clicked()
-Warning: QMetaObject::connectSlotsByName: No matching signal for on_pushButton_clicked()
-Warning: QMetaObject::connectSlotsByName: No matching signal for on_pushButton_clicked()
-Warning: QMetaObject::connectSlotsByName: No matching signal for on_pushButton_clicked()
-Warning: QMetaObject::connectSlotsByName: No matching signal for on_pushButton_clicked()
-Warning: QMetaObject::connectSlotsByName: No matching signal for on_pushButton_clicked()
-Warning: QMetaObject::connectSlotsByName: No matching signal for on_pushButton_clicked()
-Warning: QMetaObject::connectSlotsByName: No matching signal for on_pushButton_clicked()
-Warning: QMetaObject::connectSlotsByName: No matching signal for on_pushButton_clicked()
-Warning: QMetaObject::connectSlotsByName: No matching signal for on_pushButton_clicked()
-Warning: QString::arg: Argument missing: "%d" , 0 
-Warning: QMetaObject::connectSlotsByName: No matching signal for on_pushButton_clicked()
-Warning: QMetaObject::connectSlotsByName: No matching signal for on_pushButton_clicked()
-Warning: QMetaObject::connectSlotsByName: No matching signal for on_pushButton_clicked()
-Warning: QMetaObject::connectSlotsByName: No matching signal for on_pushButton_clicked()
-Warning: QMetaObject::connectSlotsByName: No matching signal for on_pushButton_clicked()
-Warning: QMetaObject::connectSlotsByName: No matching signal for on_pushButton_clicked()
-Warning: QMetaObject::connectSlotsByName: No matching signal for on_pushButton_clicked()
-Warning: QMetaObject::connectSlotsByName: No matching signal for on_pushButton_clicked()
-Warning: QMetaObject::connectSlotsByName: No matching signal for on_pushButton_clicked()
-Warning: QMetaObject::connectSlotsByName: No matching signal for on_pushButton_clicked()
-Warning: QMetaObject::connectSlotsByName: No matching signal for on_pushButton_clicked()
-Warning: QMetaObject::connectSlotsByName: No matching signal for on_pushButton_clicked()
-Warning: QMetaObject::connectSlotsByName: No matching signal for on_pushButton_clicked()
+Debug: "" 
+Debug: "" 
+Debug: "" 
+Debug: "" 
+Debug: "" 
+Debug: "" 
+Debug: "" 
+Debug: "
+            " 
+Debug: "222" 
+Debug: "96" 
+Debug: "383" 
+Debug: "39" 
+Debug: "146" 
+Debug: "373" 
+Debug: "433" 
+Debug: X "222" 
+Debug: Y "43" 
+Debug: X "96" 
+Debug: Y "106" 
+Debug: X "383" 
+Debug: Y "110" 
+Debug: X "39" 
+Debug: Y "162" 
+Debug: X "146" 
+Debug: Y "173" 
+Debug: X "373" 
+Debug: Y "179" 
+Debug: X "433" 
+Debug: Y "177" 
+Debug: X "222" 
+Debug: Y "43" 
+Debug: Label "" 
+Debug: X "96" 
+Debug: Y "106" 
+Debug: Label "" 
+Debug: X "383" 
+Debug: Y "110" 
+Debug: Label "" 
+Debug: X "39" 
+Debug: Y "162" 
+Debug: Label "" 
+Debug: X "146" 
+Debug: Y "173" 
+Debug: Label "" 
+Debug: X "373" 
+Debug: Y "179" 
+Debug: Label "" 
+Debug: X "433" 
+Debug: Y "177" 
+Debug: Label "" 
+Debug: X "199" 
+Debug: Y "27" 
+Debug: Label "" 
+Debug: X "78" 
+Debug: Y "107" 
+Debug: Label "" 
+Debug: X "340" 
+Debug: Y "105" 
+Debug: Label "0" 
+Debug: X "367" 
+Debug: Y "156" 
+Debug: Label "1" 
+Debug: X "282" 
+Debug: Y "161" 
+Debug: Label "1" 
+Debug: 0 1 
+Debug: 1 0 
+Debug: 2 3 
+Debug: 2 4 
+Debug: 3 2 
+Debug: 3 4 
+Debug: 4 2 
+Debug: 4 3 
+Warning: GraphVizion: Fatal IO error: client killed

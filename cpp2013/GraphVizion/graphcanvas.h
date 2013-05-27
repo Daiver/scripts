@@ -27,6 +27,9 @@ public:
     void setEdgeAddTool();
     void setVertexMarkTool();
 
+    void saveIntoFile(QString path);
+    void loadFromFile(QString path);
+
 protected:
     VisualTool* tool;
     virtual void paintEvent(QPaintEvent* e);

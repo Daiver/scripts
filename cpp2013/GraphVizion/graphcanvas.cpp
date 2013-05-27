@@ -1,5 +1,7 @@
 #include <QDebug>
 #include <QString>
+#include <QXmlStreamReader>
+#include <QXmlStreamWriter>
 
 #include "graphcanvas.h"
 #include <utility>
@@ -76,6 +78,17 @@ void GraphCanvas::setVertexMarkTool()
     if(nullptr != this->tool)
         delete this->tool;
     this->tool = new VisualVertexMarkTool();
+}
+
+void GraphCanvas::saveIntoFile(QString path)
+{
+    this->VG.saveIntoFile(path);
+}
+
+void GraphCanvas::loadFromFile(QString path)
+{
+    this->VG = VisualGraph(path);
+    this->repaint();
 }
 
 

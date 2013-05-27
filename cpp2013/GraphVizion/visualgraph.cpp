@@ -7,6 +7,53 @@ VisualGraph::VisualGraph()
     this->index = boost::get(boost::vertex_index, this->graph);
 }
 
+VisualGraph::VisualGraph(const QString& path) : VisualGraph()
+{
+    QFile file(path);
+    QXmlStreamReader Rxml;
+    if (!file.open(QFile::ReadOnly | QFile::Text))
+    {
+        std::cerr << "Error: Cannot read file " << (path.data())
+                  << ": " << (file.errorString().data())
+                  << std::endl;
+        return;
+    }
+
+    Rxml.setDevice(&file);
+    Rxml.readNext();
+
+    this->VG = VisualGraph();
+    while(!Rxml.atEnd())
+    {
+        if(Rxml.name() == "VERTEX" && Rxml.isStartElement())
+        {
+            Rxml.readNext();
+            Rxml.readNext();
+            auto X = Rxml.readElementText().toInt();
+            Rxml.readNext();
+            Rxml.readNext();
+            auto Y = Rxml.readElementText().toInt();
+            Rxml.readNext();
+            Rxml.readNext();
+            auto label = Rxml.readElementText();
+            this->VG.addVertex(VisualVertex(graphvizion_td::Position(X, Y), label));
+        } else if(Rxml.name() == "EDGE" && Rxml.isStartElement())
+        {
+            Rxml.readNext();
+            Rxml.readNext();
+            auto source = Rxml.readElementText().toInt();
+            Rxml.readNext();
+            Rxml.readNext();
+            auto target = Rxml.readElementText().toInt();
+            this->VG.addEdge(source, target);
+        }
+        else
+        {
+            Rxml.readNext();
+        }
+    }
+}
+
 void VisualGraph::addVertex(VisualVertex vertex)
 {
     boost::add_vertex(this->graph);
@@ -92,4 +139,43 @@ void VisualGraph::markVertex(int startindex)
             queue.push(std::pair<decltype(*ei), int>(*ei, num));
         }
     }
+}
+
+void VisualGraph::saveIntoFile(QString path)
+{
+    QFile file(path);
+    file.open(QIODevice::WriteOnly);
+
+    QXmlStreamWriter xmlWriter(&file);
+    xmlWriter.setAutoFormatting(true);
+    xmlWriter.writeStartDocument();
+
+    xmlWriter.writeStartElement("GRAPH");
+
+    xmlWriter.writeStartElement("VERTEXES");
+    xmlWriter.writeTextElement("size",QString::number(this->VG.vertexes.size()));
+    for(auto vertex : this->VG.vertexes)
+    {
+        xmlWriter.writeStartElement("VERTEX");
+        xmlWriter.writeTextElement("X",QString::number(vertex.getPos().first));
+        xmlWriter.writeTextElement("Y",QString::number(vertex.getPos().second));
+        xmlWriter.writeTextElement("label", vertex.getLabel());
+        xmlWriter.writeEndElement();
+    }
+
+    xmlWriter.writeEndElement();
+    xmlWriter.writeStartElement("EDGES");
+    boost::graph_traits<graphvizion_td::Graph>::edge_iterator ei, ei_end;
+    for (boost::tie(ei, ei_end) = edges(this->VG.graph); ei != ei_end; ++ei)
+    {
+        xmlWriter.writeStartElement("EDGE");
+        xmlWriter.writeTextElement("source",QString::number(source(*ei, this->VG.graph)));
+        xmlWriter.writeTextElement("target",QString::number(target(*ei, this->VG.graph)));
+        xmlWriter.writeEndElement();
+    }
+    xmlWriter.writeEndElement();
+
+    xmlWriter.writeEndDocument();
+
+    file.close();
 }
