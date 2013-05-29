@@ -2,6 +2,7 @@
 #include <opencv/cxcore.h>
 #include <opencv/cv.h>
 
+#include <iostream>
 #include <vector>
 
 cv::Mat toGray(const cv::Mat& rgb_image)
@@ -20,14 +21,25 @@ int main(int argc, char** argv)
     std::vector<cv::Point> features_prev, features_next;
 
     mptr >> image_next;
+    mptr >> image_next;
+    cv::waitKey(10);
+    mptr >> image_next;
+    mptr >> image_next;
+    cv::waitKey(10);
+    mptr >> image_next;
+    mptr >> image_next;
+    cv::waitKey(10);
     image_next = toGray(image_next);
+    cv::imshow("", image_next);
+    cv::waitKey(100);
     // Obtain initial set of features
     cv::goodFeaturesToTrack(image_next, // the image 
       features_next,   // the output detected features
-      100,//max_count,  // the maximum number of features 
-      10, //qlevel,     // quality level
-      1//minDist     // min distance between two features
+      500,//max_count,  // the maximum number of features 
+      0.3, //qlevel,     // quality level
+      7//minDist     // min distance between two features
     );
+    std::cout<<"points "<<features_next.size();
 
     // Tracker is initialised and initial features are stored in features_next
     // Now iterate through rest of images

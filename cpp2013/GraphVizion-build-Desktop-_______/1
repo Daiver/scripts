@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LAMPS>
+    <LIGHT1>
+        <Potencial>11</Potencial>
+    </LIGHT1>
+    <LIGHT4>
+        <State>Off</State>
+        <Room>15</Room>
+    </LIGHT4>
+</LAMPS>
