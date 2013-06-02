@@ -49,37 +49,37 @@ include CMakeFiles/lk.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/lk.dir/flags.make
 
-CMakeFiles/lk.dir/lktrack.cpp.o: CMakeFiles/lk.dir/flags.make
-CMakeFiles/lk.dir/lktrack.cpp.o: lktrack.cpp
+CMakeFiles/lk.dir/lkdemo.cpp.o: CMakeFiles/lk.dir/flags.make
+CMakeFiles/lk.dir/lkdemo.cpp.o: lkdemo.cpp
 	$(CMAKE_COMMAND) -E cmake_progress_report /home/kirill/coding/MyPy/scripts/ocv/cpp/predator/CMakeFiles $(CMAKE_PROGRESS_1)
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/lk.dir/lktrack.cpp.o"
-	/usr/bin/clang++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/lk.dir/lktrack.cpp.o -c /home/kirill/coding/MyPy/scripts/ocv/cpp/predator/lktrack.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/lk.dir/lkdemo.cpp.o"
+	/usr/bin/clang++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/lk.dir/lkdemo.cpp.o -c /home/kirill/coding/MyPy/scripts/ocv/cpp/predator/lkdemo.cpp
 
-CMakeFiles/lk.dir/lktrack.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/lk.dir/lktrack.cpp.i"
-	/usr/bin/clang++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/kirill/coding/MyPy/scripts/ocv/cpp/predator/lktrack.cpp > CMakeFiles/lk.dir/lktrack.cpp.i
+CMakeFiles/lk.dir/lkdemo.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/lk.dir/lkdemo.cpp.i"
+	/usr/bin/clang++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/kirill/coding/MyPy/scripts/ocv/cpp/predator/lkdemo.cpp > CMakeFiles/lk.dir/lkdemo.cpp.i
 
-CMakeFiles/lk.dir/lktrack.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/lk.dir/lktrack.cpp.s"
-	/usr/bin/clang++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/kirill/coding/MyPy/scripts/ocv/cpp/predator/lktrack.cpp -o CMakeFiles/lk.dir/lktrack.cpp.s
+CMakeFiles/lk.dir/lkdemo.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/lk.dir/lkdemo.cpp.s"
+	/usr/bin/clang++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/kirill/coding/MyPy/scripts/ocv/cpp/predator/lkdemo.cpp -o CMakeFiles/lk.dir/lkdemo.cpp.s
 
-CMakeFiles/lk.dir/lktrack.cpp.o.requires:
-.PHONY : CMakeFiles/lk.dir/lktrack.cpp.o.requires
+CMakeFiles/lk.dir/lkdemo.cpp.o.requires:
+.PHONY : CMakeFiles/lk.dir/lkdemo.cpp.o.requires
 
-CMakeFiles/lk.dir/lktrack.cpp.o.provides: CMakeFiles/lk.dir/lktrack.cpp.o.requires
-	$(MAKE) -f CMakeFiles/lk.dir/build.make CMakeFiles/lk.dir/lktrack.cpp.o.provides.build
-.PHONY : CMakeFiles/lk.dir/lktrack.cpp.o.provides
+CMakeFiles/lk.dir/lkdemo.cpp.o.provides: CMakeFiles/lk.dir/lkdemo.cpp.o.requires
+	$(MAKE) -f CMakeFiles/lk.dir/build.make CMakeFiles/lk.dir/lkdemo.cpp.o.provides.build
+.PHONY : CMakeFiles/lk.dir/lkdemo.cpp.o.provides
 
-CMakeFiles/lk.dir/lktrack.cpp.o.provides.build: CMakeFiles/lk.dir/lktrack.cpp.o
+CMakeFiles/lk.dir/lkdemo.cpp.o.provides.build: CMakeFiles/lk.dir/lkdemo.cpp.o
 
 # Object files for target lk
 lk_OBJECTS = \
-"CMakeFiles/lk.dir/lktrack.cpp.o"
+"CMakeFiles/lk.dir/lkdemo.cpp.o"
 
 # External object files for target lk
 lk_EXTERNAL_OBJECTS =
 
-lk: CMakeFiles/lk.dir/lktrack.cpp.o
+lk: CMakeFiles/lk.dir/lkdemo.cpp.o
 lk: CMakeFiles/lk.dir/build.make
 lk: /opt/opencv244/lib/libopencv_calib3d.so
 lk: /opt/opencv244/lib/libopencv_contrib.so
@@ -106,7 +106,7 @@ lk: CMakeFiles/lk.dir/link.txt
 CMakeFiles/lk.dir/build: lk
 .PHONY : CMakeFiles/lk.dir/build
 
-CMakeFiles/lk.dir/requires: CMakeFiles/lk.dir/lktrack.cpp.o.requires
+CMakeFiles/lk.dir/requires: CMakeFiles/lk.dir/lkdemo.cpp.o.requires
 .PHONY : CMakeFiles/lk.dir/requires
 
 CMakeFiles/lk.dir/clean:

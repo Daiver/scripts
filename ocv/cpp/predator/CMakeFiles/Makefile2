@@ -88,48 +88,13 @@ clean: CMakeFiles/lk.dir/clean
 .PHONY : clean
 
 #=============================================================================
-# Target rules for target CMakeFiles/lk2.dir
-
-# All Build rule for target.
-CMakeFiles/lk2.dir/all:
-	$(MAKE) -f CMakeFiles/lk2.dir/build.make CMakeFiles/lk2.dir/depend
-	$(MAKE) -f CMakeFiles/lk2.dir/build.make CMakeFiles/lk2.dir/build
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/kirill/coding/MyPy/scripts/ocv/cpp/predator/CMakeFiles  2
-	@echo "Built target lk2"
-.PHONY : CMakeFiles/lk2.dir/all
-
-# Include target in all.
-all: CMakeFiles/lk2.dir/all
-.PHONY : all
-
-# Build rule for subdir invocation for target.
-CMakeFiles/lk2.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/kirill/coding/MyPy/scripts/ocv/cpp/predator/CMakeFiles 1
-	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/lk2.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/kirill/coding/MyPy/scripts/ocv/cpp/predator/CMakeFiles 0
-.PHONY : CMakeFiles/lk2.dir/rule
-
-# Convenience name for target.
-lk2: CMakeFiles/lk2.dir/rule
-.PHONY : lk2
-
-# clean rule for target.
-CMakeFiles/lk2.dir/clean:
-	$(MAKE) -f CMakeFiles/lk2.dir/build.make CMakeFiles/lk2.dir/clean
-.PHONY : CMakeFiles/lk2.dir/clean
-
-# clean rule for target.
-clean: CMakeFiles/lk2.dir/clean
-.PHONY : clean
-
-#=============================================================================
 # Target rules for target CMakeFiles/main.dir
 
 # All Build rule for target.
 CMakeFiles/main.dir/all:
 	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/depend
 	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/build
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/kirill/coding/MyPy/scripts/ocv/cpp/predator/CMakeFiles  3
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/kirill/coding/MyPy/scripts/ocv/cpp/predator/CMakeFiles  2
 	@echo "Built target main"
 .PHONY : CMakeFiles/main.dir/all
 

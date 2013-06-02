@@ -112,19 +112,6 @@ lk/fast:
 .PHONY : lk/fast
 
 #=============================================================================
-# Target rules for targets named lk2
-
-# Build rule for target.
-lk2: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 lk2
-.PHONY : lk2
-
-# fast build rule for target.
-lk2/fast:
-	$(MAKE) -f CMakeFiles/lk2.dir/build.make CMakeFiles/lk2.dir/build
-.PHONY : lk2/fast
-
-#=============================================================================
 # Target rules for targets named main
 
 # Build rule for target.
@@ -142,7 +129,7 @@ lkdemo.o: lkdemo.cpp.o
 
 # target to build an object file
 lkdemo.cpp.o:
-	$(MAKE) -f CMakeFiles/lk2.dir/build.make CMakeFiles/lk2.dir/lkdemo.cpp.o
+	$(MAKE) -f CMakeFiles/lk.dir/build.make CMakeFiles/lk.dir/lkdemo.cpp.o
 .PHONY : lkdemo.cpp.o
 
 lkdemo.i: lkdemo.cpp.i
@@ -150,7 +137,7 @@ lkdemo.i: lkdemo.cpp.i
 
 # target to preprocess a source file
 lkdemo.cpp.i:
-	$(MAKE) -f CMakeFiles/lk2.dir/build.make CMakeFiles/lk2.dir/lkdemo.cpp.i
+	$(MAKE) -f CMakeFiles/lk.dir/build.make CMakeFiles/lk.dir/lkdemo.cpp.i
 .PHONY : lkdemo.cpp.i
 
 lkdemo.s: lkdemo.cpp.s
@@ -158,32 +145,8 @@ lkdemo.s: lkdemo.cpp.s
 
 # target to generate assembly for a file
 lkdemo.cpp.s:
-	$(MAKE) -f CMakeFiles/lk2.dir/build.make CMakeFiles/lk2.dir/lkdemo.cpp.s
+	$(MAKE) -f CMakeFiles/lk.dir/build.make CMakeFiles/lk.dir/lkdemo.cpp.s
 .PHONY : lkdemo.cpp.s
-
-lktrack.o: lktrack.cpp.o
-.PHONY : lktrack.o
-
-# target to build an object file
-lktrack.cpp.o:
-	$(MAKE) -f CMakeFiles/lk.dir/build.make CMakeFiles/lk.dir/lktrack.cpp.o
-.PHONY : lktrack.cpp.o
-
-lktrack.i: lktrack.cpp.i
-.PHONY : lktrack.i
-
-# target to preprocess a source file
-lktrack.cpp.i:
-	$(MAKE) -f CMakeFiles/lk.dir/build.make CMakeFiles/lk.dir/lktrack.cpp.i
-.PHONY : lktrack.cpp.i
-
-lktrack.s: lktrack.cpp.s
-.PHONY : lktrack.s
-
-# target to generate assembly for a file
-lktrack.cpp.s:
-	$(MAKE) -f CMakeFiles/lk.dir/build.make CMakeFiles/lk.dir/lktrack.cpp.s
-.PHONY : lktrack.cpp.s
 
 main.o: main.cpp.o
 .PHONY : main.o
@@ -217,15 +180,11 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... lk"
-	@echo "... lk2"
 	@echo "... main"
 	@echo "... rebuild_cache"
 	@echo "... lkdemo.o"
 	@echo "... lkdemo.i"
 	@echo "... lkdemo.s"
-	@echo "... lktrack.o"
-	@echo "... lktrack.i"
-	@echo "... lktrack.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

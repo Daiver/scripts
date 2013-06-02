@@ -1,5 +1,5 @@
 FILE(REMOVE_RECURSE
-  "CMakeFiles/lk.dir/lktrack.cpp.o"
+  "CMakeFiles/lk.dir/lkdemo.cpp.o"
   "lk.pdb"
   "lk"
 )

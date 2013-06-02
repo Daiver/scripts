@@ -5,6 +5,8 @@
 #include <iostream>
 #include <ctype.h>
 
+#include "lktracker.h"
+
 using namespace cv;
 using namespace std;
 
@@ -22,22 +24,11 @@ static void help()
             "To add/remove a feature point click it\n" << endl;
 }
 
-void initPoints(cv::Mat& gray, std::vector<cv::Point2f>& points, cv::TermCriteria& termcrit, const int MAX_COUNT)
-{
-    Size subPixWinSize(10, 10);
-    goodFeaturesToTrack(gray, points, MAX_COUNT, 0.01, 10, Mat(), 3, 0, 0.04);
-    cornerSubPix(gray, points, subPixWinSize, Size(-1,-1), termcrit);
-}
-
 int main( int argc, char** argv )
 {
     help();
 
     VideoCapture cap;
-    TermCriteria termcrit(TermCriteria::COUNT|TermCriteria::EPS,20,0.03);
-    Size winSize(31,31);
-
-    const int MAX_COUNT = 500;
     bool needToInit = false;
     bool nightMode = false;
 
@@ -54,12 +45,16 @@ int main( int argc, char** argv )
 
     namedWindow( "LK Demo", 1 );
 
-    Mat gray, prevGray, image;
-    vector<Point2f> points[2];
+    Mat gray, image;
 
+    Mat frame;
+    cap >> frame;
+    frame.copyTo(image);
+    cvtColor(image, gray, COLOR_BGR2GRAY);
+    Tracker tracker;
+    tracker.init(gray);
     for(;;)
     {
-        Mat frame;
         cap >> frame;
         if( frame.empty() )
             break;
@@ -71,28 +66,16 @@ int main( int argc, char** argv )
             image = Scalar::all(0);
 
         if( needToInit )
+            tracker.init(gray);
             // automatic initialization
-            initPoints(gray, points[1], termcrit, MAX_COUNT);
-        else if( !points[0].empty() )
-        {
-            vector<uchar> status;
-            vector<float> err;
-            if(prevGray.empty())
-                gray.copyTo(prevGray);
-            cv::calcOpticalFlowPyrLK(prevGray, gray, points[0], points[1], status, err, winSize,
-                                 3, termcrit, 0, 0.001);
-            size_t i, k;
-            for( i = k = 0; i < points[1].size(); i++ )
+        bool is_good;
+        auto pt = tracker.track(gray, &is_good);
+        if (is_good)
+            for(auto p : pt)
             {
-                if( !status[i] )
-                    continue;
-
-                points[1][k++] = points[1][i];
-                circle( image, points[1][i], 3, Scalar(0,255,0), -1, 8);
+                circle( image, p, 3, Scalar(0,255,0), -1, 8);
             }
-            points[1].resize(k);
-        }
-
+    
         needToInit = false;
         imshow("LK Demo", image);
 
@@ -105,16 +88,11 @@ int main( int argc, char** argv )
             needToInit = true;
             break;
         case 'c':
-            points[0].clear();
-            points[1].clear();
             break;
         case 'n':
             nightMode = !nightMode;
             break;
         }
-
-        std::swap(points[1], points[0]);
-        cv::swap(prevGray, gray);
     }
 
     return 0;
