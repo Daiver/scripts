@@ -23,3 +23,18 @@ def partitionToParts(predicate, parts, seq):
 def partition(predicate, seq):
     res = partitionToParts(predicate, ((0, False), (1, True)), seq)
     return [res[0], res[1]]
+
+
+'''
+def func_decorator(func):
+    def wrap(*argv, **kargv):
+        print 'before'
+        return func(*argv, **kargv)
+    return wrap
+
+@func_decorator
+def f(m):
+    return 10*m
+
+print f(10)
+'''
