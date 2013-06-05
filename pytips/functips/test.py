@@ -1,4 +1,4 @@
-import functips
+from functips import *
 import unittest
 
 from random import random
@@ -6,6 +6,11 @@ from random import random
 
 class PartitionTest(unittest.TestCase):
     def test_simple1(self):
+        res = partition(lambda x: x % 2 == 0, xrange(10))
+        self.assertEqual(res[1], [0, 2, 4, 6, 8])
+        self.assertEqual(res[0], [1, 3, 5, 7, 9])
+
+    def test_simple2(self):
         for j in xrange(1000):
             border = int(500 - random()*1000)
             f = lambda x: x > border
@@ -17,14 +22,14 @@ class PartitionTest(unittest.TestCase):
                     tr += 1
                 else:
                     fl += 1
-            ans = functips.partition(f, seq)
+            ans = partition(f, seq)
             self.assertEqual(len(ans[0]), fl)
             self.assertEqual(len(ans[1]), tr)
 
 
 class RecursionTest(unittest.TestCase):
     def N_sum_simple(self, N):
-        @functips.tail_recursion
+        @tail_recursion
         def sum_natural(x, result=0):
             if x == 0:
                 return result
@@ -45,5 +50,4 @@ class RecursionTest(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    #print functips.partition(lambda x: x > 5 , [1, 2, 3, 4, 5, 6, 7, 8, 9])
     unittest.main()
