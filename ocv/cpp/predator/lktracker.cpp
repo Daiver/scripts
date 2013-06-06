@@ -60,7 +60,7 @@ int main(int argc, char** argv)
           err      // tracking error
         );
 
-        cv::imshow("", image_next);
+        cv::imshow("image", image_next);
         cv::waitKey(1);
     }
 }
