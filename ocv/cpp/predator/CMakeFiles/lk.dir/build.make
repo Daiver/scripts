@@ -81,6 +81,7 @@ lk_EXTERNAL_OBJECTS =
 
 lk: CMakeFiles/lk.dir/lkdemo.cpp.o
 lk: CMakeFiles/lk.dir/build.make
+lk: libtracker.a
 lk: /opt/opencv244/lib/libopencv_calib3d.so
 lk: /opt/opencv244/lib/libopencv_contrib.so
 lk: /opt/opencv244/lib/libopencv_core.so

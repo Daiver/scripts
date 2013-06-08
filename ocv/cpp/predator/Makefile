@@ -124,6 +124,19 @@ main/fast:
 	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/build
 .PHONY : main/fast
 
+#=============================================================================
+# Target rules for targets named tracker
+
+# Build rule for target.
+tracker: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 tracker
+.PHONY : tracker
+
+# fast build rule for target.
+tracker/fast:
+	$(MAKE) -f CMakeFiles/tracker.dir/build.make CMakeFiles/tracker.dir/build
+.PHONY : tracker/fast
+
 lkdemo.o: lkdemo.cpp.o
 .PHONY : lkdemo.o
 
@@ -147,6 +160,30 @@ lkdemo.s: lkdemo.cpp.s
 lkdemo.cpp.s:
 	$(MAKE) -f CMakeFiles/lk.dir/build.make CMakeFiles/lk.dir/lkdemo.cpp.s
 .PHONY : lkdemo.cpp.s
+
+lktracker.o: lktracker.cpp.o
+.PHONY : lktracker.o
+
+# target to build an object file
+lktracker.cpp.o:
+	$(MAKE) -f CMakeFiles/tracker.dir/build.make CMakeFiles/tracker.dir/lktracker.cpp.o
+.PHONY : lktracker.cpp.o
+
+lktracker.i: lktracker.cpp.i
+.PHONY : lktracker.i
+
+# target to preprocess a source file
+lktracker.cpp.i:
+	$(MAKE) -f CMakeFiles/tracker.dir/build.make CMakeFiles/tracker.dir/lktracker.cpp.i
+.PHONY : lktracker.cpp.i
+
+lktracker.s: lktracker.cpp.s
+.PHONY : lktracker.s
+
+# target to generate assembly for a file
+lktracker.cpp.s:
+	$(MAKE) -f CMakeFiles/tracker.dir/build.make CMakeFiles/tracker.dir/lktracker.cpp.s
+.PHONY : lktracker.cpp.s
 
 main.o: main.cpp.o
 .PHONY : main.o
@@ -182,9 +219,13 @@ help:
 	@echo "... lk"
 	@echo "... main"
 	@echo "... rebuild_cache"
+	@echo "... tracker"
 	@echo "... lkdemo.o"
 	@echo "... lkdemo.i"
 	@echo "... lkdemo.s"
+	@echo "... lktracker.o"
+	@echo "... lktracker.i"
+	@echo "... lktracker.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

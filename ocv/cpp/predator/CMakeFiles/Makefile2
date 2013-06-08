@@ -56,7 +56,7 @@ CMAKE_BINARY_DIR = /home/kirill/coding/MyPy/scripts/ocv/cpp/predator
 # Target rules for target CMakeFiles/lk.dir
 
 # All Build rule for target.
-CMakeFiles/lk.dir/all:
+CMakeFiles/lk.dir/all: CMakeFiles/tracker.dir/all
 	$(MAKE) -f CMakeFiles/lk.dir/build.make CMakeFiles/lk.dir/depend
 	$(MAKE) -f CMakeFiles/lk.dir/build.make CMakeFiles/lk.dir/build
 	$(CMAKE_COMMAND) -E cmake_progress_report /home/kirill/coding/MyPy/scripts/ocv/cpp/predator/CMakeFiles  1
@@ -69,7 +69,7 @@ all: CMakeFiles/lk.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/lk.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/kirill/coding/MyPy/scripts/ocv/cpp/predator/CMakeFiles 1
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/kirill/coding/MyPy/scripts/ocv/cpp/predator/CMakeFiles 2
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/lk.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/kirill/coding/MyPy/scripts/ocv/cpp/predator/CMakeFiles 0
 .PHONY : CMakeFiles/lk.dir/rule
@@ -120,6 +120,41 @@ CMakeFiles/main.dir/clean:
 
 # clean rule for target.
 clean: CMakeFiles/main.dir/clean
+.PHONY : clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/tracker.dir
+
+# All Build rule for target.
+CMakeFiles/tracker.dir/all:
+	$(MAKE) -f CMakeFiles/tracker.dir/build.make CMakeFiles/tracker.dir/depend
+	$(MAKE) -f CMakeFiles/tracker.dir/build.make CMakeFiles/tracker.dir/build
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/kirill/coding/MyPy/scripts/ocv/cpp/predator/CMakeFiles  3
+	@echo "Built target tracker"
+.PHONY : CMakeFiles/tracker.dir/all
+
+# Include target in all.
+all: CMakeFiles/tracker.dir/all
+.PHONY : all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/tracker.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/kirill/coding/MyPy/scripts/ocv/cpp/predator/CMakeFiles 1
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/tracker.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/kirill/coding/MyPy/scripts/ocv/cpp/predator/CMakeFiles 0
+.PHONY : CMakeFiles/tracker.dir/rule
+
+# Convenience name for target.
+tracker: CMakeFiles/tracker.dir/rule
+.PHONY : tracker
+
+# clean rule for target.
+CMakeFiles/tracker.dir/clean:
+	$(MAKE) -f CMakeFiles/tracker.dir/build.make CMakeFiles/tracker.dir/clean
+.PHONY : CMakeFiles/tracker.dir/clean
+
+# clean rule for target.
+clean: CMakeFiles/tracker.dir/clean
 .PHONY : clean
 
 #=============================================================================

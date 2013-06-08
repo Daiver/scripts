@@ -51,7 +51,7 @@ int main( int argc, char** argv )
     cap >> frame;
     frame.copyTo(image);
     cvtColor(image, gray, COLOR_BGR2GRAY);
-    Tracker tracker;
+    LKTracker tracker;
     tracker.init(gray);
     for(;;)
     {

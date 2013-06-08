@@ -9,8 +9,11 @@ set(OpenCV_DIR "/opt/opencv244/share/OpenCV/")
 
 find_package( OpenCV REQUIRED )
 
+add_library(tracker lktracker.cpp)
+target_link_libraries( tracker ${OpenCV_LIBS}) 
+
 add_executable( lk lkdemo.cpp )
-target_link_libraries( lk ${OpenCV_LIBS}) 
+target_link_libraries( lk tracker ${OpenCV_LIBS}) 
 
 add_executable( main main.cpp )
 target_link_libraries( main ${OpenCV_LIBS}) 
