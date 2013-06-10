@@ -116,7 +116,7 @@ CMAKE_OBJCOPY:FILEPATH=/usr/bin/objcopy
 CMAKE_OBJDUMP:FILEPATH=/usr/bin/objdump
 
 //Value Computed by CMake
-CMAKE_PROJECT_NAME:STATIC=OpenCVReprojectImageToPointCloud
+CMAKE_PROJECT_NAME:STATIC=predator
 
 //Path to a program.
 CMAKE_RANLIB:FILEPATH=/usr/bin/ranlib
@@ -174,6 +174,12 @@ OpenCV_LIB_DIR_DBG:PATH=/opt/opencv244/lib
 
 //Path where release OpenCV libraries are located
 OpenCV_LIB_DIR_OPT:PATH=/opt/opencv244/lib
+
+//Value Computed by CMake
+predator_BINARY_DIR:STATIC=/home/kirill/coding/MyPy/scripts/ocv/cpp/predator
+
+//Value Computed by CMake
+predator_SOURCE_DIR:STATIC=/home/kirill/coding/MyPy/scripts/ocv/cpp/predator
 
 //Dependencies for the target
 tracker_LIB_DEPENDS:STATIC=debug;/opt/opencv244/lib/libopencv_calib3d.so;debug;/opt/opencv244/lib/libopencv_contrib.so;debug;/opt/opencv244/lib/libopencv_core.so;debug;/opt/opencv244/lib/libopencv_features2d.so;debug;/opt/opencv244/lib/libopencv_flann.so;debug;/opt/opencv244/lib/libopencv_gpu.so;debug;/opt/opencv244/lib/libopencv_highgui.so;debug;/opt/opencv244/lib/libopencv_imgproc.so;debug;/opt/opencv244/lib/libopencv_legacy.so;debug;/opt/opencv244/lib/libopencv_ml.so;debug;/opt/opencv244/lib/libopencv_nonfree.so;debug;/opt/opencv244/lib/libopencv_objdetect.so;debug;/opt/opencv244/lib/libopencv_photo.so;debug;/opt/opencv244/lib/libopencv_stitching.so;debug;/opt/opencv244/lib/libopencv_ts.so;debug;/opt/opencv244/lib/libopencv_video.so;debug;/opt/opencv244/lib/libopencv_videostab.so;optimized;/opt/opencv244/lib/libopencv_calib3d.so;optimized;/opt/opencv244/lib/libopencv_contrib.so;optimized;/opt/opencv244/lib/libopencv_core.so;optimized;/opt/opencv244/lib/libopencv_features2d.so;optimized;/opt/opencv244/lib/libopencv_flann.so;optimized;/opt/opencv244/lib/libopencv_gpu.so;optimized;/opt/opencv244/lib/libopencv_highgui.so;optimized;/opt/opencv244/lib/libopencv_imgproc.so;optimized;/opt/opencv244/lib/libopencv_legacy.so;optimized;/opt/opencv244/lib/libopencv_ml.so;optimized;/opt/opencv244/lib/libopencv_nonfree.so;optimized;/opt/opencv244/lib/libopencv_objdetect.so;optimized;/opt/opencv244/lib/libopencv_photo.so;optimized;/opt/opencv244/lib/libopencv_stitching.so;optimized;/opt/opencv244/lib/libopencv_ts.so;optimized;/opt/opencv244/lib/libopencv_video.so;optimized;/opt/opencv244/lib/libopencv_videostab.so;

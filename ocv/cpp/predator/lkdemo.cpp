@@ -45,14 +45,16 @@ int main( int argc, char** argv )
 
     namedWindow( "LK Demo", 1 );
 
-    Mat gray, image;
-
-    Mat frame;
+    Mat gray, image, frame, r_frame;
     cap >> frame;
     frame.copyTo(image);
     cvtColor(image, gray, COLOR_BGR2GRAY);
     LKTracker tracker;
-    tracker.init(gray);
+
+    cv::Rect roi(200, 120, 100, 150);
+    r_frame = cv::Mat(gray, roi);
+
+    tracker.init(r_frame);
     for(;;)
     {
         cap >> frame;
@@ -65,15 +67,18 @@ int main( int argc, char** argv )
         if( nightMode )
             image = Scalar::all(0);
 
+        r_frame = cv::Mat(gray, roi);
         if( needToInit )
-            tracker.init(gray);
-            // automatic initialization
+            tracker.init(r_frame);
+
+        cv::rectangle(image, roi, cv::Scalar(0, 0, 255));
+
         bool is_good;
-        auto pt = tracker.track(gray, &is_good);
+        auto pt = tracker.track(r_frame, &is_good);
         if (is_good)
             for(auto p : pt)
             {
-                circle( image, p, 3, Scalar(0,255,0), -1, 8);
+                circle( image, cv::Point2f(p.x + roi.x, p.y + roi.y), 3, Scalar(0,255,0), -1, 8);
             }
     
         needToInit = false;

@@ -7,6 +7,8 @@
 #IncludeRegexTransform: 
 
 /home/kirill/coding/MyPy/scripts/ocv/cpp/predator/lktracker.cpp
+stdio.h
+-
 lktracker.h
 /home/kirill/coding/MyPy/scripts/ocv/cpp/predator/lktracker.h
 

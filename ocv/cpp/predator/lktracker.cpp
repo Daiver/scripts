@@ -1,4 +1,8 @@
+#include <stdio.h>
+#include <math.h>
+
 #include "lktracker.h"
+
 void LKTracker::initPoints(cv::Mat& gray, std::vector<cv::Point2f>& points, const int MAX_COUNT)
 {
     goodFeaturesToTrack(gray, points, MAX_COUNT, 0.01, 10, cv::Mat(), 3, 0, 0.04);
@@ -19,6 +23,11 @@ void LKTracker::init(cv::Mat& gray)
     gray.copyTo(this->old_gray);
 }
 
+float dist(cv::Point2f& a, cv::Point2f& b)
+{
+    return abs(a.x - b.x) + abs(a.y - b.y);
+}
+
 std::vector<cv::Point2f> LKTracker::track(cv::Mat& gray, bool* is_good)
 {
     this->initPoints(gray, this->points[1], this->MAX_COUNT);
@@ -36,9 +45,8 @@ std::vector<cv::Point2f> LKTracker::track(cv::Mat& gray, bool* is_good)
         {
             if( !status[i] )
                 continue;
-
+            printf("%d %f\n", i, dist(points[1][i], points[0][i]));
             points[1][k++] = points[1][i];
-            //circle( image, points[1][i], 3, Scalar(0,255,0), -1, 8);
         }
         points[1].resize(k);
     }
