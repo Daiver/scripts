@@ -1,26 +1,22 @@
-import subprocess
+import psutil
+from datetime import datetime
+
+class ProcessInfo:
+    def __init__(self, pid, name, creationtime):
+        self.name = name
+        self.pid = pid
+        self.creationtime = creationtime
+        self.endtime = creationtime
+
+    def __repr__(self):
+        #return 'ProcessInfo(%s:%s:%s)' % (self.name, str(self.creationtime), str(self.endtime))
+        return 'Ps(%d, %s)' % (self.pid, self.name)
+
+def get_processes():
+    return {process.pid: ProcessInfo(process.pid, process.name, datetime.now()) for process in psutil.process_iter() if process.pid}
 
 if __name__ == '__main__':
-    def test_num(num):
-        try:
-            return int(num)
-        except:
-            return False
-    
-    p = subprocess.Popen(['ps', '-e'], stdout=subprocess.PIPE)
-    raw_string, e = p.communicate()
-    strings_arr = raw_string.split('\n')
-    process_dict = {}
-    for string in strings_arr:
-        splted = string.split()
-        key, value = None, None
-        if len(splted) == 0: continue
-        for item in splted:
-            if test_num(item):
-                key = int(item)
-                break
-        value = splted[-1]
-        process_dict[key] = value
 
-    print process_dict
+    processes_dict = get_processes()
+    print processes_dict
 
