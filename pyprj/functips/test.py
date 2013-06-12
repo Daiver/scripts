@@ -4,6 +4,14 @@ import unittest
 from random import random
 
 
+class MapFilterTest(unittest.TestCase):
+    def test_simple1(self):
+        def func(x): return x**10
+        def predicate(x): return x % 2 == 0
+        seq = range(100)
+        res = mapfilter(func, predicate, seq)
+        self.assertEqual(len(res), 50)
+
 class PartitionTest(unittest.TestCase):
     def test_simple1(self):
         res = partition(lambda x: x % 2 == 0, xrange(10))
@@ -29,6 +37,7 @@ class PartitionTest(unittest.TestCase):
 
 class RecursionTest(unittest.TestCase):
     def N_sum_simple(self, N):
+
         @tail_recursion
         def sum_natural(x, result=0):
             if x == 0:

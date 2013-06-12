@@ -24,6 +24,13 @@ def partition(predicate, seq):
     res = partitionToParts(predicate, ((0, False), (1, True)), seq)
     return [res[0], res[1]]
 
+def mapfilter(functor, predicate, sequence):
+    res = []
+    for item in sequence:
+        value = functor(item)
+        if predicate(value):
+            res.append(value)
+    return res
 
 '''
 def func_decorator(func):
