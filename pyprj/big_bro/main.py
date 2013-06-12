@@ -31,9 +31,9 @@ if __name__ == '__main__':
             for key in processes_dict:
                 ses.add(ProcessInfo(key, processes_dict[key][0], processes_dict[key][1], datetime.now()))
             ses.commit()
-
             print 'KeyboardInterrupt', e
             break
+
         except Exception as e:
             print e
 
