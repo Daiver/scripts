@@ -10,57 +10,60 @@
         (if (> a b)
             0
             (+ (term a)
-                (sum (next a) b term next)
-            )
-        )
-    )
-
+                (sum (next a) b term next))))
     ([seq]
         (if (= (count seq) 0)
             0
-            (+ (first seq) (sum (next seq)))
-        )
-    )
-
-    ([]
-        0
-    )
-)
+            (+ (first seq) (sum (next seq))))))
 
 (defn product
     [a b f next]
     (loop [i a res 1]
         (if (> i b)
             res
-            (recur (next i) (* (f i) res))
-        )
-    )
+            (recur (next i) (* (f i) res)))))
+
+(defn deriv
+    [g dx]
+    #(/ (- (g (+ dx %)) (g %)) dx)
 )
-
-(defn pi_num
-    [n]
-    (* 2
-        (/ 
-            (product 2 n #(* 1.0 % %) #(+ 2 %)) 
-            (* (product 3 (dec n) #(* 1.0 % %) #(+ 2 %)) (inc n))
-
-        )
-    )
-)
-
-(defn fact [n] (product 1 n #(ident %) #(inc %)))
 
 (defn -main
     ""
     [& args]
     (println "version" (clojure-version))
-    (time (println (pi_num 160)))
-    ;(println (fact 20))
-    ;(println (product 1 5 #(ident %) #(inc %)))
+    (println ((deriv #(square %) 0.0001) 10))
+    ;(time (println (zero_search #(+ 5 %1) -10 10 )))
+    ;(time (println (pi_num 160)))
 )
 
 (comment
-    ;(println (sum 1 5 #(+ %1) #(+ %1 1)))
+     (defn zero_search
+        [f left right]
+        (let [mid (average left right)]
+            (if (good_enough? left right 0.001)
+                mid
+                (let [f_value (f mid)]
+                    (cond
+                        (pos? f_value) (zero_search f left mid)
+                        (neg? f_value) (zero_search f mid right)
+                        (zero? f_value) mid)))))
+
+    ;(println (fact 20))
+    ;(println (product 1 5 #(ident %) #(inc %)))
+    (defn pi_num
+        [n]
+        (* 2
+            (/ 
+                (product 2 n #(* 1.0 % %) #(+ 2 %)) 
+                (* (product 3 (dec n) #(* 1.0 % %) #(+ 2 %)) (inc n))
+
+            )
+        )
+    )
+
+    (defn fact [n] (product 1 n #(ident %) #(inc %)))
+   ;(println (sum 1 5 #(+ %1) #(+ %1 1)))
     ;(println (sum [1 2 3 4 5]))
     ;(println (cube_sqrt 75.))
     ;(println (sqrt_iter2 1.0 900.0 900.0))
