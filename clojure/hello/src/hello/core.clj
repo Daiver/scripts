@@ -4,6 +4,7 @@
 (defn square [x] (* x x))
 (defn average [x y] (/ (+ x y) 2.0))
 (defn good_enough? [guess old_guess threshold] (< (abs (- guess old_guess)) threshold))
+(defn ident [x] x)
 (defn sum
     ([a b term next]
         (if (> a b)
@@ -26,17 +27,44 @@
     )
 )
 
+(defn product
+    [a b f next]
+    (loop [i a res 1]
+        (if (> i b)
+            res
+            (recur (next i) (* (f i) res))
+        )
+    )
+)
+
+(defn pi_num
+    [n]
+    (* 2
+        (/ 
+            (product 2 n #(* 1.0 % %) #(+ 2 %)) 
+            (* (product 3 (dec n) #(* 1.0 % %) #(+ 2 %)) (inc n))
+
+        )
+    )
+)
+
+(defn fact [n] (product 1 n #(ident %) #(inc %)))
+
 (defn -main
     ""
     [& args]
     (println "version" (clojure-version))
-    (println (sum 1 5 #(+ %1) #(+ %1 1)))
-    (println (sum [1 2 3 4 5]))
-    ;(println (cube_sqrt 75.))
-    ;(println (sqrt_iter2 1.0 900.0 900.0))
+    (time (println (pi_num 160)))
+    ;(println (fact 20))
+    ;(println (product 1 5 #(ident %) #(inc %)))
 )
 
 (comment
+    ;(println (sum 1 5 #(+ %1) #(+ %1 1)))
+    ;(println (sum [1 2 3 4 5]))
+    ;(println (cube_sqrt 75.))
+    ;(println (sqrt_iter2 1.0 900.0 900.0))
+
     (defn good_enough? [guess x] (< (abs (- x (square guess))) 0.001))
     (defn sqrt_iter
         [guess x]
