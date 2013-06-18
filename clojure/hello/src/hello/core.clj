@@ -28,39 +28,47 @@
     #(/ (- (g (+ dx %)) (g %)) dx)
 )
 
-
-
 (defn gcd 
     [a b]
     (if (= b 0)
         a
         (gcd b (mod a b))))
 
-(defn make_rat
-    [n d]
-    (let [g (gcd n d)]
-        (cons (/ n g) [(/ d g)])))
+(defn make_interval
+    [lo hi]
+    (cons lo [hi])
+)
 
-(defn numer
-    [rat]
-    (first rat))
-
-(defn denom
-    [rat]
-    (second rat))
+(def lo_int first)
+(def hi_int second)
 
 (defn -main
     ""
     [& args]
     (println "version" (clojure-version))
-    (def x (make_rat 15 30))
-    (println x (denom x) (numer x))
+    (def x (make_interval 5 10))
+    (println x (lo_int x) (hi_int x))
+    ;(def x (make_rat 15 30))
+    ;(println x (denom x) (numer x))
     ;(println ((deriv #(square %) 0.0001) 10))
     ;(time (println (zero_search #(+ 5 %1) -10 10 )))
     ;(time (println (pi_num 160)))
 )
 
 (comment
+    (defn make_rat
+        [n d]
+        (let [g (gcd n d)]
+            (cons (/ n g) [(/ d g)])))
+
+    (defn numer
+        [rat]
+        (first rat))
+
+    (defn denom
+        [rat]
+        (second rat))
+
      (defn zero_search
         [f left right]
         (let [mid (average left right)]
