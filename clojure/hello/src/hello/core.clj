@@ -36,18 +36,22 @@
 
 (defn make_interval
     [lo hi]
-    (cons lo [hi])
-)
+    (cons lo [hi]))
 
 (def lo_int first)
 (def hi_int second)
+
+(defn add_int
+    [a b]
+    (make_interval (+ (lo_int a) (lo_int b)) (+ (hi_int a) (hi_int b))))
 
 (defn -main
     ""
     [& args]
     (println "version" (clojure-version))
     (def x (make_interval 5 10))
-    (println x (lo_int x) (hi_int x))
+    (def y (make_interval 5 8))
+    (println x y (add_int x y))
     ;(def x (make_rat 15 30))
     ;(println x (denom x) (numer x))
     ;(println ((deriv #(square %) 0.0001) 10))
