@@ -17,7 +17,7 @@
             (+ (first seq) (sum (next seq))))))
 
 (defn product
-    [a b f next]
+    [ a b f next]
     (loop [i a res 1]
         (if (> i b)
             res
@@ -28,11 +28,34 @@
     #(/ (- (g (+ dx %)) (g %)) dx)
 )
 
+
+
+(defn gcd 
+    [a b]
+    (if (= b 0)
+        a
+        (gcd b (mod a b))))
+
+(defn make_rat
+    [n d]
+    (let [g (gcd n d)]
+        (cons (/ n g) [(/ d g)])))
+
+(defn numer
+    [rat]
+    (first rat))
+
+(defn denom
+    [rat]
+    (second rat))
+
 (defn -main
     ""
     [& args]
     (println "version" (clojure-version))
-    (println ((deriv #(square %) 0.0001) 10))
+    (def x (make_rat 15 30))
+    (println x (denom x) (numer x))
+    ;(println ((deriv #(square %) 0.0001) 10))
     ;(time (println (zero_search #(+ 5 %1) -10 10 )))
     ;(time (println (pi_num 160)))
 )
