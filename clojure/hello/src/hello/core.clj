@@ -41,9 +41,10 @@
 (def lo_int first)
 (def hi_int second)
 
-(defn add_int
-    [a b]
-    (make_interval (+ (lo_int a) (lo_int b)) (+ (hi_int a) (hi_int b))))
+(defn add_int [a b] (make_interval (+ (lo_int a) (lo_int b)) (+ (hi_int a) (hi_int b))))
+(defn mul_int [a b] (make_interval (* (lo_int a) (lo_int b)) (* (hi_int a) (hi_int b))))
+(defn div_int [a b] (mul_int a (make_interval (/ 1.0 (lo_int b)) (/ 1.0 (hi_int b)))))
+(defn sub_int [a b] (add_int a (make_interval (- (lo_int b)) (- (hi_int b)))))
 
 (defn -main
     ""
@@ -51,7 +52,7 @@
     (println "version" (clojure-version))
     (def x (make_interval 5 10))
     (def y (make_interval 5 8))
-    (println x y (add_int x y))
+    (println x y (add_int x y) (mul_int x y) (div_int x y) (sub_int x y))
     ;(def x (make_rat 15 30))
     ;(println x (denom x) (numer x))
     ;(println ((deriv #(square %) 0.0001) 10))
