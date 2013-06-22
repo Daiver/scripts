@@ -25,8 +25,7 @@
 
 (defn deriv
     [g dx]
-    #(/ (- (g (+ dx %)) (g %)) dx)
-)
+    #(/ (- (g (+ dx %)) (g %)) dx))
 
 (defn gcd 
     [a b]
@@ -34,41 +33,24 @@
         a
         (gcd b (mod a b))))
 
-(defn make_interval
-    [lo hi]
-    (cons lo [hi]))
+(defrecord Tree [value left right])
 
-(def lo_int first)
-(def hi_int second)
-
-(defn add_int [a b] (make_interval (+ (lo_int a) (lo_int b)) (+ (hi_int a) (hi_int b))))
-(defn mul_int [a b] (make_interval (* (lo_int a) (lo_int b)) (* (hi_int a) (hi_int b))))
-(defn div_int [a b] (mul_int a (make_interval (/ 1.0 (lo_int b)) (/ 1.0 (hi_int b)))))
-(defn sub_int [a b] (add_int a (make_interval (- (lo_int b)) (- (hi_int b)))))
-
-(defn ifl 
-    [n lst]
-    (loop [innerlist lst i 0]
-        (if (= i n)
-            (first innerlist)
-            (recur (rest innerlist) (inc i)))))
-
-(defn reverse_list 
-    [lst]
-    (loop [innerlist lst newlst (list)]
-        ;(println innerlist newlst)
-        (if (= 0 (count innerlist))
-            newlst
-            (recur (rest innerlist) (cons (first innerlist) newlst))      
-        )
-    )
-)
+(defn depth_walk_tree
+    [tree functor]
+        (let [item (functor (:value tree))]
+            (let [leftlst 
+                    (if (:left tree) (cons item (depth_walk_tree (:left tree) functor)) (list item))]
+                    (if (:right tree)
+                        (concat leftlst (depth_walk_tree (:right tree) functor)) 
+                        leftlst))))
 
 (defn -main
     ""
     [& args]
     (println "version" (clojure-version))
-    (println (reverse_list [1 2 3 4 5 6]))
+    (def tree (Tree. 1 (Tree. 2 nil nil) (Tree. 3 nil nil) ))
+    (println (depth_walk_tree tree #(+ % 1) ))
+    ;(println (reverse_list [1 2 3 4 5 6]))
     ;(def x (make_interval 5 10))
     ;(def y (make_interval 5 8))
     ;(println x y (add_int x y) (mul_int x y) (div_int x y) (sub_int x y))
@@ -212,4 +194,34 @@
 
 
 )
+(comment
+    (defn make_interval
+        [lo hi]
+        (cons lo [hi]))
 
+    (def lo_int first)
+    (def hi_int second)
+
+    (defn add_int [a b] (make_interval (+ (lo_int a) (lo_int b)) (+ (hi_int a) (hi_int b))))
+    (defn mul_int [a b] (make_interval (* (lo_int a) (lo_int b)) (* (hi_int a) (hi_int b))))
+    (defn div_int [a b] (mul_int a (make_interval (/ 1.0 (lo_int b)) (/ 1.0 (hi_int b)))))
+    (defn sub_int [a b] (add_int a (make_interval (- (lo_int b)) (- (hi_int b)))))
+
+    (defn ifl 
+        [n lst]
+        (loop [innerlist lst i 0]
+            (if (= i n)
+                (first innerlist)
+                (recur (rest innerlist) (inc i)))))
+
+    (defn reverse_list 
+        [lst]
+        (loop [innerlist lst newlst (list)]
+            ;(println innerlist newlst)
+            (if (= 0 (count innerlist))
+                newlst
+                (recur (rest innerlist) (cons (first innerlist) newlst))      
+            )
+        )
+    )
+)
