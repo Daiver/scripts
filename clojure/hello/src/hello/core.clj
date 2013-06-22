@@ -35,21 +35,26 @@
 
 (defrecord Tree [value left right])
 
-(defn depth_walk_tree
-    [tree functor]
-        (let [item (functor (:value tree))]
-            (let [leftlst 
-                    (if (:left tree) (cons item (depth_walk_tree (:left tree) functor)) (list item))]
-                    (if (:right tree)
-                        (concat leftlst (depth_walk_tree (:right tree) functor)) 
-                        leftlst))))
+(defn depth_walk_tree [tree functor]
+    (concat
+        (list (functor (:value tree)))
+        (if (:left tree) (depth_walk_tree (:left tree) functor))
+        (if (:right tree) (depth_walk_tree (:right tree) functor))))
+
+(defn count_tree
+    [tree]
+    (+
+        1
+        (if-not (:left tree) 0 (count_tree (:left tree)))
+        (if-not (:right tree) 0 (count_tree (:right tree)))))
 
 (defn -main
     ""
     [& args]
     (println "version" (clojure-version))
-    (def tree (Tree. 1 (Tree. 2 nil nil) (Tree. 3 nil nil) ))
+    (def tree (Tree. 1 (Tree. 2 (Tree. 0 nil nil) (Tree. 90 nil nil)) (Tree. 3 nil (Tree. 10 nil nil)) ))
     (println (depth_walk_tree tree #(+ % 1) ))
+    (println (count_tree tree))
     ;(println (reverse_list [1 2 3 4 5 6]))
     ;(def x (make_interval 5 10))
     ;(def y (make_interval 5 8))
