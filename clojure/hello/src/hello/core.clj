@@ -48,13 +48,54 @@
         (if-not (:left tree) 0 (count_tree (:left tree)))
         (if-not (:right tree) 0 (count_tree (:right tree)))))
 
+(defrecord Mobile [left right])
+(defrecord Branch [length structure])
+
+(defn total_weight
+    [mobile]
+    (if (= (type 1) (type mobile))
+        mobile
+        (+
+            (total_weight (:structure (:left mobile)))
+            (total_weight (:structure (:right mobile))))))
+
+(defn is_balanced?
+    [mobile]
+    (if (= (type 1) (type mobile))
+        true
+        (and
+            (is_balanced? (:structure (:left mobile)))
+            (is_balanced? (:structure (:right mobile)))
+            (=
+                (* 
+                    (total_weight (:structure (:left mobile)))
+                    (:length (:left mobile))
+                )
+                (* 
+                    (total_weight (:structure (:right mobile)))
+                    (:length (:right mobile)))))))
+
 (defn -main
     ""
     [& args]
     (println "version" (clojure-version))
-    (def tree (Tree. 1 (Tree. 2 (Tree. 0 nil nil) (Tree. 90 nil nil)) (Tree. 3 nil (Tree. 10 nil nil)) ))
-    (println (depth_walk_tree tree #(+ % 1) ))
-    (println (count_tree tree))
+    (def mob 
+        (Mobile.
+            (Branch. 2
+                (Mobile.
+                    (Branch. 1 10)
+                    (Branch. 1 10)
+                )
+            )
+            (Branch. 8 5)
+        )
+    )
+    (println (total_weight mob))
+    (println (is_balanced? mob))
+    ;(def tree (Tree. 1 (Tree. 2 (Tree. 0 nil nil) (Tree. 90 nil nil)) (Tree. 3 nil (Tree. 10 nil nil)) ))
+    ;(println (depth_walk_tree tree #(+ % 1) ))
+    ;(println (count_tree tree))
+    ;(println (depth_walk_tree tree #(ident %)))
     ;(println (reverse_list [1 2 3 4 5 6]))
     ;(def x (make_interval 5 10))
     ;(def y (make_interval 5 8))
