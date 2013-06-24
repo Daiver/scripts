@@ -1,14 +1,14 @@
 #include <stdio.h>
 #include <omp.h>
  
-#define N 100
+#define N 340000
  
 int main(int argc, char *argv[])
 {
   double a[N], b[N], c[N];
-  int i;
+  long i;
   omp_set_dynamic(0);      // запретить библиотеке openmp менять число потоков во время исполнения
-  omp_set_num_threads(10); // установить число потоков в 10
+  omp_set_num_threads(1); // установить число потоков в 10
  
   // инициализируем массивы
   for (i = 0; i < N; i++)
