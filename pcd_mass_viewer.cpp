@@ -215,6 +215,10 @@ void keyboardcallback(const pcl::visualization::KeyboardEvent &event, void *cook
     //sensor_msgs::PointCloud2::Ptr cloud;
     //cloud = *reinterpret_cast<sensor_msgs::PointCloud2::Ptr*> (cookie);
     printf("%s \n", event.getKeySym().c_str()); 
+    int res = 0;
+    if(event.getKeySym() == "Next") res = 1;
+    if(event.getKeySym() == "Prior") res = 2;
+    *(reinterpret_cast<int*> (cookie)) = res;
 }
 
 /* ---[ */
@@ -425,7 +429,8 @@ main (int argc, char** argv)
 
   sensor_msgs::PointCloud2::Ptr cloud;
   // Go through PCD files
-  for (size_t i = 0; i < p_file_indices.size (); ++i)
+  //for (size_t i = 0; i < p_file_indices.size (); ++i)
+  for (size_t i = 0; i < 1; ++i)
   {
     tt.tic ();
     cloud.reset (new sensor_msgs::PointCloud2);
@@ -743,13 +748,253 @@ main (int argc, char** argv)
 #endif
       if (p)
       {
-        p->registerKeyboardCallback(keyboardcallback, static_cast<void*>(&cloud));
-        p->spin ();
-        //while ( !p->wasStopped())
-        //{
-        //  p->spinOnce(100);
-        //  boost::this_thread::sleep (boost::posix_time::microseconds (100000));
-        //}
+        int keyState = 0;
+        int i;
+        p->registerKeyboardCallback(keyboardcallback, &keyState);
+        //p->spin ();
+        while ( !p->wasStopped())
+        {
+          p->spinOnce(100);
+          if(keyState)
+          {
+            printf("%d keystate\n", keyState);
+            if(keyState == 1) i++;
+            else i--;
+            if(i >= p_file_indices.size()) i = p_file_indices.size() - 1;
+            if(i < 0) i = 0;
+            printf("i %d p_size %d\n", i, p_file_indices.size());
+            //cloud->data.clear();
+            p->removeAllPointClouds();
+            {
+                tt.tic ();
+                cloud.reset (new sensor_msgs::PointCloud2);
+                Eigen::Vector4f origin;
+                Eigen::Quaternionf orientation;
+                int version;
+
+                print_highlight (stderr, "Loading "); print_value (stderr, "%s ", argv[p_file_indices.at (i)]);
+
+                if (pcd.read (argv[p_file_indices.at (i)], *cloud, origin, orientation, version) < 0)
+                  return (-1);
+
+                std::stringstream cloud_name;
+
+                // ---[ Special check for 1-point multi-dimension histograms
+                if (cloud->fields.size () == 1 && isMultiDimensionalFeatureField (cloud->fields[0]))
+                {
+                  cloud_name << argv[p_file_indices.at (i)];
+
+            #if VTK_MAJOR_VERSION==6 || (VTK_MAJOR_VERSION==5 && VTK_MINOR_VERSION>6)
+                  if (!ph)
+                    ph.reset (new pcl::visualization::PCLPlotter);
+            #endif
+
+                  pcl::getMinMax (*cloud, 0, cloud->fields[0].name, min_p, max_p);
+            #if VTK_MAJOR_VERSION==6 || (VTK_MAJOR_VERSION==5 && VTK_MINOR_VERSION>6)
+                  ph->addFeatureHistogram (*cloud, cloud->fields[0].name, cloud_name.str ());
+            #endif
+                  print_info ("[done, "); print_value ("%g", tt.toc ()); print_info (" ms : "); print_value ("%d", cloud->fields[0].count); print_info (" points]\n");
+                  continue;
+                }
+
+                // ---[ Special check for 2D images
+                if (cloud->fields.size () == 1 && isOnly2DImage (cloud->fields[0]))
+                {
+                  print_info ("[done, "); print_value ("%g", tt.toc ()); print_info (" ms : "); print_value ("%u", cloud->width * cloud->height); print_info (" points]\n");
+                  print_info ("Available dimensions: "); print_value ("%s\n", pcl::getFieldsList (*cloud).c_str ());
+                  
+                  std::stringstream name;
+                  name << "PCD Viewer :: " << argv[p_file_indices.at (i)];
+                  pcl::visualization::ImageViewer::Ptr img (new pcl::visualization::ImageViewer (name.str ()));
+                  pcl::PointCloud<pcl::RGB> rgb_cloud;
+                  pcl::fromROSMsg (*cloud, rgb_cloud);
+
+                  img->addRGBImage (rgb_cloud);
+                  imgs.push_back (img);
+
+                  continue;
+                }
+
+                cloud_name << argv[p_file_indices.at (i)] << "-" << i;
+
+                // Create the PCLVisualizer object here on the first encountered XYZ file
+                if (!p)
+                {
+                  p.reset (new pcl::visualization::PCLVisualizer (argc, argv, "PCD viewer"));
+                  if (use_pp)   // Only enable the point picking callback if the command line parameter is enabled
+                    p->registerPointPickingCallback (&pp_callback, static_cast<void*> (&cloud));
+
+                  // Set whether or not we should be using the vtkVertexBufferObjectMapper
+                  p->setUseVbos (use_vbos);
+
+                  if (!cam)
+                  {
+                    Eigen::Matrix3f rotation;
+                    rotation = orientation;
+                    p->setCameraPosition (origin [0]                  , origin [1]                  , origin [2],
+                                          origin [0] + rotation (0, 2), origin [1] + rotation (1, 2), origin [2] + rotation (2, 2),
+                                                       rotation (0, 1),              rotation (1, 1),              rotation (2, 1));
+                  }
+                  else
+                  {
+                    //print_info("CAM is HERE");
+                  }
+                }
+
+                // Multiview enabled?
+                if (mview)
+                {
+                  p->createViewPort (k * x_step, l * y_step, (k + 1) * x_step, (l + 1) * y_step, viewport);
+                  k++;
+                  if (k >= x_s)
+                  {
+                    k = 0;
+                    l++;
+                  }
+                }
+
+                if (cloud->width * cloud->height == 0)
+                {
+                  print_error ("[error: no points found!]\n");
+                  return (-1);
+                }
+
+                // If no color was given, get random colors
+                if (fcolorparam)
+                {
+                  if (fcolor_r.size () > i && fcolor_g.size () > i && fcolor_b.size () > i)
+                    color_handler.reset (new pcl::visualization::PointCloudColorHandlerCustom<sensor_msgs::PointCloud2> (cloud, fcolor_r[i], fcolor_g[i], fcolor_b[i]));
+                  else
+                    color_handler.reset (new pcl::visualization::PointCloudColorHandlerRandom<sensor_msgs::PointCloud2> (cloud));
+                }
+                else
+                  color_handler.reset (new pcl::visualization::PointCloudColorHandlerRandom<sensor_msgs::PointCloud2> (cloud));
+
+                // Add the dataset with a XYZ and a random handler
+                geometry_handler.reset (new pcl::visualization::PointCloudGeometryHandlerXYZ<sensor_msgs::PointCloud2> (cloud));
+                // Add the cloud to the renderer
+                //p->addPointCloud<pcl::PointXYZ> (cloud_xyz, geometry_handler, color_handler, cloud_name.str (), viewport);
+                p->addPointCloud (cloud, geometry_handler, color_handler, origin, orientation, cloud_name.str (), viewport);
+
+
+                if (mview)
+                  // Add text with file name
+                  p->addText (argv[p_file_indices.at (i)], 5, 5, 10, 1.0, 1.0, 1.0, "text_" + std::string (argv[p_file_indices.at (i)]), viewport);
+
+                // If normal lines are enabled
+                if (normals != 0)
+                {
+                  int normal_idx = pcl::getFieldIndex (*cloud, "normal_x");
+                  if (normal_idx == -1)
+                  {
+                    print_error ("Normal information requested but not available.\n");
+                    continue;
+                    //return (-1);
+                  }
+                  //
+                  // Convert from blob to pcl::PointCloud
+                  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_xyz (new pcl::PointCloud<pcl::PointXYZ>);
+                  pcl::fromROSMsg (*cloud, *cloud_xyz);
+                  cloud_xyz->sensor_origin_ = origin;
+                  cloud_xyz->sensor_orientation_ = orientation;
+
+                  pcl::PointCloud<pcl::Normal>::Ptr cloud_normals (new pcl::PointCloud<pcl::Normal>);
+                  pcl::fromROSMsg (*cloud, *cloud_normals);
+                  std::stringstream cloud_name_normals;
+                  cloud_name_normals << argv[p_file_indices.at (i)] << "-" << i << "-normals";
+                  p->addPointCloudNormals<pcl::PointXYZ, pcl::Normal> (cloud_xyz, cloud_normals, normals, normals_scale, cloud_name_normals.str (), viewport);
+                }
+
+                // If principal curvature lines are enabled
+                if (pc != 0)
+                {
+                  if (normals == 0)
+                    normals = pc;
+
+                  int normal_idx = pcl::getFieldIndex (*cloud, "normal_x");
+                  if (normal_idx == -1)
+                  {
+                    print_error ("Normal information requested but not available.\n");
+                    continue;
+                    //return (-1);
+                  }
+                  int pc_idx = pcl::getFieldIndex (*cloud, "principal_curvature_x");
+                  if (pc_idx == -1)
+                  {
+                    print_error ("Principal Curvature information requested but not available.\n");
+                    continue;
+                    //return (-1);
+                  }
+                  //
+                  // Convert from blob to pcl::PointCloud
+                  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_xyz (new pcl::PointCloud<pcl::PointXYZ>);
+                  pcl::fromROSMsg (*cloud, *cloud_xyz);
+                  cloud_xyz->sensor_origin_ = origin;
+                  cloud_xyz->sensor_orientation_ = orientation;
+                  pcl::PointCloud<pcl::Normal>::Ptr cloud_normals (new pcl::PointCloud<pcl::Normal>);
+                  pcl::fromROSMsg (*cloud, *cloud_normals);
+                  pcl::PointCloud<pcl::PrincipalCurvatures>::Ptr cloud_pc (new pcl::PointCloud<pcl::PrincipalCurvatures>);
+                  pcl::fromROSMsg (*cloud, *cloud_pc);
+                  std::stringstream cloud_name_normals_pc;
+                  cloud_name_normals_pc << argv[p_file_indices.at (i)] << "-" << i << "-normals";
+                  int factor = (std::min)(normals, pc);
+                  p->addPointCloudNormals<pcl::PointXYZ, pcl::Normal> (cloud_xyz, cloud_normals, factor, normals_scale, cloud_name_normals_pc.str (), viewport);
+                  p->setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_COLOR, 1.0, 0.0, 0.0, cloud_name_normals_pc.str ());
+                  p->setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_LINE_WIDTH, 3, cloud_name_normals_pc.str ());
+                  cloud_name_normals_pc << "-pc";
+                  p->addPointCloudPrincipalCurvatures (cloud_xyz, cloud_normals, cloud_pc, factor, pc_scale, cloud_name_normals_pc.str (), viewport);
+                  p->setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_LINE_WIDTH, 3, cloud_name_normals_pc.str ());
+                }
+
+                // Add every dimension as a possible color
+                if (!fcolorparam)
+                {
+                  for (size_t f = 0; f < cloud->fields.size (); ++f)
+                  {
+                    if (cloud->fields[f].name == "rgb" || cloud->fields[f].name == "rgba")
+                      color_handler.reset (new pcl::visualization::PointCloudColorHandlerRGBField<sensor_msgs::PointCloud2> (cloud));
+                    else
+                    {
+                      if (!isValidFieldName (cloud->fields[f].name))
+                        continue;
+                      color_handler.reset (new pcl::visualization::PointCloudColorHandlerGenericField<sensor_msgs::PointCloud2> (cloud, cloud->fields[f].name));
+                    }
+                    // Add the cloud to the renderer
+                    //p->addPointCloud<pcl::PointXYZ> (cloud_xyz, color_handler, cloud_name.str (), viewport);
+                    p->addPointCloud (cloud, color_handler, origin, orientation, cloud_name.str (), viewport);
+                  }
+                }
+
+                // Additionally, add normals as a handler
+                geometry_handler.reset (new pcl::visualization::PointCloudGeometryHandlerSurfaceNormal<sensor_msgs::PointCloud2> (cloud));
+                if (geometry_handler->isCapable ())
+                  //p->addPointCloud<pcl::PointXYZ> (cloud_xyz, geometry_handler, cloud_name.str (), viewport);
+                  p->addPointCloud (cloud, geometry_handler, origin, orientation, cloud_name.str (), viewport);
+
+                if (use_immediate_rendering)
+                  // Set immediate mode rendering ON
+                  p->setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_IMMEDIATE_RENDERING, 1.0, cloud_name.str ());
+
+                // Change the cloud rendered point size
+                if (psize.size () > 0)
+                  p->setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE, psize.at (i), cloud_name.str ());
+
+                // Change the cloud rendered opacity
+                if (opaque.size () > 0)
+                  p->setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_OPACITY, opaque.at (i), cloud_name.str ());
+
+                // Reset camera viewpoint to center of cloud if camera parameters were not passed manually and this is the first loaded cloud
+                if (i == 0 && !p->cameraParamsSet ())
+                  p->resetCameraViewpoint (cloud_name.str ());
+
+                print_info ("[done, "); print_value ("%g", tt.toc ()); print_info (" ms : "); print_value ("%u", cloud->width * cloud->height); print_info (" points]\n");
+                print_info ("Available dimensions: "); print_value ("%s\n", pcl::getFieldsList (*cloud).c_str ());
+
+            }
+            keyState = 0;
+          }
+          boost::this_thread::sleep (boost::posix_time::microseconds (100000));
+        }
       }
   }
 }
