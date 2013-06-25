@@ -86,6 +86,7 @@
 (defn square_sum [set] (reduce + (map square (filter odd? (enumerate_tree_list set) ))))
 (defn my_map [p set] (reduce #(concat %1 (list (p %2))) nil set))
 (defn append [seq1 seq2] (reduce #(cons %2 %1) seq2 (reverse seq1)))
+(defn length [seq] (reduce #(+ 1 %) 0 seq))
 
 (defn -main
     ""
