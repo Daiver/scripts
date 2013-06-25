@@ -83,12 +83,9 @@
             (concat 
                 (enumerate_tree_list (first tree)) (enumerate_tree_list (second tree)))))
 
-(defn square_sum
-    [set]
-    (reduce + 
-    (map square (filter odd? (enumerate_tree_list set) ))))
+(defn square_sum [set] (reduce + (map square (filter odd? (enumerate_tree_list set) ))))
 
-(defn my_map [p set] (reduce #(concat %1 (list (p %2))) (list (p (first set))) (rest set)))
+(defn my_map [p set] (reduce #(concat %1 (list (p %2))) nil set))
 
 (defn -main
     ""
