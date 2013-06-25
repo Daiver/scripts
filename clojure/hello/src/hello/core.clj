@@ -75,23 +75,18 @@
                     (total_weight (:structure (:right mobile)))
                     (:length (:right mobile)))))))
 
+(defn subset
+    [set]
+    (if (= 0 (count set))
+        (list )
+        (let [rst (subset (rest set))]
+            (concat rst (map first rst)))))
+
 (defn -main
     ""
     [& args]
     (println "version" (clojure-version))
-    (def mob 
-        (Mobile.
-            (Branch. 2
-                (Mobile.
-                    (Branch. 1 10)
-                    (Branch. 1 10)
-                )
-            )
-            (Branch. 8 5)
-        )
-    )
-    (println (total_weight mob))
-    (println (is_balanced? mob))
+    (println (subset (list 1 2 3)))
     ;(def tree (Tree. 1 (Tree. 2 (Tree. 0 nil nil) (Tree. 90 nil nil)) (Tree. 3 nil (Tree. 10 nil nil)) ))
     ;(println (depth_walk_tree tree #(+ % 1) ))
     ;(println (count_tree tree))

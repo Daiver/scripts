@@ -55,6 +55,8 @@
 #include <pcl/console/parse.h>
 #include <pcl/console/time.h>
 #include <pcl/search/kdtree.h>
+#include <boost/filesystem.hpp>
+
 #include <stdio.h>
 
 using namespace pcl::console;
@@ -259,6 +261,18 @@ main (int argc, char** argv)
   std::string dir_name;
   pcl::console::parse_argument(argc, argv, "-dir", dir_name);
   printf("file index %s\n", dir_name.c_str());
+  boost::filesystem::path dir_path(dir_name);
+  std::vector<std::string> dir_files;
+  for(boost::filesystem::directory_iterator it = boost::filesystem::directory_iterator(dir_path); it != boost::filesystem::directory_iterator(); it++)
+  {
+    //printf("%s\n", it->path().c_str());
+    if (it->path().string().find(".pcd") != -1)
+    {
+        dir_files.push_back(it->path().string());
+        //printf("%s\n", it->path().c_str());
+        printf("%s\n", dir_files[dir_files.size() - 1].c_str());
+    }
+  }
 
   double bcolor[3] = {0, 0, 0};
   pcl::console::parse_3x_arguments (argc, argv, "-bc", bcolor[0], bcolor[1], bcolor[2]);
@@ -759,10 +773,10 @@ main (int argc, char** argv)
           {
             printf("%d keystate\n", keyState);
             if(keyState == 1) i++;
-            else i--;
-            if(i >= p_file_indices.size()) i = p_file_indices.size() - 1;
+            if(keyState == 2) i--;
+            if(i >= dir_files.size()) i = dir_files.size() - 1;
             if(i < 0) i = 0;
-            printf("i %d p_size %d\n", i, p_file_indices.size());
+            printf("i %d p_size %d %s\n", i, dir_files.size(), dir_files.at(i).c_str());
             //cloud->data.clear();
             p->removeAllPointClouds();
             {
@@ -772,9 +786,9 @@ main (int argc, char** argv)
                 Eigen::Quaternionf orientation;
                 int version;
 
-                print_highlight (stderr, "Loading "); print_value (stderr, "%s ", argv[p_file_indices.at (i)]);
+                print_highlight (stderr, "Loading "); print_value (stderr, "%s ", dir_files[i].c_str());
 
-                if (pcd.read (argv[p_file_indices.at (i)], *cloud, origin, orientation, version) < 0)
+                if (pcd.read (dir_files[i], *cloud, origin, orientation, version) < 0)
                   return (-1);
 
                 std::stringstream cloud_name;
@@ -782,7 +796,7 @@ main (int argc, char** argv)
                 // ---[ Special check for 1-point multi-dimension histograms
                 if (cloud->fields.size () == 1 && isMultiDimensionalFeatureField (cloud->fields[0]))
                 {
-                  cloud_name << argv[p_file_indices.at (i)];
+                  cloud_name << dir_files[i];
 
             #if VTK_MAJOR_VERSION==6 || (VTK_MAJOR_VERSION==5 && VTK_MINOR_VERSION>6)
                   if (!ph)
@@ -804,7 +818,7 @@ main (int argc, char** argv)
                   print_info ("Available dimensions: "); print_value ("%s\n", pcl::getFieldsList (*cloud).c_str ());
                   
                   std::stringstream name;
-                  name << "PCD Viewer :: " << argv[p_file_indices.at (i)];
+                  name << "PCD Viewer :: " << dir_files[i];
                   pcl::visualization::ImageViewer::Ptr img (new pcl::visualization::ImageViewer (name.str ()));
                   pcl::PointCloud<pcl::RGB> rgb_cloud;
                   pcl::fromROSMsg (*cloud, rgb_cloud);
@@ -815,7 +829,7 @@ main (int argc, char** argv)
                   continue;
                 }
 
-                cloud_name << argv[p_file_indices.at (i)] << "-" << i;
+                cloud_name << dir_files[i] << "-" << i;
 
                 // Create the PCLVisualizer object here on the first encountered XYZ file
                 if (!p)
@@ -879,7 +893,7 @@ main (int argc, char** argv)
 
                 if (mview)
                   // Add text with file name
-                  p->addText (argv[p_file_indices.at (i)], 5, 5, 10, 1.0, 1.0, 1.0, "text_" + std::string (argv[p_file_indices.at (i)]), viewport);
+                  p->addText (dir_files[i], 5, 5, 10, 1.0, 1.0, 1.0, "text_" + std::string (dir_files[i]), viewport);
 
                 // If normal lines are enabled
                 if (normals != 0)
@@ -901,7 +915,7 @@ main (int argc, char** argv)
                   pcl::PointCloud<pcl::Normal>::Ptr cloud_normals (new pcl::PointCloud<pcl::Normal>);
                   pcl::fromROSMsg (*cloud, *cloud_normals);
                   std::stringstream cloud_name_normals;
-                  cloud_name_normals << argv[p_file_indices.at (i)] << "-" << i << "-normals";
+                  cloud_name_normals << dir_files[i] << "-" << i << "-normals";
                   p->addPointCloudNormals<pcl::PointXYZ, pcl::Normal> (cloud_xyz, cloud_normals, normals, normals_scale, cloud_name_normals.str (), viewport);
                 }
 
@@ -936,7 +950,7 @@ main (int argc, char** argv)
                   pcl::PointCloud<pcl::PrincipalCurvatures>::Ptr cloud_pc (new pcl::PointCloud<pcl::PrincipalCurvatures>);
                   pcl::fromROSMsg (*cloud, *cloud_pc);
                   std::stringstream cloud_name_normals_pc;
-                  cloud_name_normals_pc << argv[p_file_indices.at (i)] << "-" << i << "-normals";
+                  cloud_name_normals_pc << dir_files[i] << "-" << i << "-normals";
                   int factor = (std::min)(normals, pc);
                   p->addPointCloudNormals<pcl::PointXYZ, pcl::Normal> (cloud_xyz, cloud_normals, factor, normals_scale, cloud_name_normals_pc.str (), viewport);
                   p->setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_COLOR, 1.0, 0.0, 0.0, cloud_name_normals_pc.str ());
