@@ -75,18 +75,28 @@
                     (total_weight (:structure (:right mobile)))
                     (:length (:right mobile)))))))
 
-(defn subset
+(defn enumerate_tree_list
+    [tree]
+    (cond (nil? tree) nil
+        (not (= (type tree) (type (list 1)))) (list tree)
+        (= (count tree) 2) 
+            (concat 
+                (enumerate_tree_list (first tree)) (enumerate_tree_list (second tree)))))
+
+(defn square_sum
     [set]
-    (if (= 0 (count set))
-        (list )
-        (let [rst (subset (rest set))]
-            (concat rst (map first rst)))))
+    (reduce + 
+    (map square (filter odd? (enumerate_tree_list set) ))))
+
+(defn my_map [p set] (reduce #(concat %1 (list (p %2))) (list (p (first set))) (rest set)))
 
 (defn -main
     ""
     [& args]
     (println "version" (clojure-version))
-    (println (subset (list 1 2 3)))
+    (println (square_sum (list (list 1 2) (list 3 (list 5 7)))))
+    (println (my_map #(+ % 1) [5 1 2 3]))
+    ;(println (subset (list 1 2 3)))
     ;(def tree (Tree. 1 (Tree. 2 (Tree. 0 nil nil) (Tree. 90 nil nil)) (Tree. 3 nil (Tree. 10 nil nil)) ))
     ;(println (depth_walk_tree tree #(+ % 1) ))
     ;(println (count_tree tree))
