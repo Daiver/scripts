@@ -48,56 +48,32 @@
         (if-not (:left tree) 0 (count_tree (:left tree)))
         (if-not (:right tree) 0 (count_tree (:right tree)))))
 
-(defrecord Mobile [left right])
-(defrecord Branch [length structure])
+(defn acc_n [op init seq]
+    (if (empty? (first seq))
+        nil
+        (let [splice (fn [splitf seq](reverse (reduce #(cons (splitf %2) %1) (list) seq)))]
+            (cons 
+                (reduce op init (splice first seq))
+                (acc_n op init (splice rest seq))))))
 
-(defn total_weight
-    [mobile]
-    (if (= (type 1) (type mobile))
-        mobile
-        (+
-            (total_weight (:structure (:left mobile)))
-            (total_weight (:structure (:right mobile))))))
+(defn dot_scalar [m1 m2]
+    (reduce + (map * m1 m2)))
 
-(defn is_balanced?
-    [mobile]
-    (if (= (type 1) (type mobile))
-        true
-        (and
-            (is_balanced? (:structure (:left mobile)))
-            (is_balanced? (:structure (:right mobile)))
-            (=
-                (* 
-                    (total_weight (:structure (:left mobile)))
-                    (:length (:left mobile))
-                )
-                (* 
-                    (total_weight (:structure (:right mobile)))
-                    (:length (:right mobile)))))))
-
-(defn enumerate_tree_list
-    [tree]
-    (cond (nil? tree) nil
-        (not (= (type tree) (type (list 1)))) (list tree)
-        (= (count tree) 2) 
-            (concat 
-                (enumerate_tree_list (first tree)) (enumerate_tree_list (second tree)))))
-
-(defn square_sum [set] (reduce + (map square (filter odd? (enumerate_tree_list set) ))))
-(defn my_map [p set] (reduce #(concat %1 (list (p %2))) nil set))
-(defn append [seq1 seq2] (reduce #(cons %2 %1) seq2 (reverse seq1)))
-(defn my_own_length [set] (reduce (fn [x y] (+ 1 x)) 0 set))
-(defn horner [x coeff_seq] (reduce #(+ %1 (* x %2)) 0 coeff_seq))
+(defn dot_mat_vec [m v]
+    (map #(dot_scalar v %) m))
 
 (defn -main
     ""
     [& args]
     (println "version" (clojure-version))
-    (println (square_sum (list (list 1 2) (list 3 (list 5 7)))))
-    (println (my_map #(+ % 1) [5 1 2 3]))
-    (println (append [1 2 3 4 5] [6 7 8]))
-    (println (my_own_length [5 2 3 4 42232 232]))
-    (println (horner 2 [1 3 0 5 0 1])
+    (println (dot_scalar [1 2 3] [4 5 6]))
+    (println (dot_mat_vec [[1 2 3] [5 6 7] [10 10 10]] [4 5 6]))
+    (println (acc_n + 0 [[1 2 3] [3 4 5]]))
+    ;(println (square_sum (list (list 1 2) (list 3 (list 5 7)))))
+    ;(println (my_map #(+ % 1) [5 1 2 3]))
+    ;(println (append [1 2 3 4 5] [6 7 8]))
+    ;(println (my_own_length [5 2 3 4 42232 232]))
+    ;(println (horner 2 [1 3 0 5 0 1]))
     ;(println (subset (list 1 2 3)))
     ;(def tree (Tree. 1 (Tree. 2 (Tree. 0 nil nil) (Tree. 90 nil nil)) (Tree. 3 nil (Tree. 10 nil nil)) ))
     ;(println (depth_walk_tree tree #(+ % 1) ))
@@ -276,5 +252,45 @@
                 (recur (rest innerlist) (cons (first innerlist) newlst))      
             )
         )
-    )
+     (defrecord Mobile [left right])
+    (defrecord Branch [length structure])
+
+    (defn total_weight
+        [mobile]
+        (if (= (type 1) (type mobile))
+            mobile
+            (+
+                (total_weight (:structure (:left mobile)))
+                (total_weight (:structure (:right mobile))))))
+
+    (defn is_balanced?
+        [mobile]
+        (if (= (type 1) (type mobile))
+            true
+            (and
+                (is_balanced? (:structure (:left mobile)))
+                (is_balanced? (:structure (:right mobile)))
+                (=
+                    (* 
+                        (total_weight (:structure (:left mobile)))
+                        (:length (:left mobile))
+                    )
+                    (* 
+                        (total_weight (:structure (:right mobile)))
+                        (:length (:right mobile)))))))
+
+    (defn enumerate_tree_list
+        [tree]
+        (cond (nil? tree) nil
+            (not (= (type tree) (type (list 1)))) (list tree)
+            (= (count tree) 2) 
+                (concat 
+                    (enumerate_tree_list (first tree)) (enumerate_tree_list (second tree)))))
+
+    (defn square_sum [set] (reduce + (map square (filter odd? (enumerate_tree_list set) ))))
+    (defn my_map [p set] (reduce #(concat %1 (list (p %2))) nil set))
+    (defn append [seq1 seq2] (reduce #(cons %2 %1) seq2 (reverse seq1)))
+    (defn my_own_length [set] (reduce (fn [x y] (+ 1 x)) 0 set))
+    (defn horner [x coeff_seq] (reduce #(+ %1 (* x %2)) 0 coeff_seq))
+       )
 )
