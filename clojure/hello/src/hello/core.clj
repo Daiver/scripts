@@ -62,6 +62,13 @@
 (defn dot_mat_vec [m v]
     (map #(dot_scalar v %) m))
 
+(defn transpose [m]
+    (map reverse (acc_n #(cons %2 %1) (list) m)))
+
+(defn dot_mat_mat [m1 m2]
+    (let [cols (transpose m2)]
+        (map #(dot_mat_vec cols %) m1)))
+
 (defn -main
     ""
     [& args]
@@ -69,6 +76,10 @@
     (println (dot_scalar [1 2 3] [4 5 6]))
     (println (dot_mat_vec [[1 2 3] [5 6 7] [10 10 10]] [4 5 6]))
     (println (acc_n + 0 [[1 2 3] [3 4 5]]))
+    (def m1 [[1 2 3] [4 5 6] [7 8 9]])
+    (def m2 [[1 2 3] [4 5 6] [7 8 9]])
+    (println (transpose m1))
+    (println (dot_mat_mat m1 m2))
     ;(println (square_sum (list (list 1 2) (list 3 (list 5 7)))))
     ;(println (my_map #(+ % 1) [5 1 2 3]))
     ;(println (append [1 2 3 4 5] [6 7 8]))
