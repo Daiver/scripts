@@ -87,6 +87,7 @@
 (defn my_map [p set] (reduce #(concat %1 (list (p %2))) nil set))
 (defn append [seq1 seq2] (reduce #(cons %2 %1) seq2 (reverse seq1)))
 (defn my_own_length [set] (reduce (fn [x y] (+ 1 x)) 0 set))
+(defn horner [x coeff_seq] (reduce #(+ %1 (* x %2)) 0 coeff_seq))
 
 (defn -main
     ""
@@ -96,6 +97,7 @@
     (println (my_map #(+ % 1) [5 1 2 3]))
     (println (append [1 2 3 4 5] [6 7 8]))
     (println (my_own_length [5 2 3 4 42232 232]))
+    (println (horner 2 [1 3 0 5 0 1])
     ;(println (subset (list 1 2 3)))
     ;(def tree (Tree. 1 (Tree. 2 (Tree. 0 nil nil) (Tree. 90 nil nil)) (Tree. 3 nil (Tree. 10 nil nil)) ))
     ;(println (depth_walk_tree tree #(+ % 1) ))
