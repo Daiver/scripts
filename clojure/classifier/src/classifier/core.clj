@@ -1,14 +1,16 @@
 (ns classifier.core)
-(use '[clojure.string :only (split triml)])
+(use '[clojure.string :only (split triml lower-case)])
 (use 'clojure.java.io)
+
+(defn read_data_from_file [fname]
+    (map #(split % #"\s") (with-open [rdr (reader fname)] 
+        (doall (line-seq rdr)))))
 
 (defn -main
     ""
     [& args]
     (println args)
-    (def raw_data 
-        (with-open [rdr (reader (first args))] 
-            (doall (line-seq rdr))))
+    (def raw_data (read_data_from_file (first args)))
 
-    (println raw_data)
+    (println (first raw_data))
 )

@@ -1,0 +1,9 @@
+*.mat
+*.pyc
+___*
+pbw/hand*
+pbw/lbaks*
+hand_tracking/lbaks*
+hand_tracking/hand*
+hand_tracking/images/
+
