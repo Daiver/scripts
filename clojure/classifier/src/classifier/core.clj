@@ -13,7 +13,7 @@
     (let [data (group-by #(first %) raw_data)]
         (do-to-map
             data (keys data) 
-                (fn [x] (map #(rest %) x)))))
+                (fn [x] (reduce concat (map #(rest %) x))))))
         
 
 (defn -main
