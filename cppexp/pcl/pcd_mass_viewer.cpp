@@ -767,14 +767,18 @@ main (int argc, char** argv)
       if (p)
       {
         int keyState = 0;
-        int i;
+        int i = 0;
         p->registerKeyboardCallback(keyboardcallback, &keyState);
         //p->spin ();
+        int handlerindex = 0;
         while ( !p->wasStopped())
         {
           p->spinOnce(100);
           if(keyState)
           {
+            std::stringstream cloud_name;
+            cloud_name << dir_files[i] << "-" << i;
+            handlerindex = p->getColorHandlerIndex(cloud_name.str());
             printf("%d keystate\n", keyState);
             if(keyState == 1) i++;
             if(keyState == 2) i--;
@@ -990,7 +994,8 @@ main (int argc, char** argv)
                     p->addPointCloud (cloud, color_handler, origin, orientation, cloud_name.str (), viewport);
                   }
                 }
-                p->updateColorHandlerIndex(cloud_name.str(), 1);
+                printf("h index %d\n", handlerindex);
+                p->updateColorHandlerIndex(cloud_name.str(), handlerindex);
 
                 // Additionally, add normals as a handler
                 geometry_handler.reset (new pcl::visualization::PointCloudGeometryHandlerSurfaceNormal<sensor_msgs::PointCloud2> (cloud));
