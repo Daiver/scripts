@@ -444,6 +444,9 @@ main (int argc, char** argv)
   sensor_msgs::PointCloud2::Ptr cloud;
   // Go through PCD files
   //for (size_t i = 0; i < p_file_indices.size (); ++i)
+  std::string first_cloud = dir_position > -1 ?
+                            dir_files[0]:
+                            argv[p_file_indices.at(0)];
   for (size_t i = 0; i < 1; ++i)
   {
     tt.tic ();
@@ -452,9 +455,9 @@ main (int argc, char** argv)
     Eigen::Quaternionf orientation;
     int version;
 
-    print_highlight (stderr, "Loading "); print_value (stderr, "%s ", argv[p_file_indices.at (i)]);
+    print_highlight (stderr, "Loading "); print_value (stderr, "%s ", first_cloud.c_str());
 
-    if (pcd.read (argv[p_file_indices.at (i)], *cloud, origin, orientation, version) < 0)
+    if (pcd.read (first_cloud, *cloud, origin, orientation, version) < 0)
       return (-1);
 
     std::stringstream cloud_name;
@@ -462,7 +465,7 @@ main (int argc, char** argv)
     // ---[ Special check for 1-point multi-dimension histograms
     if (cloud->fields.size () == 1 && isMultiDimensionalFeatureField (cloud->fields[0]))
     {
-      cloud_name << argv[p_file_indices.at (i)];
+      cloud_name << first_cloud;
 
 #if VTK_MAJOR_VERSION==6 || (VTK_MAJOR_VERSION==5 && VTK_MINOR_VERSION>6)
       if (!ph)
@@ -484,7 +487,7 @@ main (int argc, char** argv)
       print_info ("Available dimensions: "); print_value ("%s\n", pcl::getFieldsList (*cloud).c_str ());
       
       std::stringstream name;
-      name << "PCD Viewer :: " << argv[p_file_indices.at (i)];
+      name << "PCD Viewer :: " << first_cloud;
       pcl::visualization::ImageViewer::Ptr img (new pcl::visualization::ImageViewer (name.str ()));
       pcl::PointCloud<pcl::RGB> rgb_cloud;
       pcl::fromROSMsg (*cloud, rgb_cloud);
@@ -495,7 +498,7 @@ main (int argc, char** argv)
       continue;
     }
 
-    cloud_name << argv[p_file_indices.at (i)] << "-" << i;
+    cloud_name << first_cloud << "-" << 0;
 
     // Create the PCLVisualizer object here on the first encountered XYZ file
     if (!p)
@@ -559,7 +562,7 @@ main (int argc, char** argv)
 
     if (mview)
       // Add text with file name
-      p->addText (argv[p_file_indices.at (i)], 5, 5, 10, 1.0, 1.0, 1.0, "text_" + std::string (argv[p_file_indices.at (i)]), viewport);
+      p->addText (first_cloud, 5, 5, 10, 1.0, 1.0, 1.0, "text_" + std::string (first_cloud), viewport);
 
     // If normal lines are enabled
     if (normals != 0)
@@ -581,7 +584,7 @@ main (int argc, char** argv)
       pcl::PointCloud<pcl::Normal>::Ptr cloud_normals (new pcl::PointCloud<pcl::Normal>);
       pcl::fromROSMsg (*cloud, *cloud_normals);
       std::stringstream cloud_name_normals;
-      cloud_name_normals << argv[p_file_indices.at (i)] << "-" << i << "-normals";
+      cloud_name_normals << first_cloud << "-" << 0 << "-normals";
       p->addPointCloudNormals<pcl::PointXYZ, pcl::Normal> (cloud_xyz, cloud_normals, normals, normals_scale, cloud_name_normals.str (), viewport);
     }
 
@@ -616,7 +619,7 @@ main (int argc, char** argv)
       pcl::PointCloud<pcl::PrincipalCurvatures>::Ptr cloud_pc (new pcl::PointCloud<pcl::PrincipalCurvatures>);
       pcl::fromROSMsg (*cloud, *cloud_pc);
       std::stringstream cloud_name_normals_pc;
-      cloud_name_normals_pc << argv[p_file_indices.at (i)] << "-" << i << "-normals";
+      cloud_name_normals_pc << first_cloud << "-" << 0 << "-normals";
       int factor = (std::min)(normals, pc);
       p->addPointCloudNormals<pcl::PointXYZ, pcl::Normal> (cloud_xyz, cloud_normals, factor, normals_scale, cloud_name_normals_pc.str (), viewport);
       p->setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_COLOR, 1.0, 0.0, 0.0, cloud_name_normals_pc.str ());
@@ -642,6 +645,7 @@ main (int argc, char** argv)
         // Add the cloud to the renderer
         //p->addPointCloud<pcl::PointXYZ> (cloud_xyz, color_handler, cloud_name.str (), viewport);
         p->addPointCloud (cloud, color_handler, origin, orientation, cloud_name.str (), viewport);
+        //p->addPointCloud (cloud);
       }
     }
 
@@ -675,9 +679,9 @@ main (int argc, char** argv)
   {
     std::string str;
     if (!p_file_indices.empty ())
-      str = std::string (argv[p_file_indices.at (0)]);
+      str = std::string (first_cloud);
     else if (!vtk_file_indices.empty ())
-      str = std::string (argv[vtk_file_indices.at (0)]);
+      str = std::string (first_cloud);
 
     for (size_t i = 1; i < p_file_indices.size (); ++i)
       str += ", " + std::string (argv[p_file_indices.at (i)]);
@@ -963,14 +967,22 @@ main (int argc, char** argv)
                 // Add every dimension as a possible color
                 if (!fcolorparam)
                 {
+                  sensor_msgs::PointField tmpfield;
+                  tmpfield.name = "rgb";
+                  tmpfield.count = 10;
+                  //`cloud->fields.push_back(tmpfield);
                   for (size_t f = 0; f < cloud->fields.size (); ++f)
                   {
+                    printf("f %d %s \n", f, cloud->fields[f].name.c_str()); 
                     if (cloud->fields[f].name == "rgb" || cloud->fields[f].name == "rgba")
+                    {
                       color_handler.reset (new pcl::visualization::PointCloudColorHandlerRGBField<sensor_msgs::PointCloud2> (cloud));
+                    }
                     else
                     {
                       if (!isValidFieldName (cloud->fields[f].name))
                         continue;
+                      printf("<<<\n");
                       color_handler.reset (new pcl::visualization::PointCloudColorHandlerGenericField<sensor_msgs::PointCloud2> (cloud, cloud->fields[f].name));
                     }
                     // Add the cloud to the renderer
@@ -978,6 +990,7 @@ main (int argc, char** argv)
                     p->addPointCloud (cloud, color_handler, origin, orientation, cloud_name.str (), viewport);
                   }
                 }
+                p->updateColorHandlerIndex(cloud_name.str(), 1);
 
                 // Additionally, add normals as a handler
                 geometry_handler.reset (new pcl::visualization::PointCloudGeometryHandlerSurfaceNormal<sensor_msgs::PointCloud2> (cloud));
