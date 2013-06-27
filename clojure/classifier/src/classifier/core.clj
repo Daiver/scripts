@@ -2,30 +2,40 @@
 (use '[clojure.string :only (split triml lower-case)])
 (use 'clojure.java.io)
 
-(defn read_data_from_file [fname]
-    (map #(split % #"\s")(map lower-case (with-open [rdr (reader fname)] 
-        (doall (line-seq rdr))))))
+(defn values [d] (map #(d %) (keys d)))
 
-(defn do-to-map [amap keyseq f]
-    (reduce #(assoc %1 %2 (f (%1 %2))) amap keyseq))
+(defn read_data_from_file [fname]
+    (let [lines (with-open [rdr (reader fname)] 
+                (doall (line-seq rdr)))]
+        (map #(-> % lower-case (split #"\s")) lines)))
+
+(defn do-to-map 
+    ([m keyseq f] (reduce #(assoc %1 %2 (f (%1 %2))) m keyseq))
+    ([m f] (do-to-map m (keys m) f)))
+
+(defn process_words [x]
+    (->> x 
+        (map #(rest %)) 
+        (apply concat)
+        frequencies))
 
 (defn dicts_from_data [raw_data]
     (let [data (group-by #(first %) raw_data)]
-        (do-to-map
-            data (keys data) 
-                (fn [x] (frequencies (reduce concat (map #(rest %) x)))))))
-        
+        (do-to-map data
+            process_words)))
+
+(defn classes_freq_from_data [raw_data]
+    (-> (group-by first raw_data) 
+        (do-to-map #(-> % count float)) (do-to-map #(/ % (count raw_data)))))
 
 (defn -main
     ""
     [& args]
     (println args)
     (def raw_data (read_data_from_file (first args)))
-    (def d (group-by #(first %) raw_data))
-    ;(def d1 (map #(reduce concat (d %)) (keys d)))
-    (def f (map frequencies raw_data))
-    (def d1 (apply concat (d "spam")))
-    (println (apply concat (d "ham")))
-    ;(println (dicts_from_data raw_data))
+    (def feat_freq (dicts_from_data raw_data))
+    (def classes (keys feat_freq))
+    (println "classes" classes)
+    (println (classes_freq_from_data raw_data))
     (println "end")
 )
